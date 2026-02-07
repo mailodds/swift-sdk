@@ -58,8 +58,10 @@ Use an `mo_test_` prefixed API key with test domains for predictable responses w
 
 ## API Reference
 
-Full API documentation: https://mailodds.com/docs
-OpenAPI spec: https://mailodds.com/openapi.yaml
+- Website: https://mailodds.com
+- Full documentation: https://mailodds.com/docs
+- OpenAPI spec: https://mailodds.com/openapi.yaml
+- All SDKs: https://mailodds.com/sdks
 
 ## License
 
