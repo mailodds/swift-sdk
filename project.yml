@@ -4,7 +4,7 @@ targets:
     type: framework
     platform: iOS
     deploymentTarget: "11.0"
-    sources: [Sources]
+    sources: [MailOdds]
     info:
       path: ./Info.plist
       version: 1.0.0
@@ -12,3 +12,4 @@ targets:
       APPLICATION_EXTENSION_API_ONLY: true
     scheme: {}
     dependencies:
+    - carthage: AnyCodable

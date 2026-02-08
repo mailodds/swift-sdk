@@ -26,3 +26,5 @@
 ci/**
 # Preserve GitHub Actions workflows
 .github/**
+# Preserve Package.swift (Swift 6 tools-version, custom targets)
+Package.swift

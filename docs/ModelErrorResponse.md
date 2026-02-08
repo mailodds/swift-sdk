@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **schemaVersion** | **String** |  | [optional] 
 **error** | **String** | Machine-readable error code | 
-**message** | **String** | Human-readable error message | 
+**message** | **String** | Human-readable error message | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
