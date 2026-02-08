@@ -13,6 +13,11 @@ var failed = 0
     else { failed += 1; print("  FAIL: \(label) expected=\(expected ?? "nil") got=\(actual ?? "nil")") }
 }
 
+@MainActor func checkBool(_ label: String, _ expected: Bool, _ actual: Bool?) {
+    if expected == actual { passed += 1 }
+    else { failed += 1; print("  FAIL: \(label) expected=\(expected) got=\(actual.map(String.init) ?? "nil")") }
+}
+
 guard let apiKey = ProcessInfo.processInfo.environment["MAILODDS_TEST_KEY"], !apiKey.isEmpty else {
     print("ERROR: MAILODDS_TEST_KEY not set")
     exit(1)
@@ -23,17 +28,17 @@ let config = MailOddsAPIConfiguration(
     customHeaders: ["Authorization": "Bearer \(apiKey)"]
 )
 
-let cases: [(String, String, String, String?)] = [
-    ("test@deliverable.mailodds.com", "valid", "accept", nil),
-    ("test@invalid.mailodds.com", "invalid", "reject", "smtp_rejected"),
-    ("test@risky.mailodds.com", "catch_all", "accept_with_caution", "catch_all_detected"),
-    ("test@disposable.mailodds.com", "do_not_mail", "reject", "disposable"),
-    ("test@role.mailodds.com", "do_not_mail", "reject", "role_account"),
-    ("test@timeout.mailodds.com", "unknown", "retry_later", "smtp_unreachable"),
-    ("test@freeprovider.mailodds.com", "valid", "accept", nil),
+let cases: [(String, String, String, String?, Bool, Bool, Bool, Bool)] = [
+    ("test@deliverable.mailodds.com", "valid", "accept", nil, false, false, false, true),
+    ("test@invalid.mailodds.com", "invalid", "reject", "smtp_rejected", false, false, false, true),
+    ("test@risky.mailodds.com", "catch_all", "accept_with_caution", "catch_all_detected", false, false, false, true),
+    ("test@disposable.mailodds.com", "do_not_mail", "reject", "disposable", false, true, false, true),
+    ("test@role.mailodds.com", "do_not_mail", "reject", "role_account", false, false, true, true),
+    ("test@timeout.mailodds.com", "unknown", "retry_later", "smtp_unreachable", false, false, false, true),
+    ("test@freeprovider.mailodds.com", "valid", "accept", nil, true, false, false, true),
 ]
 
-for (email, expStatus, expAction, expSub) in cases {
+for (email, expStatus, expAction, expSub, expFree, expDisp, expRole, expMx) in cases {
     let domain = String(email.split(separator: "@")[1].split(separator: ".")[0])
     do {
         let resp = try await EmailValidationAPI.validateEmail(
@@ -43,6 +48,16 @@ for (email, expStatus, expAction, expSub) in cases {
         check("\(domain).status", expStatus, resp.status.rawValue)
         check("\(domain).action", expAction, resp.action.rawValue)
         check("\(domain).sub_status", expSub, resp.subStatus)
+        checkBool("\(domain).free_provider", expFree, resp.freeProvider)
+        checkBool("\(domain).disposable", expDisp, resp.disposable)
+        checkBool("\(domain).role_account", expRole, resp.roleAccount)
+        checkBool("\(domain).mx_found", expMx, resp.mxFound)
+        check("\(domain).depth", "enhanced", resp.depth)
+        if resp.processedAt != nil && !resp.processedAt!.isEmpty {
+            passed += 1
+        } else {
+            failed += 1; print("  FAIL: \(domain).processed_at is empty")
+        }
     } catch {
         failed += 1
         print("  FAIL: \(domain) error: \(error)")

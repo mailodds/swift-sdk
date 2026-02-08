@@ -36,9 +36,13 @@ public struct ValidationResponse: Sendable, Codable, Hashable {
     public var disposable: Bool?
     public var roleAccount: Bool?
     public var freeProvider: Bool?
+    /** Validation depth used for this check */
+    public var depth: String?
+    /** ISO 8601 timestamp of validation */
+    public var processedAt: String?
     public var suppressionMatch: ValidationResponseSuppressionMatch?
 
-    public init(schemaVersion: String? = nil, email: String, status: Status, subStatus: String? = nil, action: Action, domain: String? = nil, mxFound: Bool? = nil, smtpCheck: Bool? = nil, disposable: Bool? = nil, roleAccount: Bool? = nil, freeProvider: Bool? = nil, suppressionMatch: ValidationResponseSuppressionMatch? = nil) {
+    public init(schemaVersion: String? = nil, email: String, status: Status, subStatus: String? = nil, action: Action, domain: String? = nil, mxFound: Bool? = nil, smtpCheck: Bool? = nil, disposable: Bool? = nil, roleAccount: Bool? = nil, freeProvider: Bool? = nil, depth: String? = nil, processedAt: String? = nil, suppressionMatch: ValidationResponseSuppressionMatch? = nil) {
         self.schemaVersion = schemaVersion
         self.email = email
         self.status = status
@@ -50,6 +54,8 @@ public struct ValidationResponse: Sendable, Codable, Hashable {
         self.disposable = disposable
         self.roleAccount = roleAccount
         self.freeProvider = freeProvider
+        self.depth = depth
+        self.processedAt = processedAt
         self.suppressionMatch = suppressionMatch
     }
 
@@ -65,6 +71,8 @@ public struct ValidationResponse: Sendable, Codable, Hashable {
         case disposable
         case roleAccount = "role_account"
         case freeProvider = "free_provider"
+        case depth
+        case processedAt = "processed_at"
         case suppressionMatch = "suppression_match"
     }
 
@@ -83,6 +91,8 @@ public struct ValidationResponse: Sendable, Codable, Hashable {
         try container.encodeIfPresent(disposable, forKey: .disposable)
         try container.encodeIfPresent(roleAccount, forKey: .roleAccount)
         try container.encodeIfPresent(freeProvider, forKey: .freeProvider)
+        try container.encodeIfPresent(depth, forKey: .depth)
+        try container.encodeIfPresent(processedAt, forKey: .processedAt)
         try container.encodeIfPresent(suppressionMatch, forKey: .suppressionMatch)
     }
 }
