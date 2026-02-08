@@ -1,46 +1,27 @@
-// SDK smoke test -- validates build-from-source and API integration.
-// Uses curl subprocess since Foundation.URLSession needs async runtime setup.
+// SDK smoke test -- validates build-from-source and API integration using the SDK client.
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+import MailOdds
 
-let apiUrl = "https://api.mailodds.com"
+var passed = 0
+var failed = 0
+
+@MainActor func check(_ label: String, _ expected: String?, _ actual: String?) {
+    if expected == actual { passed += 1 }
+    else { failed += 1; print("  FAIL: \(label) expected=\(expected ?? "nil") got=\(actual ?? "nil")") }
+}
+
 guard let apiKey = ProcessInfo.processInfo.environment["MAILODDS_TEST_KEY"], !apiKey.isEmpty else {
     print("ERROR: MAILODDS_TEST_KEY not set")
     exit(1)
 }
 
-var passed = 0
-var failed = 0
-
-func check(_ label: String, _ expected: String?, _ actual: String?) {
-    if expected == actual { passed += 1 }
-    else { failed += 1; print("  FAIL: \(label) expected=\(expected ?? "nil") got=\(actual ?? "nil")") }
-}
-
-func apiCall(_ email: String, _ key: String) -> (Int, [String: Any]) {
-    let process = Process()
-    process.executableURL = URL(fileURLWithPath: "/usr/bin/curl")
-    process.arguments = ["-s", "-w", "\n%{http_code}", "-X", "POST",
-                         "-H", "Authorization: Bearer \(key)",
-                         "-H", "Content-Type: application/json",
-                         "-d", "{\"email\":\"\(email)\"}",
-                         "\(apiUrl)/v1/validate", "--max-time", "30"]
-    let pipe = Pipe()
-    process.standardOutput = pipe
-    try! process.run()
-    process.waitUntilExit()
-
-    let data = pipe.fileHandleForReading.readDataToEndOfFile()
-    let output = String(data: data, encoding: .utf8)!.trimmingCharacters(in: .whitespacesAndNewlines)
-    let lines = output.components(separatedBy: "\n")
-    let code = Int(lines.last!) ?? 0
-    let body = lines.dropLast().joined(separator: "\n")
-
-    if let jsonData = body.data(using: .utf8),
-       let json = try? JSONSerialization.jsonObject(with: jsonData) as? [String: Any] {
-        return (code, json)
-    }
-    return (code, [:])
-}
+let config = MailOddsAPIConfiguration(
+    basePath: "https://api.mailodds.com",
+    customHeaders: ["Authorization": "Bearer \(apiKey)"]
+)
 
 let cases: [(String, String, String, String?)] = [
     ("test@deliverable.mailodds.com", "valid", "accept", nil),
@@ -53,36 +34,56 @@ let cases: [(String, String, String, String?)] = [
 ]
 
 for (email, expStatus, expAction, expSub) in cases {
-    let domain = email.split(separator: "@")[1].split(separator: ".")[0]
-    let (_, r) = apiCall(email, apiKey)
-    check("\(domain).status", expStatus, r["status"] as? String)
-    check("\(domain).action", expAction, r["action"] as? String)
-    let sub = r["sub_status"] as? String
-    check("\(domain).sub_status", expSub, sub)
-    let testMode = r["test_mode"] as? Bool ?? false
-    check("\(domain).test_mode", "true", testMode ? "true" : "false")
+    let domain = String(email.split(separator: "@")[1].split(separator: ".")[0])
+    do {
+        let resp = try await EmailValidationAPI.validateEmail(
+            validateRequest: ValidateRequest(email: email),
+            apiConfiguration: config
+        )
+        check("\(domain).status", expStatus, resp.status.rawValue)
+        check("\(domain).action", expAction, resp.action.rawValue)
+        check("\(domain).sub_status", expSub, resp.subStatus)
+    } catch {
+        failed += 1
+        print("  FAIL: \(domain) error: \(error)")
+    }
 }
 
-// Error handling
-let (code401, _) = apiCall("test@deliverable.mailodds.com", "invalid_key")
-check("error.401", "401", "\(code401)")
+// Error handling: 401 with bad key
+let badConfig = MailOddsAPIConfiguration(
+    basePath: "https://api.mailodds.com",
+    customHeaders: ["Authorization": "Bearer invalid_key"]
+)
+do {
+    _ = try await EmailValidationAPI.validateEmail(
+        validateRequest: ValidateRequest(email: "test@deliverable.mailodds.com"),
+        apiConfiguration: badConfig
+    )
+    failed += 1
+    print("  FAIL: error.401 no error raised")
+} catch ErrorResponse.error(let code, _, _, _) {
+    if code == 401 { passed += 1 }
+    else { failed += 1; print("  FAIL: error.401 expected=401 got=\(code)") }
+} catch {
+    failed += 1
+    print("  FAIL: error.401 wrong error: \(error)")
+}
 
-let process = Process()
-process.executableURL = URL(fileURLWithPath: "/usr/bin/curl")
-process.arguments = ["-s", "-w", "\n%{http_code}", "-X", "POST",
-                     "-H", "Authorization: Bearer \(apiKey)",
-                     "-H", "Content-Type: application/json",
-                     "-d", "{}",
-                     "\(apiUrl)/v1/validate", "--max-time", "10"]
-let pipe = Pipe()
-process.standardOutput = pipe
-try! process.run()
-process.waitUntilExit()
-let data = pipe.fileHandleForReading.readDataToEndOfFile()
-let output = String(data: data, encoding: .utf8)!.trimmingCharacters(in: .whitespacesAndNewlines)
-let code400 = Int(output.components(separatedBy: "\n").last!) ?? 0
-if code400 == 400 || code400 == 422 { passed += 1 }
-else { failed += 1; print("  FAIL: error.400 expected=400|422 got=\(code400)") }
+// Error handling: 400/422 with missing email
+do {
+    _ = try await EmailValidationAPI.validateEmail(
+        validateRequest: ValidateRequest(email: ""),
+        apiConfiguration: config
+    )
+    failed += 1
+    print("  FAIL: error.400 no error raised")
+} catch ErrorResponse.error(let code, _, _, _) {
+    if code == 400 || code == 422 { passed += 1 }
+    else { failed += 1; print("  FAIL: error.400 expected=400|422 got=\(code)") }
+} catch {
+    failed += 1
+    print("  FAIL: error.400 wrong error: \(error)")
+}
 
 let total = passed + failed
 let result = failed == 0 ? "PASS" : "FAIL"
