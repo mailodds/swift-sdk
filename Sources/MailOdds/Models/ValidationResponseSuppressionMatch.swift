@@ -7,35 +7,36 @@
 
 import Foundation
 
+/** Present only when email matched a suppression list entry. */
 public struct ValidationResponseSuppressionMatch: Sendable, Codable, Hashable {
 
     public enum MatchType: String, Sendable, Codable, CaseIterable {
         case email = "email"
         case domain = "domain"
     }
-    public var matched: Bool?
     public var matchType: MatchType?
     public var matchValue: String?
+    public var reason: String?
 
-    public init(matched: Bool? = nil, matchType: MatchType? = nil, matchValue: String? = nil) {
-        self.matched = matched
+    public init(matchType: MatchType? = nil, matchValue: String? = nil, reason: String? = nil) {
         self.matchType = matchType
         self.matchValue = matchValue
+        self.reason = reason
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
-        case matched
         case matchType = "match_type"
         case matchValue = "match_value"
+        case reason
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(matched, forKey: .matched)
         try container.encodeIfPresent(matchType, forKey: .matchType)
         try container.encodeIfPresent(matchValue, forKey: .matchValue)
+        try container.encodeIfPresent(reason, forKey: .reason)
     }
 }
 

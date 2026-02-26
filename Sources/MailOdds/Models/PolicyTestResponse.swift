@@ -10,6 +10,8 @@ import Foundation
 public struct PolicyTestResponse: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
+    /** Unique request identifier */
+    public var requestId: String?
     /** Original validation result before policy */
     public var original: JSONValue?
     /** Result after policy applied */
@@ -18,8 +20,9 @@ public struct PolicyTestResponse: Sendable, Codable, Hashable {
     public var matchedRule: JSONValue?
     public var rulesEvaluated: Int?
 
-    public init(schemaVersion: String? = nil, original: JSONValue? = nil, modified: JSONValue? = nil, matchedRule: JSONValue? = nil, rulesEvaluated: Int? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, original: JSONValue? = nil, modified: JSONValue? = nil, matchedRule: JSONValue? = nil, rulesEvaluated: Int? = nil) {
         self.schemaVersion = schemaVersion
+        self.requestId = requestId
         self.original = original
         self.modified = modified
         self.matchedRule = matchedRule
@@ -28,6 +31,7 @@ public struct PolicyTestResponse: Sendable, Codable, Hashable {
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
+        case requestId = "request_id"
         case original
         case modified
         case matchedRule = "matched_rule"
@@ -39,6 +43,7 @@ public struct PolicyTestResponse: Sendable, Codable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encodeIfPresent(original, forKey: .original)
         try container.encodeIfPresent(modified, forKey: .modified)
         try container.encodeIfPresent(matchedRule, forKey: .matchedRule)

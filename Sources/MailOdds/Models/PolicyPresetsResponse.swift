@@ -10,15 +10,19 @@ import Foundation
 public struct PolicyPresetsResponse: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
+    /** Unique request identifier */
+    public var requestId: String?
     public var presets: [PolicyPresetsResponsePresetsInner]?
 
-    public init(schemaVersion: String? = nil, presets: [PolicyPresetsResponsePresetsInner]? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, presets: [PolicyPresetsResponsePresetsInner]? = nil) {
         self.schemaVersion = schemaVersion
+        self.requestId = requestId
         self.presets = presets
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
+        case requestId = "request_id"
         case presets
     }
 
@@ -27,6 +31,7 @@ public struct PolicyPresetsResponse: Sendable, Codable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encodeIfPresent(presets, forKey: .presets)
     }
 }

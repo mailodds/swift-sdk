@@ -10,17 +10,21 @@ import Foundation
 public struct SuppressionStatsResponse: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
+    /** Unique request identifier */
+    public var requestId: String?
     public var total: Int?
     public var byType: SuppressionStatsResponseByType?
 
-    public init(schemaVersion: String? = nil, total: Int? = nil, byType: SuppressionStatsResponseByType? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, total: Int? = nil, byType: SuppressionStatsResponseByType? = nil) {
         self.schemaVersion = schemaVersion
+        self.requestId = requestId
         self.total = total
         self.byType = byType
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
+        case requestId = "request_id"
         case total
         case byType = "by_type"
     }
@@ -30,6 +34,7 @@ public struct SuppressionStatsResponse: Sendable, Codable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encodeIfPresent(total, forKey: .total)
         try container.encodeIfPresent(byType, forKey: .byType)
     }

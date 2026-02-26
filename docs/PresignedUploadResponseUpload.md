@@ -4,7 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **url** | **String** |  | [optional] 
-**fields** | **AnyCodable** |  | [optional] 
+**fields** | **JSONValue** |  | [optional] 
 **s3Key** | **String** |  | [optional] 
 **expiresIn** | **Int** |  | [optional] 
 

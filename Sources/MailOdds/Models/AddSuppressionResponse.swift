@@ -10,19 +10,33 @@ import Foundation
 public struct AddSuppressionResponse: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
+    /** Unique request identifier */
+    public var requestId: String?
+    /** Number of entries successfully added */
     public var added: Int?
-    public var skipped: Int?
+    /** Number of duplicate entries skipped */
+    public var duplicates: Int?
+    /** Number of invalid entries rejected */
+    public var invalid: Int?
+    /** Total entries in the request */
+    public var total: Int?
 
-    public init(schemaVersion: String? = nil, added: Int? = nil, skipped: Int? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, added: Int? = nil, duplicates: Int? = nil, invalid: Int? = nil, total: Int? = nil) {
         self.schemaVersion = schemaVersion
+        self.requestId = requestId
         self.added = added
-        self.skipped = skipped
+        self.duplicates = duplicates
+        self.invalid = invalid
+        self.total = total
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
+        case requestId = "request_id"
         case added
-        case skipped
+        case duplicates
+        case invalid
+        case total
     }
 
     // Encodable protocol methods
@@ -30,8 +44,11 @@ public struct AddSuppressionResponse: Sendable, Codable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encodeIfPresent(added, forKey: .added)
-        try container.encodeIfPresent(skipped, forKey: .skipped)
+        try container.encodeIfPresent(duplicates, forKey: .duplicates)
+        try container.encodeIfPresent(invalid, forKey: .invalid)
+        try container.encodeIfPresent(total, forKey: .total)
     }
 }
 

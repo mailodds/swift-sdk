@@ -11,13 +11,15 @@ public struct JobSummary: Sendable, Codable, Hashable {
 
     public var valid: Int?
     public var invalid: Int?
+    public var catchAll: Int?
     public var doNotMail: Int?
     public var unknown: Int?
     public var cancelledPending: Int?
 
-    public init(valid: Int? = nil, invalid: Int? = nil, doNotMail: Int? = nil, unknown: Int? = nil, cancelledPending: Int? = nil) {
+    public init(valid: Int? = nil, invalid: Int? = nil, catchAll: Int? = nil, doNotMail: Int? = nil, unknown: Int? = nil, cancelledPending: Int? = nil) {
         self.valid = valid
         self.invalid = invalid
+        self.catchAll = catchAll
         self.doNotMail = doNotMail
         self.unknown = unknown
         self.cancelledPending = cancelledPending
@@ -26,6 +28,7 @@ public struct JobSummary: Sendable, Codable, Hashable {
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case valid
         case invalid
+        case catchAll = "catch_all"
         case doNotMail = "do_not_mail"
         case unknown
         case cancelledPending = "cancelled_pending"
@@ -37,6 +40,7 @@ public struct JobSummary: Sendable, Codable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(valid, forKey: .valid)
         try container.encodeIfPresent(invalid, forKey: .invalid)
+        try container.encodeIfPresent(catchAll, forKey: .catchAll)
         try container.encodeIfPresent(doNotMail, forKey: .doNotMail)
         try container.encodeIfPresent(unknown, forKey: .unknown)
         try container.encodeIfPresent(cancelledPending, forKey: .cancelledPending)

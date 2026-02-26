@@ -4,6 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **schemaVersion** | **String** |  | 
+**requestId** | **String** | Unique request identifier | [optional] 
 **email** | **String** |  | 
 **status** | **String** | Validation status | 
 **action** | **String** | Recommended action | 
@@ -20,6 +21,10 @@ Name | Type | Description | Notes
 **processedAt** | **Date** | ISO 8601 timestamp of validation | 
 **suggestedEmail** | **String** | Typo correction suggestion. Omitted when no typo detected. | [optional] 
 **retryAfterMs** | **Int** | Suggested retry delay in milliseconds. Present only for retry_later action. | [optional] 
+**hasSpf** | **Bool** | Whether the domain has an SPF record. Omitted for standard depth. | [optional] 
+**hasDmarc** | **Bool** | Whether the domain has a DMARC record. Omitted for standard depth. | [optional] 
+**dmarcPolicy** | **String** | The domain&#39;s DMARC policy. Omitted when no DMARC record found. | [optional] 
+**dnsblListed** | **Bool** | Whether the domain&#39;s MX IP is on a DNS blocklist (Spamhaus ZEN). Omitted for standard depth. | [optional] 
 **suppressionMatch** | [**ValidationResponseSuppressionMatch**](ValidationResponseSuppressionMatch.md) |  | [optional] 
 **policyApplied** | [**ValidationResponsePolicyApplied**](ValidationResponsePolicyApplied.md) |  | [optional] 
 

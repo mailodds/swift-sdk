@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **summary** | [**JobSummary**](JobSummary.md) |  | [optional] 
 **createdAt** | **Date** |  | [optional] 
 **completedAt** | **Date** |  | [optional] 
-**metadata** | **AnyCodable** |  | [optional] 
+**metadata** | **JSONValue** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

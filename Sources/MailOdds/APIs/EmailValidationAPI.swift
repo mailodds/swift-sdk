@@ -10,6 +10,47 @@ import Foundation
 open class EmailValidationAPI {
 
     /**
+     Validate multiple emails (sync)
+     
+     - parameter validateBatchRequest: (body)  
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: ValidateBatch200Response
+     */
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func validateBatch(validateBatchRequest: ValidateBatchRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> ValidateBatch200Response {
+        return try await validateBatchWithRequestBuilder(validateBatchRequest: validateBatchRequest, apiConfiguration: apiConfiguration).execute().body
+    }
+
+    /**
+     Validate multiple emails (sync)
+     - POST /v1/validate/batch
+     - Validate up to 100 email addresses synchronously. For larger lists, use the bulk jobs API.
+     - Bearer Token:
+       - type: http
+       - name: BearerAuth
+     - parameter validateBatchRequest: (body)  
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: RequestBuilder<ValidateBatch200Response> 
+     */
+    open class func validateBatchWithRequestBuilder(validateBatchRequest: ValidateBatchRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<ValidateBatch200Response> {
+        let localVariablePath = "/v1/validate/batch"
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: validateBatchRequest, codableHelper: apiConfiguration.codableHelper)
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+            "Content-Type": "application/json",
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<ValidateBatch200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+    }
+
+    /**
      Validate single email
      
      - parameter validateRequest: (body)  

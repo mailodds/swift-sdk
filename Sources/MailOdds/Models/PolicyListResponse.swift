@@ -10,17 +10,21 @@ import Foundation
 public struct PolicyListResponse: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
+    /** Unique request identifier */
+    public var requestId: String?
     public var policies: [Policy]?
     public var limits: PolicyListResponseLimits?
 
-    public init(schemaVersion: String? = nil, policies: [Policy]? = nil, limits: PolicyListResponseLimits? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, policies: [Policy]? = nil, limits: PolicyListResponseLimits? = nil) {
         self.schemaVersion = schemaVersion
+        self.requestId = requestId
         self.policies = policies
         self.limits = limits
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
+        case requestId = "request_id"
         case policies
         case limits
     }
@@ -30,6 +34,7 @@ public struct PolicyListResponse: Sendable, Codable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encodeIfPresent(policies, forKey: .policies)
         try container.encodeIfPresent(limits, forKey: .limits)
     }

@@ -28,3 +28,5 @@ ci/**
 .github/**
 # Preserve Package.swift (Swift 6 tools-version, custom targets)
 Package.swift
+# Preserve Linux compatibility fix (MobileCoreServices guard)
+Sources/MailOdds/Infrastructure/URLSessionImplementations.swift

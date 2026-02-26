@@ -10,19 +10,23 @@ import Foundation
 public struct ModelErrorResponse: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
+    /** Unique request identifier */
+    public var requestId: String?
     /** Machine-readable error code */
     public var error: String
     /** Human-readable error message */
-    public var message: String
+    public var message: String?
 
-    public init(schemaVersion: String? = nil, error: String, message: String) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, error: String, message: String? = nil) {
         self.schemaVersion = schemaVersion
+        self.requestId = requestId
         self.error = error
         self.message = message
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
+        case requestId = "request_id"
         case error
         case message
     }
@@ -32,8 +36,9 @@ public struct ModelErrorResponse: Sendable, Codable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encode(error, forKey: .error)
-        try container.encode(message, forKey: .message)
+        try container.encodeIfPresent(message, forKey: .message)
     }
 }
 

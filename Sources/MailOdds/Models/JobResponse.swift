@@ -10,15 +10,19 @@ import Foundation
 public struct JobResponse: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
+    /** Unique request identifier */
+    public var requestId: String?
     public var job: Job?
 
-    public init(schemaVersion: String? = nil, job: Job? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, job: Job? = nil) {
         self.schemaVersion = schemaVersion
+        self.requestId = requestId
         self.job = job
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
+        case requestId = "request_id"
         case job
     }
 
@@ -27,6 +31,7 @@ public struct JobResponse: Sendable, Codable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encodeIfPresent(job, forKey: .job)
     }
 }

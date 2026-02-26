@@ -9,13 +9,26 @@ import Foundation
 
 public struct ValidationResult: Sendable, Codable, Hashable {
 
+    public enum Status: String, Sendable, Codable, CaseIterable {
+        case valid = "valid"
+        case invalid = "invalid"
+        case catchAll = "catch_all"
+        case doNotMail = "do_not_mail"
+        case unknown = "unknown"
+    }
+    public enum Action: String, Sendable, Codable, CaseIterable {
+        case accept = "accept"
+        case acceptWithCaution = "accept_with_caution"
+        case reject = "reject"
+        case retryLater = "retry_later"
+    }
     public var email: String?
-    public var status: String?
+    public var status: Status?
     public var subStatus: String?
-    public var action: String?
+    public var action: Action?
     public var processedAt: Date?
 
-    public init(email: String? = nil, status: String? = nil, subStatus: String? = nil, action: String? = nil, processedAt: Date? = nil) {
+    public init(email: String? = nil, status: Status? = nil, subStatus: String? = nil, action: Action? = nil, processedAt: Date? = nil) {
         self.email = email
         self.status = status
         self.subStatus = subStatus

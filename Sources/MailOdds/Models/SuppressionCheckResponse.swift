@@ -14,13 +14,16 @@ public struct SuppressionCheckResponse: Sendable, Codable, Hashable {
         case domain = "domain"
     }
     public var schemaVersion: String?
+    /** Unique request identifier */
+    public var requestId: String?
     public var email: String?
     public var suppressed: Bool?
     public var matchType: MatchType?
     public var matchValue: String?
 
-    public init(schemaVersion: String? = nil, email: String? = nil, suppressed: Bool? = nil, matchType: MatchType? = nil, matchValue: String? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, email: String? = nil, suppressed: Bool? = nil, matchType: MatchType? = nil, matchValue: String? = nil) {
         self.schemaVersion = schemaVersion
+        self.requestId = requestId
         self.email = email
         self.suppressed = suppressed
         self.matchType = matchType
@@ -29,6 +32,7 @@ public struct SuppressionCheckResponse: Sendable, Codable, Hashable {
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
+        case requestId = "request_id"
         case email
         case suppressed
         case matchType = "match_type"
@@ -40,6 +44,7 @@ public struct SuppressionCheckResponse: Sendable, Codable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encodeIfPresent(email, forKey: .email)
         try container.encodeIfPresent(suppressed, forKey: .suppressed)
         try container.encodeIfPresent(matchType, forKey: .matchType)

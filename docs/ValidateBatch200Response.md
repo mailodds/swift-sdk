@@ -4,6 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **schemaVersion** | **String** |  | [optional] 
+**requestId** | **String** | Unique request identifier | [optional] 
 **total** | **Int** |  | [optional] 
 **summary** | [**ValidateBatch200ResponseSummary**](ValidateBatch200ResponseSummary.md) |  | [optional] 
 **results** | [ValidationResponse] |  | [optional] 

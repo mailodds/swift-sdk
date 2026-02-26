@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **emails** | **[String]** | List of emails to validate | 
 **dedup** | **Bool** | Remove duplicate emails | [optional] [default to false]
-**metadata** | **AnyCodable** | Custom metadata for the job | [optional] 
+**metadata** | **JSONValue** | Custom metadata for the job | [optional] 
 **webhookUrl** | **String** | URL for completion webhook | [optional] 
 **idempotencyKey** | **String** | Unique key for idempotent requests | [optional] 
 

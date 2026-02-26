@@ -10,15 +10,19 @@ import Foundation
 public struct PresignedUploadResponse: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
+    /** Unique request identifier */
+    public var requestId: String?
     public var upload: PresignedUploadResponseUpload?
 
-    public init(schemaVersion: String? = nil, upload: PresignedUploadResponseUpload? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, upload: PresignedUploadResponseUpload? = nil) {
         self.schemaVersion = schemaVersion
+        self.requestId = requestId
         self.upload = upload
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
+        case requestId = "request_id"
         case upload
     }
 
@@ -27,6 +31,7 @@ public struct PresignedUploadResponse: Sendable, Codable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encodeIfPresent(upload, forKey: .upload)
     }
 }

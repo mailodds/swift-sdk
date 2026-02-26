@@ -7,6 +7,7 @@
 
 import Foundation
 
+/** Flat validation response. Conditional fields are omitted (not null) when not applicable. */
 public struct ValidationResponse: Sendable, Codable, Hashable {
 
     public enum Status: String, Sendable, Codable, CaseIterable {
@@ -22,78 +23,156 @@ public struct ValidationResponse: Sendable, Codable, Hashable {
         case reject = "reject"
         case retryLater = "retry_later"
     }
-    public var schemaVersion: String?
+    public enum SubStatus: String, Sendable, Codable, CaseIterable {
+        case formatInvalid = "format_invalid"
+        case mxMissing = "mx_missing"
+        case mxTimeout = "mx_timeout"
+        case smtpUnreachable = "smtp_unreachable"
+        case smtpRejected = "smtp_rejected"
+        case disposable = "disposable"
+        case roleAccount = "role_account"
+        case greylisted = "greylisted"
+        case catchAllDetected = "catch_all_detected"
+        case domainNotFound = "domain_not_found"
+        case suppressionMatch = "suppression_match"
+        case restrictedMilitary = "restricted_military"
+        case restrictedSanctioned = "restricted_sanctioned"
+    }
+    public enum Depth: String, Sendable, Codable, CaseIterable {
+        case standard = "standard"
+        case enhanced = "enhanced"
+    }
+    public enum DmarcPolicy: String, Sendable, Codable, CaseIterable {
+        case _none = "none"
+        case quarantine = "quarantine"
+        case reject = "reject"
+    }
+    public var schemaVersion: String
+    /** Unique request identifier */
+    public var requestId: String?
     public var email: String
     /** Validation status */
     public var status: Status
-    /** Detailed status reason */
-    public var subStatus: String?
     /** Recommended action */
     public var action: Action
-    public var domain: String?
-    public var mxFound: Bool?
+    /** Detailed status reason. Omitted when none. */
+    public var subStatus: SubStatus?
+    public var domain: String
+    /** Whether MX records were found for the domain */
+    public var mxFound: Bool
+    /** Primary MX hostname. Omitted when MX not resolved. */
+    public var mxHost: String?
+    /** Whether SMTP verification passed. Omitted when SMTP not checked. */
     public var smtpCheck: Bool?
-    public var disposable: Bool?
-    public var roleAccount: Bool?
-    public var freeProvider: Bool?
+    /** Whether domain is catch-all. Omitted when SMTP not checked. */
+    public var catchAll: Bool?
+    /** Whether domain is a known disposable email provider */
+    public var disposable: Bool
+    /** Whether address is a role account (e.g., info@, admin@) */
+    public var roleAccount: Bool
+    /** Whether domain is a known free email provider (e.g., gmail.com) */
+    public var freeProvider: Bool
     /** Validation depth used for this check */
-    public var depth: String?
+    public var depth: Depth
     /** ISO 8601 timestamp of validation */
-    public var processedAt: String?
+    public var processedAt: Date
+    /** Typo correction suggestion. Omitted when no typo detected. */
+    public var suggestedEmail: String?
+    /** Suggested retry delay in milliseconds. Present only for retry_later action. */
+    public var retryAfterMs: Int?
+    /** Whether the domain has an SPF record. Omitted for standard depth. */
+    public var hasSpf: Bool?
+    /** Whether the domain has a DMARC record. Omitted for standard depth. */
+    public var hasDmarc: Bool?
+    /** The domain's DMARC policy. Omitted when no DMARC record found. */
+    public var dmarcPolicy: DmarcPolicy?
+    /** Whether the domain's MX IP is on a DNS blocklist (Spamhaus ZEN). Omitted for standard depth. */
+    public var dnsblListed: Bool?
     public var suppressionMatch: ValidationResponseSuppressionMatch?
+    public var policyApplied: ValidationResponsePolicyApplied?
 
-    public init(schemaVersion: String? = nil, email: String, status: Status, subStatus: String? = nil, action: Action, domain: String? = nil, mxFound: Bool? = nil, smtpCheck: Bool? = nil, disposable: Bool? = nil, roleAccount: Bool? = nil, freeProvider: Bool? = nil, depth: String? = nil, processedAt: String? = nil, suppressionMatch: ValidationResponseSuppressionMatch? = nil) {
+    public init(schemaVersion: String, requestId: String? = nil, email: String, status: Status, action: Action, subStatus: SubStatus? = nil, domain: String, mxFound: Bool, mxHost: String? = nil, smtpCheck: Bool? = nil, catchAll: Bool? = nil, disposable: Bool, roleAccount: Bool, freeProvider: Bool, depth: Depth, processedAt: Date, suggestedEmail: String? = nil, retryAfterMs: Int? = nil, hasSpf: Bool? = nil, hasDmarc: Bool? = nil, dmarcPolicy: DmarcPolicy? = nil, dnsblListed: Bool? = nil, suppressionMatch: ValidationResponseSuppressionMatch? = nil, policyApplied: ValidationResponsePolicyApplied? = nil) {
         self.schemaVersion = schemaVersion
+        self.requestId = requestId
         self.email = email
         self.status = status
-        self.subStatus = subStatus
         self.action = action
+        self.subStatus = subStatus
         self.domain = domain
         self.mxFound = mxFound
+        self.mxHost = mxHost
         self.smtpCheck = smtpCheck
+        self.catchAll = catchAll
         self.disposable = disposable
         self.roleAccount = roleAccount
         self.freeProvider = freeProvider
         self.depth = depth
         self.processedAt = processedAt
+        self.suggestedEmail = suggestedEmail
+        self.retryAfterMs = retryAfterMs
+        self.hasSpf = hasSpf
+        self.hasDmarc = hasDmarc
+        self.dmarcPolicy = dmarcPolicy
+        self.dnsblListed = dnsblListed
         self.suppressionMatch = suppressionMatch
+        self.policyApplied = policyApplied
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
+        case requestId = "request_id"
         case email
         case status
-        case subStatus = "sub_status"
         case action
+        case subStatus = "sub_status"
         case domain
         case mxFound = "mx_found"
+        case mxHost = "mx_host"
         case smtpCheck = "smtp_check"
+        case catchAll = "catch_all"
         case disposable
         case roleAccount = "role_account"
         case freeProvider = "free_provider"
         case depth
         case processedAt = "processed_at"
+        case suggestedEmail = "suggested_email"
+        case retryAfterMs = "retry_after_ms"
+        case hasSpf = "has_spf"
+        case hasDmarc = "has_dmarc"
+        case dmarcPolicy = "dmarc_policy"
+        case dnsblListed = "dnsbl_listed"
         case suppressionMatch = "suppression_match"
+        case policyApplied = "policy_applied"
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
+        try container.encode(schemaVersion, forKey: .schemaVersion)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
         try container.encode(email, forKey: .email)
         try container.encode(status, forKey: .status)
-        try container.encodeIfPresent(subStatus, forKey: .subStatus)
         try container.encode(action, forKey: .action)
-        try container.encodeIfPresent(domain, forKey: .domain)
-        try container.encodeIfPresent(mxFound, forKey: .mxFound)
+        try container.encodeIfPresent(subStatus, forKey: .subStatus)
+        try container.encode(domain, forKey: .domain)
+        try container.encode(mxFound, forKey: .mxFound)
+        try container.encodeIfPresent(mxHost, forKey: .mxHost)
         try container.encodeIfPresent(smtpCheck, forKey: .smtpCheck)
-        try container.encodeIfPresent(disposable, forKey: .disposable)
-        try container.encodeIfPresent(roleAccount, forKey: .roleAccount)
-        try container.encodeIfPresent(freeProvider, forKey: .freeProvider)
-        try container.encodeIfPresent(depth, forKey: .depth)
-        try container.encodeIfPresent(processedAt, forKey: .processedAt)
+        try container.encodeIfPresent(catchAll, forKey: .catchAll)
+        try container.encode(disposable, forKey: .disposable)
+        try container.encode(roleAccount, forKey: .roleAccount)
+        try container.encode(freeProvider, forKey: .freeProvider)
+        try container.encode(depth, forKey: .depth)
+        try container.encode(processedAt, forKey: .processedAt)
+        try container.encodeIfPresent(suggestedEmail, forKey: .suggestedEmail)
+        try container.encodeIfPresent(retryAfterMs, forKey: .retryAfterMs)
+        try container.encodeIfPresent(hasSpf, forKey: .hasSpf)
+        try container.encodeIfPresent(hasDmarc, forKey: .hasDmarc)
+        try container.encodeIfPresent(dmarcPolicy, forKey: .dmarcPolicy)
+        try container.encodeIfPresent(dnsblListed, forKey: .dnsblListed)
         try container.encodeIfPresent(suppressionMatch, forKey: .suppressionMatch)
+        try container.encodeIfPresent(policyApplied, forKey: .policyApplied)
     }
 }
 

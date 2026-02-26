@@ -4,6 +4,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **schemaVersion** | **String** |  | [optional] 
+**requestId** | **String** | Unique request identifier | [optional] 
 **results** | [ValidationResult] |  | [optional] 
 **pagination** | [**Pagination**](Pagination.md) |  | [optional] 
 
