@@ -54,6 +54,43 @@ Run `carthage update`
 
 Run `pod install`
 
+## Sending Email
+
+### Send a Single Email
+
+```swift
+import MailOdds
+
+let request = DeliverRequest(
+    to: [DeliverRequestToInner(email: "recipient@example.com", name: "Jane")],
+    from: "you@yourdomain.com",
+    subject: "Hello from MailOdds",
+    html: "<h1>Welcome!</h1><p>Your order has been confirmed.</p>",
+    domainId: "your-domain-uuid"
+)
+
+let result = try await EmailSendingAPI.deliverEmail(deliverRequest: request)
+print(result.delivery?.messageId ?? "")
+```
+
+### Managing Sending Domains
+
+```swift
+// List sending domains
+let domains = try await SendingDomainsAPI.listSendingDomains()
+for domain in domains.domains ?? [] {
+    print("\(domain.domain ?? ""): \(domain.status ?? "")")
+}
+
+// Add a new sending domain
+let newDomain = try await SendingDomainsAPI.createSendingDomain(
+    createSendingDomainRequest: CreateSendingDomainRequest(domain: "yourdomain.com")
+)
+print(newDomain.dnsRecords ?? "") // DKIM records to add
+```
+
+For batch sending, scheduled delivery, and campaign management, see the [API documentation](https://mailodds.com/docs).
+
 ## Documentation for API Endpoints
 
 All URIs are relative to *https://api.mailodds.com/v1*
