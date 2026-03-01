@@ -6,29 +6,55 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct SendingDomainIdentityScore: Sendable, Codable, Hashable {
+public struct SendingDomainIdentityScore: Codable, JSONEncodable, Hashable {
 
-    /** Composite score 0-100 */
-    public var overallScore: Double?
-    public var checks: SendingDomainIdentityScoreChecks?
+    public enum Grade: String, Codable, CaseIterable {
+        case aPlus = "A+"
+        case a = "A"
+        case b = "B"
+        case c = "C"
+        case d = "D"
+        case f = "F"
+    }
+    /** Total points earned across all checks */
+    public var score: Int
+    /** Maximum possible score (100) */
+    public var maxScore: Int
+    /** Score as percentage (same as score since max is 100) */
+    public var percentage: Int
+    public var breakdown: SendingDomainIdentityScoreBreakdown
+    /** Letter grade (A+, A, B, C, D, F) */
+    public var grade: Grade
 
-    public init(overallScore: Double? = nil, checks: SendingDomainIdentityScoreChecks? = nil) {
-        self.overallScore = overallScore
-        self.checks = checks
+    public init(score: Int, maxScore: Int, percentage: Int, breakdown: SendingDomainIdentityScoreBreakdown, grade: Grade) {
+        self.score = score
+        self.maxScore = maxScore
+        self.percentage = percentage
+        self.breakdown = breakdown
+        self.grade = grade
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
-        case overallScore = "overall_score"
-        case checks
+        case score
+        case maxScore = "max_score"
+        case percentage
+        case breakdown
+        case grade
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(overallScore, forKey: .overallScore)
-        try container.encodeIfPresent(checks, forKey: .checks)
+        try container.encode(score, forKey: .score)
+        try container.encode(maxScore, forKey: .maxScore)
+        try container.encode(percentage, forKey: .percentage)
+        try container.encode(breakdown, forKey: .breakdown)
+        try container.encode(grade, forKey: .grade)
     }
 }
 

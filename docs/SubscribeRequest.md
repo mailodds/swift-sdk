@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **email** | **String** | Subscriber email address | 
 **name** | **String** | Subscriber name | [optional] 
-**metadata** | **JSONValue** | Custom metadata key-value pairs | [optional] 
+**metadata** | **AnyCodable** | Custom metadata key-value pairs | [optional] 
 **pageUrl** | **String** | URL of the page where the subscription form was submitted (for consent proof) | [optional] 
 **formId** | **String** | Identifier of the form used to subscribe (for consent proof) | [optional] 
 

@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct HealthCheck200Response: Sendable, Codable, Hashable {
+public struct HealthCheck200Response: Codable, JSONEncodable, Hashable {
 
     public var status: String?
     public var timestamp: Date?

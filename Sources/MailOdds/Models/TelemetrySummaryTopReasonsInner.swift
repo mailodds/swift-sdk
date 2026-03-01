@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct TelemetrySummaryTopReasonsInner: Sendable, Codable, Hashable {
+public struct TelemetrySummaryTopReasonsInner: Codable, JSONEncodable, Hashable {
 
     public var reason: String?
     public var count: Int?

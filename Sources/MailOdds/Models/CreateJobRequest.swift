@@ -6,9 +6,12 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
 /** Bulk jobs use the account&#39;s default validation policy. To use a specific policy, set it as default via the Policies API. */
-public struct CreateJobRequest: Sendable, Codable, Hashable {
+public struct CreateJobRequest: Codable, JSONEncodable, Hashable {
 
     public static let emailsRule = ArrayRule(minItems: nil, maxItems: 100000, uniqueItems: false)
     /** List of emails to validate */
@@ -16,13 +19,13 @@ public struct CreateJobRequest: Sendable, Codable, Hashable {
     /** Remove duplicate emails */
     public var dedup: Bool? = false
     /** Custom metadata for the job */
-    public var metadata: JSONValue?
-    /** URL for completion webhook */
+    public var metadata: AnyCodable?
+    /** URL for completion webhook. Payloads are signed with HMAC-SHA256 if a webhook secret is configured (see Webhooks section). */
     public var webhookUrl: String?
     /** Unique key for idempotent requests */
     public var idempotencyKey: String?
 
-    public init(emails: [String], dedup: Bool? = false, metadata: JSONValue? = nil, webhookUrl: String? = nil, idempotencyKey: String? = nil) {
+    public init(emails: [String], dedup: Bool? = false, metadata: AnyCodable? = nil, webhookUrl: String? = nil, idempotencyKey: String? = nil) {
         self.emails = emails
         self.dedup = dedup
         self.metadata = metadata

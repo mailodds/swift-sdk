@@ -6,33 +6,49 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct ValidationResult: Sendable, Codable, Hashable {
+/** Individual result from a bulk validation job */
+public struct ValidationResult: Codable, JSONEncodable, Hashable {
 
-    public enum Status: String, Sendable, Codable, CaseIterable {
+    public enum Status: String, Codable, CaseIterable {
         case valid = "valid"
         case invalid = "invalid"
         case catchAll = "catch_all"
         case doNotMail = "do_not_mail"
         case unknown = "unknown"
     }
-    public enum Action: String, Sendable, Codable, CaseIterable {
+    public enum Action: String, Codable, CaseIterable {
         case accept = "accept"
         case acceptWithCaution = "accept_with_caution"
         case reject = "reject"
         case retryLater = "retry_later"
     }
-    public var email: String?
-    public var status: Status?
+    public var email: String
+    public var status: Status
+    /** Detailed reason. Omitted when none. */
     public var subStatus: String?
-    public var action: Action?
-    public var processedAt: Date?
+    public var action: Action
+    /** Email domain */
+    public var domain: String
+    /** Primary MX hostname. Omitted when not resolved. */
+    public var mxHost: String?
+    /** Detailed check results (JSONB). Omitted when not available. */
+    public var checks: [String: AnyCodable]?
+    public var suppression: ValidationResultSuppression?
+    public var processedAt: Date
 
-    public init(email: String? = nil, status: Status? = nil, subStatus: String? = nil, action: Action? = nil, processedAt: Date? = nil) {
+    public init(email: String, status: Status, subStatus: String? = nil, action: Action, domain: String, mxHost: String? = nil, checks: [String: AnyCodable]? = nil, suppression: ValidationResultSuppression? = nil, processedAt: Date) {
         self.email = email
         self.status = status
         self.subStatus = subStatus
         self.action = action
+        self.domain = domain
+        self.mxHost = mxHost
+        self.checks = checks
+        self.suppression = suppression
         self.processedAt = processedAt
     }
 
@@ -41,6 +57,10 @@ public struct ValidationResult: Sendable, Codable, Hashable {
         case status
         case subStatus = "sub_status"
         case action
+        case domain
+        case mxHost = "mx_host"
+        case checks
+        case suppression
         case processedAt = "processed_at"
     }
 
@@ -48,11 +68,15 @@ public struct ValidationResult: Sendable, Codable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(email, forKey: .email)
-        try container.encodeIfPresent(status, forKey: .status)
+        try container.encode(email, forKey: .email)
+        try container.encode(status, forKey: .status)
         try container.encodeIfPresent(subStatus, forKey: .subStatus)
-        try container.encodeIfPresent(action, forKey: .action)
-        try container.encodeIfPresent(processedAt, forKey: .processedAt)
+        try container.encode(action, forKey: .action)
+        try container.encode(domain, forKey: .domain)
+        try container.encodeIfPresent(mxHost, forKey: .mxHost)
+        try container.encodeIfPresent(checks, forKey: .checks)
+        try container.encodeIfPresent(suppression, forKey: .suppression)
+        try container.encode(processedAt, forKey: .processedAt)
     }
 }
 

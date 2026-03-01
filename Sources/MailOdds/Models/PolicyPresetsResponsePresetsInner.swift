@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct PolicyPresetsResponsePresetsInner: Sendable, Codable, Hashable {
+public struct PolicyPresetsResponsePresetsInner: Codable, JSONEncodable, Hashable {
 
     public var id: String?
     public var name: String?

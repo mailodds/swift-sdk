@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct SuppressionStatsResponseByType: Sendable, Codable, Hashable {
+public struct SuppressionStatsResponseByType: Codable, JSONEncodable, Hashable {
 
     public var email: Int?
     public var domain: Int?

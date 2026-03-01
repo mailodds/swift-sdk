@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct BatchDeliverResponseRejectedInner: Sendable, Codable, Hashable {
+public struct BatchDeliverResponseRejectedInner: Codable, JSONEncodable, Hashable {
 
     public var email: String?
     /** Rejection reason (suppressed, validation_rejected) */

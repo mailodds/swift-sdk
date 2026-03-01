@@ -6,10 +6,13 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct Subscriber: Sendable, Codable, Hashable {
+public struct Subscriber: Codable, JSONEncodable, Hashable {
 
-    public enum Status: String, Sendable, Codable, CaseIterable {
+    public enum Status: String, Codable, CaseIterable {
         case pending = "pending"
         case confirmed = "confirmed"
         case unsubscribed = "unsubscribed"
@@ -32,12 +35,12 @@ public struct Subscriber: Sendable, Codable, Hashable {
     public var confirmedAt: Date?
     public var unsubscribedAt: Date?
     /** Email validation result */
-    public var validationResult: JSONValue?
+    public var validationResult: AnyCodable?
     /** Custom metadata */
-    public var metadata: JSONValue?
+    public var metadata: AnyCodable?
     public var createdAt: Date?
 
-    public init(id: String? = nil, listId: String? = nil, email: String? = nil, name: String? = nil, status: Status? = nil, consentSourceIp: String? = nil, consentPageUrl: String? = nil, consentFormId: String? = nil, consentTimestamp: Date? = nil, confirmedAt: Date? = nil, unsubscribedAt: Date? = nil, validationResult: JSONValue? = nil, metadata: JSONValue? = nil, createdAt: Date? = nil) {
+    public init(id: String? = nil, listId: String? = nil, email: String? = nil, name: String? = nil, status: Status? = nil, consentSourceIp: String? = nil, consentPageUrl: String? = nil, consentFormId: String? = nil, consentTimestamp: Date? = nil, confirmedAt: Date? = nil, unsubscribedAt: Date? = nil, validationResult: AnyCodable? = nil, metadata: AnyCodable? = nil, createdAt: Date? = nil) {
         self.id = id
         self.listId = listId
         self.email = email

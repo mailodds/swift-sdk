@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct TelemetrySummaryTotals: Sendable, Codable, Hashable {
+public struct TelemetrySummaryTotals: Codable, JSONEncodable, Hashable {
 
     /** Total validations in window */
     public var validations: Int?

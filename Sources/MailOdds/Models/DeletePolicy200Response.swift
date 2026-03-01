@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct DeletePolicy200Response: Sendable, Codable, Hashable {
+public struct DeletePolicy200Response: Codable, JSONEncodable, Hashable {
 
     public var deleted: Bool?
     public var policyId: Int?

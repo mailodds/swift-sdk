@@ -6,13 +6,16 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
 open class SystemAPI {
 
     /**
      * enum for parameter window
      */
-    public enum Window_getTelemetrySummary: String, Sendable, CaseIterable {
+    public enum Window_getTelemetrySummary: String, CaseIterable {
         case _1h = "1h"
         case _24h = "24h"
         case _30d = "30d"
@@ -22,12 +25,19 @@ open class SystemAPI {
      Get validation telemetry
      
      - parameter window: (query) Time window for metrics (optional, default to ._24h)
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: TelemetrySummary
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getTelemetrySummary(window: Window_getTelemetrySummary? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> TelemetrySummary {
-        return try await getTelemetrySummaryWithRequestBuilder(window: window, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func getTelemetrySummary(window: Window_getTelemetrySummary? = nil, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: TelemetrySummary?, _ error: Error?) -> Void)) -> RequestTask {
+        return getTelemetrySummaryWithRequestBuilder(window: window).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -39,63 +49,68 @@ open class SystemAPI {
        - name: BearerAuth
      - responseHeaders: [ETag(String), Cache-Control(String)]
      - parameter window: (query) Time window for metrics (optional, default to ._24h)
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<TelemetrySummary> 
      */
-    open class func getTelemetrySummaryWithRequestBuilder(window: Window_getTelemetrySummary? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<TelemetrySummary> {
+    open class func getTelemetrySummaryWithRequestBuilder(window: Window_getTelemetrySummary? = nil) -> RequestBuilder<TelemetrySummary> {
         let localVariablePath = "/v1/telemetry/summary"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "window": (wrappedValue: window?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "window": (wrappedValue: window?.encodeToJSON(), isExplode: true),
         ])
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<TelemetrySummary>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<TelemetrySummary>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Health check
      
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: HealthCheck200Response
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func healthCheck(apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> HealthCheck200Response {
-        return try await healthCheckWithRequestBuilder(apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func healthCheck(apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: HealthCheck200Response?, _ error: Error?) -> Void)) -> RequestTask {
+        return healthCheckWithRequestBuilder().execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
      Health check
      - GET /health
      - Check API health status. No authentication required.
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<HealthCheck200Response> 
      */
-    open class func healthCheckWithRequestBuilder(apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<HealthCheck200Response> {
+    open class func healthCheckWithRequestBuilder() -> RequestBuilder<HealthCheck200Response> {
         let localVariablePath = "/health"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<HealthCheck200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<HealthCheck200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
     }
 }

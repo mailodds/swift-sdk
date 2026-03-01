@@ -6,64 +6,93 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct Job: Sendable, Codable, Hashable {
+public struct Job: Codable, JSONEncodable, Hashable {
 
-    public enum Status: String, Sendable, Codable, CaseIterable {
+    public enum Status: String, Codable, CaseIterable {
         case pending = "pending"
         case processing = "processing"
         case completed = "completed"
         case failed = "failed"
         case cancelled = "cancelled"
     }
-    public static let progressPercentRule = NumericRule<Int>(minimum: 0, exclusiveMinimum: false, maximum: 100, exclusiveMaximum: false, multipleOf: nil)
-    public var id: String?
-    public var status: Status?
-    public var totalCount: Int?
-    public var processedCount: Int?
-    public var progressPercent: Int?
+    public var id: String
+    /** Job name (from metadata or auto-generated) */
+    public var name: String
+    public var status: Status
+    public var totalCount: Int
+    public var processedCount: Int
     public var summary: JobSummary?
-    public var createdAt: Date?
+    public var createdAt: Date
+    /** When processing began. Omitted if not yet started. */
+    public var startedAt: Date?
+    /** Omitted if not yet completed. */
     public var completedAt: Date?
-    public var metadata: JSONValue?
+    /** When job results will be purged */
+    public var resultsExpireAt: Date
+    /** Custom metadata attached at creation */
+    public var metadata: AnyCodable?
+    /** Error details. Present only for failed jobs. */
+    public var errorMessage: String?
+    /** Request ID from the job creation request */
+    public var requestId: String?
+    public var artifacts: JobArtifacts?
 
-    public init(id: String? = nil, status: Status? = nil, totalCount: Int? = nil, processedCount: Int? = nil, progressPercent: Int? = nil, summary: JobSummary? = nil, createdAt: Date? = nil, completedAt: Date? = nil, metadata: JSONValue? = nil) {
+    public init(id: String, name: String, status: Status, totalCount: Int, processedCount: Int, summary: JobSummary? = nil, createdAt: Date, startedAt: Date? = nil, completedAt: Date? = nil, resultsExpireAt: Date, metadata: AnyCodable? = nil, errorMessage: String? = nil, requestId: String? = nil, artifacts: JobArtifacts? = nil) {
         self.id = id
+        self.name = name
         self.status = status
         self.totalCount = totalCount
         self.processedCount = processedCount
-        self.progressPercent = progressPercent
         self.summary = summary
         self.createdAt = createdAt
+        self.startedAt = startedAt
         self.completedAt = completedAt
+        self.resultsExpireAt = resultsExpireAt
         self.metadata = metadata
+        self.errorMessage = errorMessage
+        self.requestId = requestId
+        self.artifacts = artifacts
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case id
+        case name
         case status
         case totalCount = "total_count"
         case processedCount = "processed_count"
-        case progressPercent = "progress_percent"
         case summary
         case createdAt = "created_at"
+        case startedAt = "started_at"
         case completedAt = "completed_at"
+        case resultsExpireAt = "results_expire_at"
         case metadata
+        case errorMessage = "error_message"
+        case requestId = "request_id"
+        case artifacts
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(id, forKey: .id)
-        try container.encodeIfPresent(status, forKey: .status)
-        try container.encodeIfPresent(totalCount, forKey: .totalCount)
-        try container.encodeIfPresent(processedCount, forKey: .processedCount)
-        try container.encodeIfPresent(progressPercent, forKey: .progressPercent)
+        try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
+        try container.encode(status, forKey: .status)
+        try container.encode(totalCount, forKey: .totalCount)
+        try container.encode(processedCount, forKey: .processedCount)
         try container.encodeIfPresent(summary, forKey: .summary)
-        try container.encodeIfPresent(createdAt, forKey: .createdAt)
+        try container.encode(createdAt, forKey: .createdAt)
+        try container.encodeIfPresent(startedAt, forKey: .startedAt)
         try container.encodeIfPresent(completedAt, forKey: .completedAt)
+        try container.encode(resultsExpireAt, forKey: .resultsExpireAt)
         try container.encodeIfPresent(metadata, forKey: .metadata)
+        try container.encodeIfPresent(errorMessage, forKey: .errorMessage)
+        try container.encodeIfPresent(requestId, forKey: .requestId)
+        try container.encodeIfPresent(artifacts, forKey: .artifacts)
     }
 }
 

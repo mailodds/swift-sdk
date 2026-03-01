@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct GetSubscribers200Response: Sendable, Codable, Hashable {
+public struct GetSubscribers200Response: Codable, JSONEncodable, Hashable {
 
     public var subscribers: [Subscriber]?
     public var total: Int?

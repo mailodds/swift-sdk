@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
 open class EmailValidationAPI {
 
@@ -13,12 +16,19 @@ open class EmailValidationAPI {
      Validate multiple emails (sync)
      
      - parameter validateBatchRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: ValidateBatch200Response
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func validateBatch(validateBatchRequest: ValidateBatchRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> ValidateBatch200Response {
-        return try await validateBatchWithRequestBuilder(validateBatchRequest: validateBatchRequest, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func validateBatch(validateBatchRequest: ValidateBatchRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: ValidateBatch200Response?, _ error: Error?) -> Void)) -> RequestTask {
+        return validateBatchWithRequestBuilder(validateBatchRequest: validateBatchRequest).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -29,37 +39,43 @@ open class EmailValidationAPI {
        - type: http
        - name: BearerAuth
      - parameter validateBatchRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<ValidateBatch200Response> 
      */
-    open class func validateBatchWithRequestBuilder(validateBatchRequest: ValidateBatchRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<ValidateBatch200Response> {
+    open class func validateBatchWithRequestBuilder(validateBatchRequest: ValidateBatchRequest) -> RequestBuilder<ValidateBatch200Response> {
         let localVariablePath = "/v1/validate/batch"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: validateBatchRequest, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: validateBatchRequest)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<ValidateBatch200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<ValidateBatch200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Validate single email
      
      - parameter validateRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: ValidationResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func validateEmail(validateRequest: ValidateRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> ValidationResponse {
-        return try await validateEmailWithRequestBuilder(validateRequest: validateRequest, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func validateEmail(validateRequest: ValidateRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: ValidationResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return validateEmailWithRequestBuilder(validateRequest: validateRequest).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -70,24 +86,23 @@ open class EmailValidationAPI {
        - type: http
        - name: BearerAuth
      - parameter validateRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<ValidationResponse> 
      */
-    open class func validateEmailWithRequestBuilder(validateRequest: ValidateRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<ValidationResponse> {
+    open class func validateEmailWithRequestBuilder(validateRequest: ValidateRequest) -> RequestBuilder<ValidationResponse> {
         let localVariablePath = "/v1/validate"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: validateRequest, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: validateRequest)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<ValidationResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<ValidationResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 }

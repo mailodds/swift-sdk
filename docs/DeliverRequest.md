@@ -10,10 +10,13 @@ Name | Type | Description | Notes
 **text** | **String** | Plain text email body | [optional] 
 **domainId** | **String** | Sending domain UUID | 
 **replyTo** | **String** | Reply-to address | [optional] 
-**headers** | **JSONValue** | Extra email headers | [optional] 
+**headers** | **AnyCodable** | Extra email headers | [optional] 
 **tags** | **[String]** | Tags for categorization | [optional] 
 **campaignType** | **String** | Campaign type for JSON-LD auto-generation | [optional] 
 **structuredData** | [**DeliverRequestStructuredData**](DeliverRequestStructuredData.md) |  | [optional] 
+**schemaData** | **[String: String]** | Key-value pairs for campaign_type JSON-LD resolution (e.g., order_number, tracking_url) | [optional] 
+**autoDetectSchema** | **Bool** | Auto-detect JSON-LD structured data type from subject line | [optional] [default to false]
+**aiSummary** | **String** | Hidden text summary for AI email assistants (max 500 characters) | [optional] 
 **options** | [**DeliverRequestOptions**](DeliverRequestOptions.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

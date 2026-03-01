@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct ValidateBatch200ResponseSummary: Sendable, Codable, Hashable {
+public struct ValidateBatch200ResponseSummary: Codable, JSONEncodable, Hashable {
 
     public var valid: Int?
     public var invalid: Int?

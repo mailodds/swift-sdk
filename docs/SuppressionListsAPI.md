@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**addSuppression**](SuppressionListsAPI.md#addsuppression) | **POST** /v1/suppression | Add suppression entries
 [**checkSuppression**](SuppressionListsAPI.md#checksuppression) | **POST** /v1/suppression/check | Check suppression status
+[**getSuppressionAuditLog**](SuppressionListsAPI.md#getsuppressionauditlog) | **GET** /v1/suppression/audit | Get suppression audit log
 [**getSuppressionStats**](SuppressionListsAPI.md#getsuppressionstats) | **GET** /v1/suppression/stats | Get suppression statistics
 [**listSuppression**](SuppressionListsAPI.md#listsuppression) | **GET** /v1/suppression | List suppression entries
 [**removeSuppression**](SuppressionListsAPI.md#removesuppression) | **DELETE** /v1/suppression | Remove suppression entries
@@ -111,6 +112,58 @@ Name | Type | Description  | Notes
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **getSuppressionAuditLog**
+```swift
+    open class func getSuppressionAuditLog(page: Int? = nil, limit: Int? = nil, completion: @escaping (_ data: SuppressionAuditResponse?, _ error: Error?) -> Void)
+```
+
+Get suppression audit log
+
+Get a chronological log of suppression list changes (additions, removals).
+
+### Example
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import MailOdds
+
+let page = 987 // Int |  (optional) (default to 1)
+let limit = 987 // Int |  (optional) (default to 20)
+
+// Get suppression audit log
+SuppressionListsAPI.getSuppressionAuditLog(page: page, limit: limit) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **page** | **Int** |  | [optional] [default to 1]
+ **limit** | **Int** |  | [optional] [default to 20]
+
+### Return type
+
+[**SuppressionAuditResponse**](SuppressionAuditResponse.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **getSuppressionStats**
 ```swift
     open class func getSuppressionStats(completion: @escaping (_ data: SuppressionStatsResponse?, _ error: Error?) -> Void)
@@ -159,7 +212,7 @@ This endpoint does not need any parameter.
 
 # **listSuppression**
 ```swift
-    open class func listSuppression(page: Int? = nil, perPage: Int? = nil, type: ModelType_listSuppression? = nil, search: String? = nil, completion: @escaping (_ data: SuppressionListResponse?, _ error: Error?) -> Void)
+    open class func listSuppression(page: Int? = nil, perPage: Int? = nil, type: ModelType_listSuppression? = nil, search: String? = nil, source: String? = nil, completion: @escaping (_ data: SuppressionListResponse?, _ error: Error?) -> Void)
 ```
 
 List suppression entries
@@ -175,9 +228,10 @@ let page = 987 // Int |  (optional) (default to 1)
 let perPage = 987 // Int |  (optional) (default to 50)
 let type = "type_example" // String |  (optional)
 let search = "search_example" // String |  (optional)
+let source = "source_example" // String | Filter by entry source (e.g. api, bounce, complaint) (optional)
 
 // List suppression entries
-SuppressionListsAPI.listSuppression(page: page, perPage: perPage, type: type, search: search) { (response, error) in
+SuppressionListsAPI.listSuppression(page: page, perPage: perPage, type: type, search: search, source: source) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -197,6 +251,7 @@ Name | Type | Description  | Notes
  **perPage** | **Int** |  | [optional] [default to 50]
  **type** | **String** |  | [optional] 
  **search** | **String** |  | [optional] 
+ **source** | **String** | Filter by entry source (e.g. api, bounce, complaint) | [optional] 
 
 ### Return type
 

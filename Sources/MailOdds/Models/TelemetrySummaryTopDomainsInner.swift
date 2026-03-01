@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct TelemetrySummaryTopDomainsInner: Sendable, Codable, Hashable {
+public struct TelemetrySummaryTopDomainsInner: Codable, JSONEncodable, Hashable {
 
     public var domain: String?
     public var volume: Int?

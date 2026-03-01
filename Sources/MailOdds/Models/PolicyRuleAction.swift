@@ -6,10 +6,13 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct PolicyRuleAction: Sendable, Codable, Hashable {
+public struct PolicyRuleAction: Codable, JSONEncodable, Hashable {
 
-    public enum Action: String, Sendable, Codable, CaseIterable {
+    public enum Action: String, Codable, CaseIterable {
         case accept = "accept"
         case reject = "reject"
         case acceptWithCaution = "accept_with_caution"

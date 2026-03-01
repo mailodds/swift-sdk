@@ -429,7 +429,7 @@ Name | Type | Description  | Notes
 
 # **listJobs**
 ```swift
-    open class func listJobs(page: Int? = nil, perPage: Int? = nil, status: Status_listJobs? = nil, completion: @escaping (_ data: JobListResponse?, _ error: Error?) -> Void)
+    open class func listJobs(cursor: String? = nil, limit: Int? = nil, status: Status_listJobs? = nil, completion: @escaping (_ data: JobListResponse?, _ error: Error?) -> Void)
 ```
 
 List validation jobs
@@ -441,12 +441,12 @@ List all validation jobs for the authenticated account.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let page = 987 // Int |  (optional) (default to 1)
-let perPage = 987 // Int |  (optional) (default to 20)
+let cursor = "cursor_example" // String | Pagination cursor (ISO timestamp from previous response) (optional)
+let limit = 987 // Int | Results per page (optional) (default to 50)
 let status = "status_example" // String |  (optional)
 
 // List validation jobs
-BulkValidationAPI.listJobs(page: page, perPage: perPage, status: status) { (response, error) in
+BulkValidationAPI.listJobs(cursor: cursor, limit: limit, status: status) { (response, error) in
     guard error == nil else {
         print(error)
         return
@@ -462,8 +462,8 @@ BulkValidationAPI.listJobs(page: page, perPage: perPage, status: status) { (resp
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **Int** |  | [optional] [default to 1]
- **perPage** | **Int** |  | [optional] [default to 20]
+ **cursor** | **String** | Pagination cursor (ISO timestamp from previous response) | [optional] 
+ **limit** | **Int** | Results per page | [optional] [default to 50]
  **status** | **String** |  | [optional] 
 
 ### Return type

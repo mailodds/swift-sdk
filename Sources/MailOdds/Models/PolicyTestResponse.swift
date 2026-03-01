@@ -6,21 +6,24 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct PolicyTestResponse: Sendable, Codable, Hashable {
+public struct PolicyTestResponse: Codable, JSONEncodable, Hashable {
 
     public var schemaVersion: String?
     /** Unique request identifier */
     public var requestId: String?
     /** Original validation result before policy */
-    public var original: JSONValue?
+    public var original: AnyCodable?
     /** Result after policy applied */
-    public var modified: JSONValue?
+    public var modified: AnyCodable?
     /** The rule that matched, or null if none matched */
-    public var matchedRule: JSONValue?
+    public var matchedRule: AnyCodable?
     public var rulesEvaluated: Int?
 
-    public init(schemaVersion: String? = nil, requestId: String? = nil, original: JSONValue? = nil, modified: JSONValue? = nil, matchedRule: JSONValue? = nil, rulesEvaluated: Int? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, original: AnyCodable? = nil, modified: AnyCodable? = nil, matchedRule: AnyCodable? = nil, rulesEvaluated: Int? = nil) {
         self.schemaVersion = schemaVersion
         self.requestId = requestId
         self.original = original

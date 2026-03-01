@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct JobResponse: Sendable, Codable, Hashable {
+public struct JobResponse: Codable, JSONEncodable, Hashable {
 
     public var schemaVersion: String?
     /** Unique request identifier */

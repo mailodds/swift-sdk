@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct Pagination: Sendable, Codable, Hashable {
+public struct Pagination: Codable, JSONEncodable, Hashable {
 
     public var page: Int?
     public var perPage: Int?

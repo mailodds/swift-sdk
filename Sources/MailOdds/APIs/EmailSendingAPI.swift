@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
 open class EmailSendingAPI {
 
@@ -13,12 +16,19 @@ open class EmailSendingAPI {
      Send to multiple recipients (max 100)
      
      - parameter batchDeliverRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: BatchDeliverResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func deliverBatch(batchDeliverRequest: BatchDeliverRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> BatchDeliverResponse {
-        return try await deliverBatchWithRequestBuilder(batchDeliverRequest: batchDeliverRequest, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func deliverBatch(batchDeliverRequest: BatchDeliverRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: BatchDeliverResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return deliverBatchWithRequestBuilder(batchDeliverRequest: batchDeliverRequest).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -29,37 +39,43 @@ open class EmailSendingAPI {
        - type: http
        - name: BearerAuth
      - parameter batchDeliverRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<BatchDeliverResponse> 
      */
-    open class func deliverBatchWithRequestBuilder(batchDeliverRequest: BatchDeliverRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<BatchDeliverResponse> {
+    open class func deliverBatchWithRequestBuilder(batchDeliverRequest: BatchDeliverRequest) -> RequestBuilder<BatchDeliverResponse> {
         let localVariablePath = "/v1/deliver/batch"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: batchDeliverRequest, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: batchDeliverRequest)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<BatchDeliverResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<BatchDeliverResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Send a single email
      
      - parameter deliverRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: DeliverResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func deliverEmail(deliverRequest: DeliverRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> DeliverResponse {
-        return try await deliverEmailWithRequestBuilder(deliverRequest: deliverRequest, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func deliverEmail(deliverRequest: DeliverRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: DeliverResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return deliverEmailWithRequestBuilder(deliverRequest: deliverRequest).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -70,24 +86,23 @@ open class EmailSendingAPI {
        - type: http
        - name: BearerAuth
      - parameter deliverRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<DeliverResponse> 
      */
-    open class func deliverEmailWithRequestBuilder(deliverRequest: DeliverRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<DeliverResponse> {
+    open class func deliverEmailWithRequestBuilder(deliverRequest: DeliverRequest) -> RequestBuilder<DeliverResponse> {
         let localVariablePath = "/v1/deliver"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: deliverRequest, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: deliverRequest)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<DeliverResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<DeliverResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 }

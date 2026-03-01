@@ -6,24 +6,27 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
 /** Flat validation response. Conditional fields are omitted (not null) when not applicable. */
-public struct ValidationResponse: Sendable, Codable, Hashable {
+public struct ValidationResponse: Codable, JSONEncodable, Hashable {
 
-    public enum Status: String, Sendable, Codable, CaseIterable {
+    public enum Status: String, Codable, CaseIterable {
         case valid = "valid"
         case invalid = "invalid"
         case catchAll = "catch_all"
         case doNotMail = "do_not_mail"
         case unknown = "unknown"
     }
-    public enum Action: String, Sendable, Codable, CaseIterable {
+    public enum Action: String, Codable, CaseIterable {
         case accept = "accept"
         case acceptWithCaution = "accept_with_caution"
         case reject = "reject"
         case retryLater = "retry_later"
     }
-    public enum SubStatus: String, Sendable, Codable, CaseIterable {
+    public enum SubStatus: String, Codable, CaseIterable {
         case formatInvalid = "format_invalid"
         case mxMissing = "mx_missing"
         case mxTimeout = "mx_timeout"
@@ -38,11 +41,11 @@ public struct ValidationResponse: Sendable, Codable, Hashable {
         case restrictedMilitary = "restricted_military"
         case restrictedSanctioned = "restricted_sanctioned"
     }
-    public enum Depth: String, Sendable, Codable, CaseIterable {
+    public enum Depth: String, Codable, CaseIterable {
         case standard = "standard"
         case enhanced = "enhanced"
     }
-    public enum DmarcPolicy: String, Sendable, Codable, CaseIterable {
+    public enum DmarcPolicy: String, Codable, CaseIterable {
         case _none = "none"
         case quarantine = "quarantine"
         case reject = "reject"
@@ -76,7 +79,7 @@ public struct ValidationResponse: Sendable, Codable, Hashable {
     public var depth: Depth
     /** ISO 8601 timestamp of validation */
     public var processedAt: Date
-    /** Typo correction suggestion. Omitted when no typo detected. */
+    /** Domain typo correction suggestion based on a static lookup table of common misspellings (e.g. gmial.com -> gmail.com). Not validated via SMTP. Omitted when no match found. */
     public var suggestedEmail: String?
     /** Suggested retry delay in milliseconds. Present only for retry_later action. */
     public var retryAfterMs: Int?

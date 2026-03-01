@@ -3,11 +3,15 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**email** | **String** |  | [optional] 
-**status** | **String** |  | [optional] 
-**subStatus** | **String** |  | [optional] 
-**action** | **String** |  | [optional] 
-**processedAt** | **Date** |  | [optional] 
+**email** | **String** |  | 
+**status** | **String** |  | 
+**subStatus** | **String** | Detailed reason. Omitted when none. | [optional] 
+**action** | **String** |  | 
+**domain** | **String** | Email domain | 
+**mxHost** | **String** | Primary MX hostname. Omitted when not resolved. | [optional] 
+**checks** | **[String: AnyCodable]** | Detailed check results (JSONB). Omitted when not available. | [optional] 
+**suppression** | [**ValidationResultSuppression**](ValidationResultSuppression.md) |  | [optional] 
+**processedAt** | **Date** |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

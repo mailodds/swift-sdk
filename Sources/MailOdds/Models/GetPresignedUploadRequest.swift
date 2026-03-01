@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct GetPresignedUploadRequest: Sendable, Codable, Hashable {
+public struct GetPresignedUploadRequest: Codable, JSONEncodable, Hashable {
 
     /** Original filename */
     public var filename: String

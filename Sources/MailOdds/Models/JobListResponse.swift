@@ -6,27 +6,36 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct JobListResponse: Sendable, Codable, Hashable {
+public struct JobListResponse: Codable, JSONEncodable, Hashable {
 
     public var schemaVersion: String?
     /** Unique request identifier */
     public var requestId: String?
-    public var jobs: [Job]?
-    public var pagination: Pagination?
+    /** List of jobs */
+    public var data: [Job]?
+    /** Cursor for next page. Null when no more results. */
+    public var nextCursor: String?
+    /** Whether more results exist beyond this page */
+    public var hasMore: Bool?
 
-    public init(schemaVersion: String? = nil, requestId: String? = nil, jobs: [Job]? = nil, pagination: Pagination? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, data: [Job]? = nil, nextCursor: String? = nil, hasMore: Bool? = nil) {
         self.schemaVersion = schemaVersion
         self.requestId = requestId
-        self.jobs = jobs
-        self.pagination = pagination
+        self.data = data
+        self.nextCursor = nextCursor
+        self.hasMore = hasMore
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
         case requestId = "request_id"
-        case jobs
-        case pagination
+        case data
+        case nextCursor = "next_cursor"
+        case hasMore = "has_more"
     }
 
     // Encodable protocol methods
@@ -35,8 +44,9 @@ public struct JobListResponse: Sendable, Codable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
         try container.encodeIfPresent(requestId, forKey: .requestId)
-        try container.encodeIfPresent(jobs, forKey: .jobs)
-        try container.encodeIfPresent(pagination, forKey: .pagination)
+        try container.encodeIfPresent(data, forKey: .data)
+        try container.encodeIfPresent(nextCursor, forKey: .nextCursor)
+        try container.encodeIfPresent(hasMore, forKey: .hasMore)
     }
 }
 

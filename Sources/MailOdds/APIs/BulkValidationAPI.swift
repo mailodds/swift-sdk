@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
 open class BulkValidationAPI {
 
@@ -13,12 +16,19 @@ open class BulkValidationAPI {
      Cancel a job
      
      - parameter jobId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: JobResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func cancelJob(jobId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> JobResponse {
-        return try await cancelJobWithRequestBuilder(jobId: jobId, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func cancelJob(jobId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: JobResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return cancelJobWithRequestBuilder(jobId: jobId).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -29,40 +39,46 @@ open class BulkValidationAPI {
        - type: http
        - name: BearerAuth
      - parameter jobId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<JobResponse> 
      */
-    open class func cancelJobWithRequestBuilder(jobId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<JobResponse> {
+    open class func cancelJobWithRequestBuilder(jobId: String) -> RequestBuilder<JobResponse> {
         var localVariablePath = "/v1/jobs/{job_id}/cancel"
         let jobIdPreEscape = "\(APIHelper.mapValueToPathItem(jobId))"
         let jobIdPostEscape = jobIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{job_id}", with: jobIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<JobResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<JobResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Create bulk validation job (JSON)
      
      - parameter createJobRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: JobResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createJob(createJobRequest: CreateJobRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> JobResponse {
-        return try await createJobWithRequestBuilder(createJobRequest: createJobRequest, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func createJob(createJobRequest: CreateJobRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: JobResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return createJobWithRequestBuilder(createJobRequest: createJobRequest).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -73,37 +89,43 @@ open class BulkValidationAPI {
        - type: http
        - name: BearerAuth
      - parameter createJobRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<JobResponse> 
      */
-    open class func createJobWithRequestBuilder(createJobRequest: CreateJobRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<JobResponse> {
+    open class func createJobWithRequestBuilder(createJobRequest: CreateJobRequest) -> RequestBuilder<JobResponse> {
         let localVariablePath = "/v1/jobs"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createJobRequest, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createJobRequest)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<JobResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<JobResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Create job from S3 upload
      
      - parameter createJobFromS3Request: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: JobResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createJobFromS3(createJobFromS3Request: CreateJobFromS3Request, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> JobResponse {
-        return try await createJobFromS3WithRequestBuilder(createJobFromS3Request: createJobFromS3Request, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func createJobFromS3(createJobFromS3Request: CreateJobFromS3Request, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: JobResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return createJobFromS3WithRequestBuilder(createJobFromS3Request: createJobFromS3Request).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -114,25 +136,24 @@ open class BulkValidationAPI {
        - type: http
        - name: BearerAuth
      - parameter createJobFromS3Request: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<JobResponse> 
      */
-    open class func createJobFromS3WithRequestBuilder(createJobFromS3Request: CreateJobFromS3Request, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<JobResponse> {
+    open class func createJobFromS3WithRequestBuilder(createJobFromS3Request: CreateJobFromS3Request) -> RequestBuilder<JobResponse> {
         let localVariablePath = "/v1/jobs/upload/s3"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createJobFromS3Request, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createJobFromS3Request)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<JobResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<JobResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
@@ -141,12 +162,19 @@ open class BulkValidationAPI {
      - parameter file: (form) CSV, Excel (.xlsx, .xls), ODS, or TXT file 
      - parameter dedup: (form) Remove duplicate emails (optional, default to false)
      - parameter metadata: (form) JSON metadata for the job (optional)
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: JobResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createJobUpload(file: URL, dedup: Bool? = nil, metadata: String? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> JobResponse {
-        return try await createJobUploadWithRequestBuilder(file: file, dedup: dedup, metadata: metadata, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func createJobUpload(file: URL, dedup: Bool? = nil, metadata: String? = nil, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: JobResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return createJobUploadWithRequestBuilder(file: file, dedup: dedup, metadata: metadata).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -159,16 +187,15 @@ open class BulkValidationAPI {
      - parameter file: (form) CSV, Excel (.xlsx, .xls), ODS, or TXT file 
      - parameter dedup: (form) Remove duplicate emails (optional, default to false)
      - parameter metadata: (form) JSON metadata for the job (optional)
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<JobResponse> 
      */
-    open class func createJobUploadWithRequestBuilder(file: URL, dedup: Bool? = nil, metadata: String? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<JobResponse> {
+    open class func createJobUploadWithRequestBuilder(file: URL, dedup: Bool? = nil, metadata: String? = nil) -> RequestBuilder<JobResponse> {
         let localVariablePath = "/v1/jobs/upload"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableFormParams: [String: (any Sendable)?] = [
-            "file": file.asParameter(codableHelper: apiConfiguration.codableHelper),
-            "dedup": dedup?.asParameter(codableHelper: apiConfiguration.codableHelper),
-            "metadata": metadata?.asParameter(codableHelper: apiConfiguration.codableHelper),
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableFormParams: [String: Any?] = [
+            "file": file.encodeToJSON(),
+            "dedup": dedup?.encodeToJSON(),
+            "metadata": metadata?.encodeToJSON(),
         ]
 
         let localVariableNonNullParameters = APIHelper.rejectNil(localVariableFormParams)
@@ -176,27 +203,34 @@ open class BulkValidationAPI {
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "multipart/form-data",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<JobResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<JobResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Delete a job
      
      - parameter jobId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: DeleteJob200Response
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func deleteJob(jobId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> DeleteJob200Response {
-        return try await deleteJobWithRequestBuilder(jobId: jobId, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func deleteJob(jobId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: DeleteJob200Response?, _ error: Error?) -> Void)) -> RequestTask {
+        return deleteJobWithRequestBuilder(jobId: jobId).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -207,40 +241,46 @@ open class BulkValidationAPI {
        - type: http
        - name: BearerAuth
      - parameter jobId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<DeleteJob200Response> 
      */
-    open class func deleteJobWithRequestBuilder(jobId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<DeleteJob200Response> {
+    open class func deleteJobWithRequestBuilder(jobId: String) -> RequestBuilder<DeleteJob200Response> {
         var localVariablePath = "/v1/jobs/{job_id}"
         let jobIdPreEscape = "\(APIHelper.mapValueToPathItem(jobId))"
         let jobIdPostEscape = jobIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{job_id}", with: jobIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<DeleteJob200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<DeleteJob200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Get job status
      
      - parameter jobId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: JobResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getJob(jobId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> JobResponse {
-        return try await getJobWithRequestBuilder(jobId: jobId, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func getJob(jobId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: JobResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getJobWithRequestBuilder(jobId: jobId).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -251,34 +291,33 @@ open class BulkValidationAPI {
        - type: http
        - name: BearerAuth
      - parameter jobId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<JobResponse> 
      */
-    open class func getJobWithRequestBuilder(jobId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<JobResponse> {
+    open class func getJobWithRequestBuilder(jobId: String) -> RequestBuilder<JobResponse> {
         var localVariablePath = "/v1/jobs/{job_id}"
         let jobIdPreEscape = "\(APIHelper.mapValueToPathItem(jobId))"
         let jobIdPostEscape = jobIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{job_id}", with: jobIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<JobResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<JobResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      * enum for parameter format
      */
-    public enum Format_getJobResults: String, Sendable, CaseIterable {
+    public enum Format_getJobResults: String, CaseIterable {
         case json = "json"
         case csv = "csv"
         case ndjson = "ndjson"
@@ -287,7 +326,7 @@ open class BulkValidationAPI {
     /**
      * enum for parameter filter
      */
-    public enum Filter_getJobResults: String, Sendable, CaseIterable {
+    public enum Filter_getJobResults: String, CaseIterable {
         case all = "all"
         case validOnly = "valid_only"
         case invalidOnly = "invalid_only"
@@ -301,12 +340,19 @@ open class BulkValidationAPI {
      - parameter filter: (query)  (optional)
      - parameter page: (query)  (optional, default to 1)
      - parameter perPage: (query)  (optional, default to 1000)
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: ResultsResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getJobResults(jobId: String, format: Format_getJobResults? = nil, filter: Filter_getJobResults? = nil, page: Int? = nil, perPage: Int? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> ResultsResponse {
-        return try await getJobResultsWithRequestBuilder(jobId: jobId, format: format, filter: filter, page: page, perPage: perPage, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func getJobResults(jobId: String, format: Format_getJobResults? = nil, filter: Filter_getJobResults? = nil, page: Int? = nil, perPage: Int? = nil, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: ResultsResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getJobResultsWithRequestBuilder(jobId: jobId, format: format, filter: filter, page: page, perPage: perPage).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -321,46 +367,52 @@ open class BulkValidationAPI {
      - parameter filter: (query)  (optional)
      - parameter page: (query)  (optional, default to 1)
      - parameter perPage: (query)  (optional, default to 1000)
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<ResultsResponse> 
      */
-    open class func getJobResultsWithRequestBuilder(jobId: String, format: Format_getJobResults? = nil, filter: Filter_getJobResults? = nil, page: Int? = nil, perPage: Int? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<ResultsResponse> {
+    open class func getJobResultsWithRequestBuilder(jobId: String, format: Format_getJobResults? = nil, filter: Filter_getJobResults? = nil, page: Int? = nil, perPage: Int? = nil) -> RequestBuilder<ResultsResponse> {
         var localVariablePath = "/v1/jobs/{job_id}/results"
         let jobIdPreEscape = "\(APIHelper.mapValueToPathItem(jobId))"
         let jobIdPostEscape = jobIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{job_id}", with: jobIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "format": (wrappedValue: format?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
-            "filter": (wrappedValue: filter?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
-            "page": (wrappedValue: page?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
-            "per_page": (wrappedValue: perPage?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "format": (wrappedValue: format?.encodeToJSON(), isExplode: true),
+            "filter": (wrappedValue: filter?.encodeToJSON(), isExplode: true),
+            "page": (wrappedValue: page?.encodeToJSON(), isExplode: true),
+            "per_page": (wrappedValue: perPage?.encodeToJSON(), isExplode: true),
         ])
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<ResultsResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<ResultsResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Get S3 presigned upload URL
      
      - parameter getPresignedUploadRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: PresignedUploadResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getPresignedUpload(getPresignedUploadRequest: GetPresignedUploadRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> PresignedUploadResponse {
-        return try await getPresignedUploadWithRequestBuilder(getPresignedUploadRequest: getPresignedUploadRequest, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func getPresignedUpload(getPresignedUploadRequest: GetPresignedUploadRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: PresignedUploadResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getPresignedUploadWithRequestBuilder(getPresignedUploadRequest: getPresignedUploadRequest).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -371,31 +423,30 @@ open class BulkValidationAPI {
        - type: http
        - name: BearerAuth
      - parameter getPresignedUploadRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<PresignedUploadResponse> 
      */
-    open class func getPresignedUploadWithRequestBuilder(getPresignedUploadRequest: GetPresignedUploadRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<PresignedUploadResponse> {
+    open class func getPresignedUploadWithRequestBuilder(getPresignedUploadRequest: GetPresignedUploadRequest) -> RequestBuilder<PresignedUploadResponse> {
         let localVariablePath = "/v1/jobs/upload/presigned"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getPresignedUploadRequest, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: getPresignedUploadRequest)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<PresignedUploadResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<PresignedUploadResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      * enum for parameter status
      */
-    public enum Status_listJobs: String, Sendable, CaseIterable {
+    public enum Status_listJobs: String, CaseIterable {
         case pending = "pending"
         case processing = "processing"
         case completed = "completed"
@@ -406,15 +457,22 @@ open class BulkValidationAPI {
     /**
      List validation jobs
      
-     - parameter page: (query)  (optional, default to 1)
-     - parameter perPage: (query)  (optional, default to 20)
+     - parameter cursor: (query) Pagination cursor (ISO timestamp from previous response) (optional)
+     - parameter limit: (query) Results per page (optional, default to 50)
      - parameter status: (query)  (optional)
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: JobListResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listJobs(page: Int? = nil, perPage: Int? = nil, status: Status_listJobs? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> JobListResponse {
-        return try await listJobsWithRequestBuilder(page: page, perPage: perPage, status: status, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func listJobs(cursor: String? = nil, limit: Int? = nil, status: Status_listJobs? = nil, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: JobListResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return listJobsWithRequestBuilder(cursor: cursor, limit: limit, status: status).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -424,32 +482,31 @@ open class BulkValidationAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter page: (query)  (optional, default to 1)
-     - parameter perPage: (query)  (optional, default to 20)
+     - parameter cursor: (query) Pagination cursor (ISO timestamp from previous response) (optional)
+     - parameter limit: (query) Results per page (optional, default to 50)
      - parameter status: (query)  (optional)
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<JobListResponse> 
      */
-    open class func listJobsWithRequestBuilder(page: Int? = nil, perPage: Int? = nil, status: Status_listJobs? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<JobListResponse> {
+    open class func listJobsWithRequestBuilder(cursor: String? = nil, limit: Int? = nil, status: Status_listJobs? = nil) -> RequestBuilder<JobListResponse> {
         let localVariablePath = "/v1/jobs"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page": (wrappedValue: page?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
-            "per_page": (wrappedValue: perPage?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
-            "status": (wrappedValue: status?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "cursor": (wrappedValue: cursor?.encodeToJSON(), isExplode: true),
+            "limit": (wrappedValue: limit?.encodeToJSON(), isExplode: true),
+            "status": (wrappedValue: status?.encodeToJSON(), isExplode: true),
         ])
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<JobListResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<JobListResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 }

@@ -6,9 +6,12 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
 /** Same fields as DeliverRequest but &#39;to&#39; accepts up to 100 recipients. */
-public struct BatchDeliverRequest: Sendable, Codable, Hashable {
+public struct BatchDeliverRequest: Codable, JSONEncodable, Hashable {
 
     public static let toRule = ArrayRule(minItems: nil, maxItems: 100, uniqueItems: false)
     /** List of recipient email addresses (max 100) */
@@ -19,13 +22,13 @@ public struct BatchDeliverRequest: Sendable, Codable, Hashable {
     public var text: String?
     public var domainId: String
     public var replyTo: String?
-    public var headers: JSONValue?
+    public var headers: AnyCodable?
     public var tags: [String]?
     public var campaignType: String?
     public var structuredData: BatchDeliverRequestStructuredData?
-    public var options: JSONValue?
+    public var options: AnyCodable?
 
-    public init(to: [String], from: String, subject: String, html: String? = nil, text: String? = nil, domainId: String, replyTo: String? = nil, headers: JSONValue? = nil, tags: [String]? = nil, campaignType: String? = nil, structuredData: BatchDeliverRequestStructuredData? = nil, options: JSONValue? = nil) {
+    public init(to: [String], from: String, subject: String, html: String? = nil, text: String? = nil, domainId: String, replyTo: String? = nil, headers: AnyCodable? = nil, tags: [String]? = nil, campaignType: String? = nil, structuredData: BatchDeliverRequestStructuredData? = nil, options: AnyCodable? = nil) {
         self.to = to
         self.from = from
         self.subject = subject

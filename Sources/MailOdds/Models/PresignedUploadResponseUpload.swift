@@ -6,15 +6,18 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct PresignedUploadResponseUpload: Sendable, Codable, Hashable {
+public struct PresignedUploadResponseUpload: Codable, JSONEncodable, Hashable {
 
     public var url: String?
-    public var fields: JSONValue?
+    public var fields: AnyCodable?
     public var s3Key: String?
     public var expiresIn: Int?
 
-    public init(url: String? = nil, fields: JSONValue? = nil, s3Key: String? = nil, expiresIn: Int? = nil) {
+    public init(url: String? = nil, fields: AnyCodable? = nil, s3Key: String? = nil, expiresIn: Int? = nil) {
         self.url = url
         self.fields = fields
         self.s3Key = s3Key

@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct RemoveSuppression200Response: Sendable, Codable, Hashable {
+public struct RemoveSuppression200Response: Codable, JSONEncodable, Hashable {
 
     public var schemaVersion: String?
     /** Unique request identifier */

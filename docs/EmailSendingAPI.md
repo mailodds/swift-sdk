@@ -72,7 +72,7 @@ Send a transactional email through the safety pipeline. Validates recipients, ch
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let deliverRequest = DeliverRequest(to: [DeliverRequest_to_inner(email: "email_example", name: "name_example")], from: "from_example", subject: "subject_example", html: "html_example", text: "text_example", domainId: "domainId_example", replyTo: "replyTo_example", headers: 123, tags: ["tags_example"], campaignType: "campaignType_example", structuredData: DeliverRequest_structured_data(), options: DeliverRequest_options(validateFirst: false)) // DeliverRequest | 
+let deliverRequest = DeliverRequest(to: [DeliverRequest_to_inner(email: "email_example", name: "name_example")], from: "from_example", subject: "subject_example", html: "html_example", text: "text_example", domainId: "domainId_example", replyTo: "replyTo_example", headers: 123, tags: ["tags_example"], campaignType: "campaignType_example", structuredData: DeliverRequest_structured_data(), schemaData: "TODO", autoDetectSchema: false, aiSummary: "aiSummary_example", options: DeliverRequest_options(validateFirst: false)) // DeliverRequest | 
 
 // Send a single email
 EmailSendingAPI.deliverEmail(deliverRequest: deliverRequest) { (response, error) in

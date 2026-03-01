@@ -6,9 +6,12 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
 /** Present when a validation policy modified the result. */
-public struct ValidationResponsePolicyApplied: Sendable, Codable, Hashable {
+public struct ValidationResponsePolicyApplied: Codable, JSONEncodable, Hashable {
 
     public var policyId: Int?
     public var policyName: String?

@@ -6,33 +6,36 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
 /** JSON-LD structured data (object, array, or string). Max 10KB. */
-public enum DeliverRequestStructuredData: Sendable, Codable, Hashable {
-    case typeJSONValue(JSONValue)
+public enum DeliverRequestStructuredData: Codable, JSONEncodable, Hashable {
+    case typeAnyCodable(AnyCodable)
     case typeString(String)
-    case typeArrayOfJSONValue([JSONValue])
+    case type[AnyCodable]([AnyCodable])
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .typeJSONValue(let value):
+        case .typeAnyCodable(let value):
             try container.encode(value)
         case .typeString(let value):
             try container.encode(value)
-        case .typeArrayOfJSONValue(let value):
+        case .type[AnyCodable](let value):
             try container.encode(value)
         }
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(JSONValue.self) {
-            self = .typeJSONValue(value)
+        if let value = try? container.decode(AnyCodable.self) {
+            self = .typeAnyCodable(value)
         } else if let value = try? container.decode(String.self) {
             self = .typeString(value)
-        } else if let value = try? container.decode([JSONValue].self) {
-            self = .typeArrayOfJSONValue(value)
+        } else if let value = try? container.decode([AnyCodable].self) {
+            self = .type[AnyCodable](value)
         } else {
             throw DecodingError.typeMismatch(Self.Type.self, .init(codingPath: decoder.codingPath, debugDescription: "Unable to decode instance of DeliverRequestStructuredData"))
         }

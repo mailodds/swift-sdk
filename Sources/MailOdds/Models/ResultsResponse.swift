@@ -6,26 +6,33 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct ResultsResponse: Sendable, Codable, Hashable {
+public struct ResultsResponse: Codable, JSONEncodable, Hashable {
 
     public var schemaVersion: String?
     /** Unique request identifier */
     public var requestId: String?
-    public var results: [ValidationResult]?
+    public var job: Job?
+    /** Validation results for this page */
+    public var data: [ValidationResult]?
     public var pagination: Pagination?
 
-    public init(schemaVersion: String? = nil, requestId: String? = nil, results: [ValidationResult]? = nil, pagination: Pagination? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, job: Job? = nil, data: [ValidationResult]? = nil, pagination: Pagination? = nil) {
         self.schemaVersion = schemaVersion
         self.requestId = requestId
-        self.results = results
+        self.job = job
+        self.data = data
         self.pagination = pagination
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
         case requestId = "request_id"
-        case results
+        case job
+        case data
         case pagination
     }
 
@@ -35,7 +42,8 @@ public struct ResultsResponse: Sendable, Codable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
         try container.encodeIfPresent(requestId, forKey: .requestId)
-        try container.encodeIfPresent(results, forKey: .results)
+        try container.encodeIfPresent(job, forKey: .job)
+        try container.encodeIfPresent(data, forKey: .data)
         try container.encodeIfPresent(pagination, forKey: .pagination)
     }
 }

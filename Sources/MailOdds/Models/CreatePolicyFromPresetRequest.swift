@@ -6,10 +6,13 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct CreatePolicyFromPresetRequest: Sendable, Codable, Hashable {
+public struct CreatePolicyFromPresetRequest: Codable, JSONEncodable, Hashable {
 
-    public enum PresetId: String, Sendable, Codable, CaseIterable {
+    public enum PresetId: String, Codable, CaseIterable {
         case strict = "strict"
         case permissive = "permissive"
         case smtpRequired = "smtp_required"

@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct DeliverResponseDelivery: Sendable, Codable, Hashable {
+public struct DeliverResponseDelivery: Codable, JSONEncodable, Hashable {
 
     /** IP pool used */
     public var pool: String?

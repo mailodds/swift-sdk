@@ -6,23 +6,25 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct JobSummary: Sendable, Codable, Hashable {
+/** Status breakdown. Present when processing has started. */
+public struct JobSummary: Codable, JSONEncodable, Hashable {
 
     public var valid: Int?
     public var invalid: Int?
     public var catchAll: Int?
     public var doNotMail: Int?
     public var unknown: Int?
-    public var cancelledPending: Int?
 
-    public init(valid: Int? = nil, invalid: Int? = nil, catchAll: Int? = nil, doNotMail: Int? = nil, unknown: Int? = nil, cancelledPending: Int? = nil) {
+    public init(valid: Int? = nil, invalid: Int? = nil, catchAll: Int? = nil, doNotMail: Int? = nil, unknown: Int? = nil) {
         self.valid = valid
         self.invalid = invalid
         self.catchAll = catchAll
         self.doNotMail = doNotMail
         self.unknown = unknown
-        self.cancelledPending = cancelledPending
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -31,7 +33,6 @@ public struct JobSummary: Sendable, Codable, Hashable {
         case catchAll = "catch_all"
         case doNotMail = "do_not_mail"
         case unknown
-        case cancelledPending = "cancelled_pending"
     }
 
     // Encodable protocol methods
@@ -43,7 +44,6 @@ public struct JobSummary: Sendable, Codable, Hashable {
         try container.encodeIfPresent(catchAll, forKey: .catchAll)
         try container.encodeIfPresent(doNotMail, forKey: .doNotMail)
         try container.encodeIfPresent(unknown, forKey: .unknown)
-        try container.encodeIfPresent(cancelledPending, forKey: .cancelledPending)
     }
 }
 

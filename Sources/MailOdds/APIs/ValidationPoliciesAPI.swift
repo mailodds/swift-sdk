@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
 open class ValidationPoliciesAPI {
 
@@ -14,12 +17,19 @@ open class ValidationPoliciesAPI {
      
      - parameter policyId: (path)  
      - parameter policyRule: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: AddPolicyRule201Response
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func addPolicyRule(policyId: Int, policyRule: PolicyRule, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> AddPolicyRule201Response {
-        return try await addPolicyRuleWithRequestBuilder(policyId: policyId, policyRule: policyRule, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func addPolicyRule(policyId: Int, policyRule: PolicyRule, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: AddPolicyRule201Response?, _ error: Error?) -> Void)) -> RequestTask {
+        return addPolicyRuleWithRequestBuilder(policyId: policyId, policyRule: policyRule).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -31,40 +41,46 @@ open class ValidationPoliciesAPI {
        - name: BearerAuth
      - parameter policyId: (path)  
      - parameter policyRule: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<AddPolicyRule201Response> 
      */
-    open class func addPolicyRuleWithRequestBuilder(policyId: Int, policyRule: PolicyRule, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<AddPolicyRule201Response> {
+    open class func addPolicyRuleWithRequestBuilder(policyId: Int, policyRule: PolicyRule) -> RequestBuilder<AddPolicyRule201Response> {
         var localVariablePath = "/v1/policies/{policy_id}/rules"
         let policyIdPreEscape = "\(APIHelper.mapValueToPathItem(policyId))"
         let policyIdPostEscape = policyIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{policy_id}", with: policyIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: policyRule, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: policyRule)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<AddPolicyRule201Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<AddPolicyRule201Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Create policy
      
      - parameter createPolicyRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: PolicyResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createPolicy(createPolicyRequest: CreatePolicyRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> PolicyResponse {
-        return try await createPolicyWithRequestBuilder(createPolicyRequest: createPolicyRequest, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func createPolicy(createPolicyRequest: CreatePolicyRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: PolicyResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return createPolicyWithRequestBuilder(createPolicyRequest: createPolicyRequest).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -75,37 +91,43 @@ open class ValidationPoliciesAPI {
        - type: http
        - name: BearerAuth
      - parameter createPolicyRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<PolicyResponse> 
      */
-    open class func createPolicyWithRequestBuilder(createPolicyRequest: CreatePolicyRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<PolicyResponse> {
+    open class func createPolicyWithRequestBuilder(createPolicyRequest: CreatePolicyRequest) -> RequestBuilder<PolicyResponse> {
         let localVariablePath = "/v1/policies"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createPolicyRequest, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createPolicyRequest)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<PolicyResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<PolicyResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Create policy from preset
      
      - parameter createPolicyFromPresetRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: PolicyResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func createPolicyFromPreset(createPolicyFromPresetRequest: CreatePolicyFromPresetRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> PolicyResponse {
-        return try await createPolicyFromPresetWithRequestBuilder(createPolicyFromPresetRequest: createPolicyFromPresetRequest, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func createPolicyFromPreset(createPolicyFromPresetRequest: CreatePolicyFromPresetRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: PolicyResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return createPolicyFromPresetWithRequestBuilder(createPolicyFromPresetRequest: createPolicyFromPresetRequest).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -116,37 +138,43 @@ open class ValidationPoliciesAPI {
        - type: http
        - name: BearerAuth
      - parameter createPolicyFromPresetRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<PolicyResponse> 
      */
-    open class func createPolicyFromPresetWithRequestBuilder(createPolicyFromPresetRequest: CreatePolicyFromPresetRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<PolicyResponse> {
+    open class func createPolicyFromPresetWithRequestBuilder(createPolicyFromPresetRequest: CreatePolicyFromPresetRequest) -> RequestBuilder<PolicyResponse> {
         let localVariablePath = "/v1/policies/from-preset"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createPolicyFromPresetRequest, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createPolicyFromPresetRequest)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<PolicyResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<PolicyResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Delete policy
      
      - parameter policyId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: DeletePolicy200Response
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func deletePolicy(policyId: Int, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> DeletePolicy200Response {
-        return try await deletePolicyWithRequestBuilder(policyId: policyId, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func deletePolicy(policyId: Int, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: DeletePolicy200Response?, _ error: Error?) -> Void)) -> RequestTask {
+        return deletePolicyWithRequestBuilder(policyId: policyId).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -157,28 +185,27 @@ open class ValidationPoliciesAPI {
        - type: http
        - name: BearerAuth
      - parameter policyId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<DeletePolicy200Response> 
      */
-    open class func deletePolicyWithRequestBuilder(policyId: Int, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<DeletePolicy200Response> {
+    open class func deletePolicyWithRequestBuilder(policyId: Int) -> RequestBuilder<DeletePolicy200Response> {
         var localVariablePath = "/v1/policies/{policy_id}"
         let policyIdPreEscape = "\(APIHelper.mapValueToPathItem(policyId))"
         let policyIdPostEscape = policyIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{policy_id}", with: policyIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<DeletePolicy200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<DeletePolicy200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
@@ -186,12 +213,19 @@ open class ValidationPoliciesAPI {
      
      - parameter policyId: (path)  
      - parameter ruleId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: DeletePolicyRule200Response
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func deletePolicyRule(policyId: Int, ruleId: Int, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> DeletePolicyRule200Response {
-        return try await deletePolicyRuleWithRequestBuilder(policyId: policyId, ruleId: ruleId, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func deletePolicyRule(policyId: Int, ruleId: Int, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: DeletePolicyRule200Response?, _ error: Error?) -> Void)) -> RequestTask {
+        return deletePolicyRuleWithRequestBuilder(policyId: policyId, ruleId: ruleId).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -203,10 +237,9 @@ open class ValidationPoliciesAPI {
        - name: BearerAuth
      - parameter policyId: (path)  
      - parameter ruleId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<DeletePolicyRule200Response> 
      */
-    open class func deletePolicyRuleWithRequestBuilder(policyId: Int, ruleId: Int, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<DeletePolicyRule200Response> {
+    open class func deletePolicyRuleWithRequestBuilder(policyId: Int, ruleId: Int) -> RequestBuilder<DeletePolicyRule200Response> {
         var localVariablePath = "/v1/policies/{policy_id}/rules/{rule_id}"
         let policyIdPreEscape = "\(APIHelper.mapValueToPathItem(policyId))"
         let policyIdPostEscape = policyIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -214,32 +247,39 @@ open class ValidationPoliciesAPI {
         let ruleIdPreEscape = "\(APIHelper.mapValueToPathItem(ruleId))"
         let ruleIdPostEscape = ruleIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{rule_id}", with: ruleIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<DeletePolicyRule200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<DeletePolicyRule200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Get policy
      
      - parameter policyId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: PolicyResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getPolicy(policyId: Int, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> PolicyResponse {
-        return try await getPolicyWithRequestBuilder(policyId: policyId, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func getPolicy(policyId: Int, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: PolicyResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getPolicyWithRequestBuilder(policyId: policyId).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -250,39 +290,45 @@ open class ValidationPoliciesAPI {
        - type: http
        - name: BearerAuth
      - parameter policyId: (path)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<PolicyResponse> 
      */
-    open class func getPolicyWithRequestBuilder(policyId: Int, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<PolicyResponse> {
+    open class func getPolicyWithRequestBuilder(policyId: Int) -> RequestBuilder<PolicyResponse> {
         var localVariablePath = "/v1/policies/{policy_id}"
         let policyIdPreEscape = "\(APIHelper.mapValueToPathItem(policyId))"
         let policyIdPostEscape = policyIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{policy_id}", with: policyIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<PolicyResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<PolicyResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Get policy presets
      
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: PolicyPresetsResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func getPolicyPresets(apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> PolicyPresetsResponse {
-        return try await getPolicyPresetsWithRequestBuilder(apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func getPolicyPresets(apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: PolicyPresetsResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return getPolicyPresetsWithRequestBuilder().execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -292,37 +338,43 @@ open class ValidationPoliciesAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<PolicyPresetsResponse> 
      */
-    open class func getPolicyPresetsWithRequestBuilder(apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<PolicyPresetsResponse> {
+    open class func getPolicyPresetsWithRequestBuilder() -> RequestBuilder<PolicyPresetsResponse> {
         let localVariablePath = "/v1/policies/presets"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<PolicyPresetsResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<PolicyPresetsResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      List policies
      
      - parameter includeRules: (query) Include full rules in response (optional, default to false)
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: PolicyListResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func listPolicies(includeRules: Bool? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> PolicyListResponse {
-        return try await listPoliciesWithRequestBuilder(includeRules: includeRules, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func listPolicies(includeRules: Bool? = nil, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: PolicyListResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return listPoliciesWithRequestBuilder(includeRules: includeRules).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -333,40 +385,46 @@ open class ValidationPoliciesAPI {
        - type: http
        - name: BearerAuth
      - parameter includeRules: (query) Include full rules in response (optional, default to false)
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<PolicyListResponse> 
      */
-    open class func listPoliciesWithRequestBuilder(includeRules: Bool? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<PolicyListResponse> {
+    open class func listPoliciesWithRequestBuilder(includeRules: Bool? = nil) -> RequestBuilder<PolicyListResponse> {
         let localVariablePath = "/v1/policies"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters: [String: any Sendable]? = nil
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "include_rules": (wrappedValue: includeRules?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "include_rules": (wrappedValue: includeRules?.encodeToJSON(), isExplode: true),
         ])
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<PolicyListResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<PolicyListResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
      Test policy evaluation
      
      - parameter testPolicyRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: PolicyTestResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func testPolicy(testPolicyRequest: TestPolicyRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> PolicyTestResponse {
-        return try await testPolicyWithRequestBuilder(testPolicyRequest: testPolicyRequest, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func testPolicy(testPolicyRequest: TestPolicyRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: PolicyTestResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return testPolicyWithRequestBuilder(testPolicyRequest: testPolicyRequest).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -377,25 +435,24 @@ open class ValidationPoliciesAPI {
        - type: http
        - name: BearerAuth
      - parameter testPolicyRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<PolicyTestResponse> 
      */
-    open class func testPolicyWithRequestBuilder(testPolicyRequest: TestPolicyRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<PolicyTestResponse> {
+    open class func testPolicyWithRequestBuilder(testPolicyRequest: TestPolicyRequest) -> RequestBuilder<PolicyTestResponse> {
         let localVariablePath = "/v1/policies/test"
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: testPolicyRequest, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: testPolicyRequest)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<PolicyTestResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<PolicyTestResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 
     /**
@@ -403,12 +460,19 @@ open class ValidationPoliciesAPI {
      
      - parameter policyId: (path)  
      - parameter updatePolicyRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
-     - returns: PolicyResponse
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
      */
-    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    open class func updatePolicy(policyId: Int, updatePolicyRequest: UpdatePolicyRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> PolicyResponse {
-        return try await updatePolicyWithRequestBuilder(policyId: policyId, updatePolicyRequest: updatePolicyRequest, apiConfiguration: apiConfiguration).execute().body
+    @discardableResult
+    open class func updatePolicy(policyId: Int, updatePolicyRequest: UpdatePolicyRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: PolicyResponse?, _ error: Error?) -> Void)) -> RequestTask {
+        return updatePolicyWithRequestBuilder(policyId: policyId, updatePolicyRequest: updatePolicyRequest).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
     }
 
     /**
@@ -420,27 +484,26 @@ open class ValidationPoliciesAPI {
        - name: BearerAuth
      - parameter policyId: (path)  
      - parameter updatePolicyRequest: (body)  
-     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<PolicyResponse> 
      */
-    open class func updatePolicyWithRequestBuilder(policyId: Int, updatePolicyRequest: UpdatePolicyRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<PolicyResponse> {
+    open class func updatePolicyWithRequestBuilder(policyId: Int, updatePolicyRequest: UpdatePolicyRequest) -> RequestBuilder<PolicyResponse> {
         var localVariablePath = "/v1/policies/{policy_id}"
         let policyIdPreEscape = "\(APIHelper.mapValueToPathItem(policyId))"
         let policyIdPostEscape = policyIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{policy_id}", with: policyIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = apiConfiguration.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: updatePolicyRequest, codableHelper: apiConfiguration.codableHelper)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: updatePolicyRequest)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+        let localVariableNillableHeaders: [String: Any?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<PolicyResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<PolicyResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "PUT", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+        return localVariableRequestBuilder.init(method: "PUT", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
     }
 }

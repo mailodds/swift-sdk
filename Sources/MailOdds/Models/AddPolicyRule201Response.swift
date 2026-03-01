@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct AddPolicyRule201Response: Sendable, Codable, Hashable {
+public struct AddPolicyRule201Response: Codable, JSONEncodable, Hashable {
 
     public var rule: PolicyRule?
 

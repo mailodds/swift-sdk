@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct CreateListRequest: Sendable, Codable, Hashable {
+public struct CreateListRequest: Codable, JSONEncodable, Hashable {
 
     /** List name (unique per account) */
     public var name: String

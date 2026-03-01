@@ -6,8 +6,11 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct CreateSendingDomainRequest: Sendable, Codable, Hashable {
+public struct CreateSendingDomainRequest: Codable, JSONEncodable, Hashable {
 
     /** Domain name to add */
     public var domain: String

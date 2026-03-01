@@ -6,10 +6,13 @@
 //
 
 import Foundation
+#if canImport(AnyCodable)
+import AnyCodable
+#endif
 
-public struct DeliverRequest: Sendable, Codable, Hashable {
+public struct DeliverRequest: Codable, JSONEncodable, Hashable {
 
-    public enum CampaignType: String, Sendable, Codable, CaseIterable {
+    public enum CampaignType: String, Codable, CaseIterable {
         case orderConfirmation = "order_confirmation"
         case shippingNotification = "shipping_notification"
         case subscriptionConfirm = "subscription_confirm"
@@ -21,6 +24,7 @@ public struct DeliverRequest: Sendable, Codable, Hashable {
         case appointmentReminder = "appointment_reminder"
         case ticketConfirmation = "ticket_confirmation"
     }
+    public static let aiSummaryRule = StringRule(minLength: nil, maxLength: 500, pattern: nil)
     /** List of recipient email addresses */
     public var to: [DeliverRequestToInner]
     /** Sender email address (must match sending domain) */
@@ -36,15 +40,21 @@ public struct DeliverRequest: Sendable, Codable, Hashable {
     /** Reply-to address */
     public var replyTo: String?
     /** Extra email headers */
-    public var headers: JSONValue?
+    public var headers: AnyCodable?
     /** Tags for categorization */
     public var tags: [String]?
     /** Campaign type for JSON-LD auto-generation */
     public var campaignType: CampaignType?
     public var structuredData: DeliverRequestStructuredData?
+    /** Key-value pairs for campaign_type JSON-LD resolution (e.g., order_number, tracking_url) */
+    public var schemaData: [String: String]?
+    /** Auto-detect JSON-LD structured data type from subject line */
+    public var autoDetectSchema: Bool? = false
+    /** Hidden text summary for AI email assistants (max 500 characters) */
+    public var aiSummary: String?
     public var options: DeliverRequestOptions?
 
-    public init(to: [DeliverRequestToInner], from: String, subject: String, html: String? = nil, text: String? = nil, domainId: String, replyTo: String? = nil, headers: JSONValue? = nil, tags: [String]? = nil, campaignType: CampaignType? = nil, structuredData: DeliverRequestStructuredData? = nil, options: DeliverRequestOptions? = nil) {
+    public init(to: [DeliverRequestToInner], from: String, subject: String, html: String? = nil, text: String? = nil, domainId: String, replyTo: String? = nil, headers: AnyCodable? = nil, tags: [String]? = nil, campaignType: CampaignType? = nil, structuredData: DeliverRequestStructuredData? = nil, schemaData: [String: String]? = nil, autoDetectSchema: Bool? = false, aiSummary: String? = nil, options: DeliverRequestOptions? = nil) {
         self.to = to
         self.from = from
         self.subject = subject
@@ -56,6 +66,9 @@ public struct DeliverRequest: Sendable, Codable, Hashable {
         self.tags = tags
         self.campaignType = campaignType
         self.structuredData = structuredData
+        self.schemaData = schemaData
+        self.autoDetectSchema = autoDetectSchema
+        self.aiSummary = aiSummary
         self.options = options
     }
 
@@ -71,6 +84,9 @@ public struct DeliverRequest: Sendable, Codable, Hashable {
         case tags
         case campaignType = "campaign_type"
         case structuredData = "structured_data"
+        case schemaData = "schema_data"
+        case autoDetectSchema = "auto_detect_schema"
+        case aiSummary = "ai_summary"
         case options
     }
 
@@ -89,6 +105,9 @@ public struct DeliverRequest: Sendable, Codable, Hashable {
         try container.encodeIfPresent(tags, forKey: .tags)
         try container.encodeIfPresent(campaignType, forKey: .campaignType)
         try container.encodeIfPresent(structuredData, forKey: .structuredData)
+        try container.encodeIfPresent(schemaData, forKey: .schemaData)
+        try container.encodeIfPresent(autoDetectSchema, forKey: .autoDetectSchema)
+        try container.encodeIfPresent(aiSummary, forKey: .aiSummary)
         try container.encodeIfPresent(options, forKey: .options)
     }
 }
