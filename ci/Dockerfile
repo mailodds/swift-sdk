@@ -4,4 +4,5 @@ WORKDIR /sdk
 COPY . .
 RUN sed -i '/.target(/i\        .executableTarget(name: "SmokeTest", dependencies: ["MailOdds"], path: "ci", sources: ["smoke_test.swift"]),' Package.swift
 RUN swift build 2>&1
-CMD [".build/debug/SmokeTest"]
+RUN ln -sf "$(swift build --show-bin-path)/SmokeTest" /usr/local/bin/smoke-test
+CMD ["/usr/local/bin/smoke-test"]

@@ -14,7 +14,7 @@ import AnyCodable
 public enum DeliverRequestStructuredData: Codable, JSONEncodable, Hashable {
     case typeAnyCodable(AnyCodable)
     case typeString(String)
-    case type[AnyCodable]([AnyCodable])
+    case typeAnyCodableArray([AnyCodable])
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
@@ -23,7 +23,7 @@ public enum DeliverRequestStructuredData: Codable, JSONEncodable, Hashable {
             try container.encode(value)
         case .typeString(let value):
             try container.encode(value)
-        case .type[AnyCodable](let value):
+        case .typeAnyCodableArray(let value):
             try container.encode(value)
         }
     }
@@ -35,7 +35,7 @@ public enum DeliverRequestStructuredData: Codable, JSONEncodable, Hashable {
         } else if let value = try? container.decode(String.self) {
             self = .typeString(value)
         } else if let value = try? container.decode([AnyCodable].self) {
-            self = .type[AnyCodable](value)
+            self = .typeAnyCodableArray(value)
         } else {
             throw DecodingError.typeMismatch(Self.Type.self, .init(codingPath: decoder.codingPath, debugDescription: "Unable to decode instance of DeliverRequestStructuredData"))
         }
