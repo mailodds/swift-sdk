@@ -6,21 +6,18 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct SuppressionAuditResponseEntriesInner: Codable, JSONEncodable, Hashable {
+public struct SuppressionAuditResponseEntriesInner: Sendable, Codable, Hashable {
 
     public var id: Int?
     /** Audit event type */
     public var eventType: String?
     public var eventCategory: String?
     /** Event-specific details */
-    public var details: AnyCodable?
+    public var details: JSONValue?
     public var createdAt: Date?
 
-    public init(id: Int? = nil, eventType: String? = nil, eventCategory: String? = nil, details: AnyCodable? = nil, createdAt: Date? = nil) {
+    public init(id: Int? = nil, eventType: String? = nil, eventCategory: String? = nil, details: JSONValue? = nil, createdAt: Date? = nil) {
         self.id = id
         self.eventType = eventType
         self.eventCategory = eventCategory

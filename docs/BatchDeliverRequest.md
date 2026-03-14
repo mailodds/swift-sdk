@@ -10,11 +10,11 @@ Name | Type | Description | Notes
 **text** | **String** |  | [optional] 
 **domainId** | **String** |  | 
 **replyTo** | **String** |  | [optional] 
-**headers** | **AnyCodable** |  | [optional] 
+**headers** | **JSONValue** |  | [optional] 
 **tags** | **[String]** |  | [optional] 
 **campaignType** | **String** |  | [optional] 
 **structuredData** | [**BatchDeliverRequestStructuredData**](BatchDeliverRequestStructuredData.md) |  | [optional] 
-**options** | **AnyCodable** |  | [optional] 
+**options** | **JSONValue** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct IdentityScoreCheck: Codable, JSONEncodable, Hashable {
+public struct IdentityScoreCheck: Sendable, Codable, Hashable {
 
     /** Check status (e.g. verified, pending, missing) */
     public var status: String

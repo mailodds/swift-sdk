@@ -6,9 +6,6 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 open class SuppressionListsAPI {
 
@@ -16,19 +13,12 @@ open class SuppressionListsAPI {
      Add suppression entries
      
      - parameter addSuppressionRequest: (body)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: AddSuppressionResponse
      */
-    @discardableResult
-    open class func addSuppression(addSuppressionRequest: AddSuppressionRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: AddSuppressionResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return addSuppressionWithRequestBuilder(addSuppressionRequest: addSuppressionRequest).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func addSuppression(addSuppressionRequest: AddSuppressionRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> AddSuppressionResponse {
+        return try await addSuppressionWithRequestBuilder(addSuppressionRequest: addSuppressionRequest, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -39,43 +29,37 @@ open class SuppressionListsAPI {
        - type: http
        - name: BearerAuth
      - parameter addSuppressionRequest: (body)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<AddSuppressionResponse> 
      */
-    open class func addSuppressionWithRequestBuilder(addSuppressionRequest: AddSuppressionRequest) -> RequestBuilder<AddSuppressionResponse> {
+    open class func addSuppressionWithRequestBuilder(addSuppressionRequest: AddSuppressionRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<AddSuppressionResponse> {
         let localVariablePath = "/v1/suppression"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: addSuppressionRequest)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: addSuppressionRequest, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<AddSuppressionResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<AddSuppressionResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      Check suppression status
      
      - parameter checkSuppressionRequest: (body)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: SuppressionCheckResponse
      */
-    @discardableResult
-    open class func checkSuppression(checkSuppressionRequest: CheckSuppressionRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: SuppressionCheckResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return checkSuppressionWithRequestBuilder(checkSuppressionRequest: checkSuppressionRequest).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func checkSuppression(checkSuppressionRequest: CheckSuppressionRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> SuppressionCheckResponse {
+        return try await checkSuppressionWithRequestBuilder(checkSuppressionRequest: checkSuppressionRequest, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -86,24 +70,25 @@ open class SuppressionListsAPI {
        - type: http
        - name: BearerAuth
      - parameter checkSuppressionRequest: (body)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<SuppressionCheckResponse> 
      */
-    open class func checkSuppressionWithRequestBuilder(checkSuppressionRequest: CheckSuppressionRequest) -> RequestBuilder<SuppressionCheckResponse> {
+    open class func checkSuppressionWithRequestBuilder(checkSuppressionRequest: CheckSuppressionRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<SuppressionCheckResponse> {
         let localVariablePath = "/v1/suppression/check"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: checkSuppressionRequest)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: checkSuppressionRequest, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<SuppressionCheckResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<SuppressionCheckResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
@@ -111,19 +96,12 @@ open class SuppressionListsAPI {
      
      - parameter page: (query)  (optional, default to 1)
      - parameter limit: (query)  (optional, default to 20)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: SuppressionAuditResponse
      */
-    @discardableResult
-    open class func getSuppressionAuditLog(page: Int? = nil, limit: Int? = nil, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: SuppressionAuditResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return getSuppressionAuditLogWithRequestBuilder(page: page, limit: limit).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getSuppressionAuditLog(page: Int? = nil, limit: Int? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> SuppressionAuditResponse {
+        return try await getSuppressionAuditLogWithRequestBuilder(page: page, limit: limit, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -135,46 +113,40 @@ open class SuppressionListsAPI {
        - name: BearerAuth
      - parameter page: (query)  (optional, default to 1)
      - parameter limit: (query)  (optional, default to 20)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<SuppressionAuditResponse> 
      */
-    open class func getSuppressionAuditLogWithRequestBuilder(page: Int? = nil, limit: Int? = nil) -> RequestBuilder<SuppressionAuditResponse> {
+    open class func getSuppressionAuditLogWithRequestBuilder(page: Int? = nil, limit: Int? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<SuppressionAuditResponse> {
         let localVariablePath = "/v1/suppression/audit"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page": (wrappedValue: page?.encodeToJSON(), isExplode: true),
-            "limit": (wrappedValue: limit?.encodeToJSON(), isExplode: true),
+            "page": (wrappedValue: page?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "limit": (wrappedValue: limit?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
         ])
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<SuppressionAuditResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<SuppressionAuditResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      Get suppression statistics
      
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: SuppressionStatsResponse
      */
-    @discardableResult
-    open class func getSuppressionStats(apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: SuppressionStatsResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return getSuppressionStatsWithRequestBuilder().execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getSuppressionStats(apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> SuppressionStatsResponse {
+        return try await getSuppressionStatsWithRequestBuilder(apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -184,30 +156,31 @@ open class SuppressionListsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<SuppressionStatsResponse> 
      */
-    open class func getSuppressionStatsWithRequestBuilder() -> RequestBuilder<SuppressionStatsResponse> {
+    open class func getSuppressionStatsWithRequestBuilder(apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<SuppressionStatsResponse> {
         let localVariablePath = "/v1/suppression/stats"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<SuppressionStatsResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<SuppressionStatsResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      * enum for parameter type
      */
-    public enum ModelType_listSuppression: String, CaseIterable {
+    public enum ModelType_listSuppression: String, Sendable, CaseIterable {
         case email = "email"
         case domain = "domain"
     }
@@ -220,19 +193,12 @@ open class SuppressionListsAPI {
      - parameter type: (query)  (optional)
      - parameter search: (query)  (optional)
      - parameter source: (query) Filter by entry source (e.g. api, bounce, complaint) (optional)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: SuppressionListResponse
      */
-    @discardableResult
-    open class func listSuppression(page: Int? = nil, perPage: Int? = nil, type: ModelType_listSuppression? = nil, search: String? = nil, source: String? = nil, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: SuppressionListResponse?, _ error: Error?) -> Void)) -> RequestTask {
-        return listSuppressionWithRequestBuilder(page: page, perPage: perPage, type: type, search: search, source: source).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func listSuppression(page: Int? = nil, perPage: Int? = nil, type: ModelType_listSuppression? = nil, search: String? = nil, source: String? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> SuppressionListResponse {
+        return try await listSuppressionWithRequestBuilder(page: page, perPage: perPage, type: type, search: search, source: source, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -247,50 +213,44 @@ open class SuppressionListsAPI {
      - parameter type: (query)  (optional)
      - parameter search: (query)  (optional)
      - parameter source: (query) Filter by entry source (e.g. api, bounce, complaint) (optional)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<SuppressionListResponse> 
      */
-    open class func listSuppressionWithRequestBuilder(page: Int? = nil, perPage: Int? = nil, type: ModelType_listSuppression? = nil, search: String? = nil, source: String? = nil) -> RequestBuilder<SuppressionListResponse> {
+    open class func listSuppressionWithRequestBuilder(page: Int? = nil, perPage: Int? = nil, type: ModelType_listSuppression? = nil, search: String? = nil, source: String? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<SuppressionListResponse> {
         let localVariablePath = "/v1/suppression"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page": (wrappedValue: page?.encodeToJSON(), isExplode: true),
-            "per_page": (wrappedValue: perPage?.encodeToJSON(), isExplode: true),
-            "type": (wrappedValue: type?.encodeToJSON(), isExplode: true),
-            "search": (wrappedValue: search?.encodeToJSON(), isExplode: true),
-            "source": (wrappedValue: source?.encodeToJSON(), isExplode: true),
+            "page": (wrappedValue: page?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "per_page": (wrappedValue: perPage?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "type": (wrappedValue: type?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "search": (wrappedValue: search?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "source": (wrappedValue: source?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
         ])
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<SuppressionListResponse>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<SuppressionListResponse>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      Remove suppression entries
      
      - parameter removeSuppressionRequest: (body)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: RemoveSuppression200Response
      */
-    @discardableResult
-    open class func removeSuppression(removeSuppressionRequest: RemoveSuppressionRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: RemoveSuppression200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return removeSuppressionWithRequestBuilder(removeSuppressionRequest: removeSuppressionRequest).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func removeSuppression(removeSuppressionRequest: RemoveSuppressionRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> RemoveSuppression200Response {
+        return try await removeSuppressionWithRequestBuilder(removeSuppressionRequest: removeSuppressionRequest, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -301,23 +261,24 @@ open class SuppressionListsAPI {
        - type: http
        - name: BearerAuth
      - parameter removeSuppressionRequest: (body)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<RemoveSuppression200Response> 
      */
-    open class func removeSuppressionWithRequestBuilder(removeSuppressionRequest: RemoveSuppressionRequest) -> RequestBuilder<RemoveSuppression200Response> {
+    open class func removeSuppressionWithRequestBuilder(removeSuppressionRequest: RemoveSuppressionRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<RemoveSuppression200Response> {
         let localVariablePath = "/v1/suppression"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: removeSuppressionRequest)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: removeSuppressionRequest, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<RemoveSuppression200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<RemoveSuppression200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 }

@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct CheckSuppressionRequest: Codable, JSONEncodable, Hashable {
+public struct CheckSuppressionRequest: Sendable, Codable, Hashable {
 
     public var email: String
 

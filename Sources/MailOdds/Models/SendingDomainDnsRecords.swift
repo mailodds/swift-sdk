@@ -6,12 +6,9 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** DNS records for domain verification */
-public struct SendingDomainDnsRecords: Codable, JSONEncodable, Hashable {
+public struct SendingDomainDnsRecords: Sendable, Codable, Hashable {
 
     public var ns: SendingDomainDnsRecordsNs?
 

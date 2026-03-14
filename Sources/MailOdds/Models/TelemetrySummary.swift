@@ -6,14 +6,11 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Validation metrics for building dashboards and monitoring. */
-public struct TelemetrySummary: Codable, JSONEncodable, Hashable {
+public struct TelemetrySummary: Sendable, Codable, Hashable {
 
-    public enum Window: String, Codable, CaseIterable {
+    public enum Window: String, Sendable, Codable, CaseIterable {
         case _1h = "1h"
         case _24h = "24h"
         case _30d = "30d"

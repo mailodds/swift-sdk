@@ -6,9 +6,6 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 open class SubscriberListsAPI {
 
@@ -16,19 +13,12 @@ open class SubscriberListsAPI {
      Confirm subscription
      
      - parameter token: (path) Confirmation token from email 
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: ConfirmSubscription200Response
      */
-    @discardableResult
-    open class func confirmSubscription(token: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: ConfirmSubscription200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return confirmSubscriptionWithRequestBuilder(token: token).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func confirmSubscription(token: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> ConfirmSubscription200Response {
+        return try await confirmSubscriptionWithRequestBuilder(token: token, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -36,46 +26,40 @@ open class SubscriberListsAPI {
      - GET /v1/confirm/{token}
      - Confirm a pending subscription via the token sent in the confirmation email. No authentication required. Redirects to the list's configured redirect URL if set, otherwise returns JSON. Tokens expire after 72 hours.
      - parameter token: (path) Confirmation token from email 
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<ConfirmSubscription200Response> 
      */
-    open class func confirmSubscriptionWithRequestBuilder(token: String) -> RequestBuilder<ConfirmSubscription200Response> {
+    open class func confirmSubscriptionWithRequestBuilder(token: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<ConfirmSubscription200Response> {
         var localVariablePath = "/v1/confirm/{token}"
         let tokenPreEscape = "\(APIHelper.mapValueToPathItem(token))"
         let tokenPostEscape = tokenPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{token}", with: tokenPostEscape, options: .literal, range: nil)
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<ConfirmSubscription200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<ConfirmSubscription200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false, apiConfiguration: apiConfiguration)
     }
 
     /**
      Create a subscriber list
      
      - parameter createListRequest: (body)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: CreateList201Response
      */
-    @discardableResult
-    open class func createList(createListRequest: CreateListRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: CreateList201Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return createListWithRequestBuilder(createListRequest: createListRequest).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func createList(createListRequest: CreateListRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> CreateList201Response {
+        return try await createListWithRequestBuilder(createListRequest: createListRequest, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -86,43 +70,37 @@ open class SubscriberListsAPI {
        - type: http
        - name: BearerAuth
      - parameter createListRequest: (body)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<CreateList201Response> 
      */
-    open class func createListWithRequestBuilder(createListRequest: CreateListRequest) -> RequestBuilder<CreateList201Response> {
+    open class func createListWithRequestBuilder(createListRequest: CreateListRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<CreateList201Response> {
         let localVariablePath = "/v1/lists"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createListRequest)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createListRequest, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<CreateList201Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<CreateList201Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      Delete a subscriber list
      
      - parameter listId: (path) List UUID 
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: DeletePolicyRule200Response
      */
-    @discardableResult
-    open class func deleteList(listId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: DeletePolicyRule200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return deleteListWithRequestBuilder(listId: listId).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func deleteList(listId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> DeletePolicyRule200Response {
+        return try await deleteListWithRequestBuilder(listId: listId, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -133,46 +111,40 @@ open class SubscriberListsAPI {
        - type: http
        - name: BearerAuth
      - parameter listId: (path) List UUID 
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<DeletePolicyRule200Response> 
      */
-    open class func deleteListWithRequestBuilder(listId: String) -> RequestBuilder<DeletePolicyRule200Response> {
+    open class func deleteListWithRequestBuilder(listId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<DeletePolicyRule200Response> {
         var localVariablePath = "/v1/lists/{list_id}"
         let listIdPreEscape = "\(APIHelper.mapValueToPathItem(listId))"
         let listIdPostEscape = listIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{list_id}", with: listIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<DeletePolicyRule200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<DeletePolicyRule200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      Get a subscriber list
      
      - parameter listId: (path) List UUID 
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: CreateList201Response
      */
-    @discardableResult
-    open class func getList(listId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: CreateList201Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return getListWithRequestBuilder(listId: listId).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getList(listId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> CreateList201Response {
+        return try await getListWithRequestBuilder(listId: listId, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -183,27 +155,28 @@ open class SubscriberListsAPI {
        - type: http
        - name: BearerAuth
      - parameter listId: (path) List UUID 
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<CreateList201Response> 
      */
-    open class func getListWithRequestBuilder(listId: String) -> RequestBuilder<CreateList201Response> {
+    open class func getListWithRequestBuilder(listId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<CreateList201Response> {
         var localVariablePath = "/v1/lists/{list_id}"
         let listIdPreEscape = "\(APIHelper.mapValueToPathItem(listId))"
         let listIdPostEscape = listIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{list_id}", with: listIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<CreateList201Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<CreateList201Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
@@ -211,19 +184,12 @@ open class SubscriberListsAPI {
      
      - parameter page: (query) Page number (optional, default to 1)
      - parameter perPage: (query) Items per page (optional, default to 25)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: GetLists200Response
      */
-    @discardableResult
-    open class func getLists(page: Int? = nil, perPage: Int? = nil, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: GetLists200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return getListsWithRequestBuilder(page: page, perPage: perPage).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getLists(page: Int? = nil, perPage: Int? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> GetLists200Response {
+        return try await getListsWithRequestBuilder(page: page, perPage: perPage, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -235,34 +201,35 @@ open class SubscriberListsAPI {
        - name: BearerAuth
      - parameter page: (query) Page number (optional, default to 1)
      - parameter perPage: (query) Items per page (optional, default to 25)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<GetLists200Response> 
      */
-    open class func getListsWithRequestBuilder(page: Int? = nil, perPage: Int? = nil) -> RequestBuilder<GetLists200Response> {
+    open class func getListsWithRequestBuilder(page: Int? = nil, perPage: Int? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<GetLists200Response> {
         let localVariablePath = "/v1/lists"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page": (wrappedValue: page?.encodeToJSON(), isExplode: true),
-            "per_page": (wrappedValue: perPage?.encodeToJSON(), isExplode: true),
+            "page": (wrappedValue: page?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "per_page": (wrappedValue: perPage?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
         ])
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<GetLists200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<GetLists200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      * enum for parameter status
      */
-    public enum Status_getSubscribers: String, CaseIterable {
+    public enum Status_getSubscribers: String, Sendable, CaseIterable {
         case pending = "pending"
         case confirmed = "confirmed"
         case unsubscribed = "unsubscribed"
@@ -276,19 +243,12 @@ open class SubscriberListsAPI {
      - parameter page: (query) Page number (optional, default to 1)
      - parameter perPage: (query) Items per page (optional, default to 50)
      - parameter status: (query) Filter by subscriber status (optional)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: GetSubscribers200Response
      */
-    @discardableResult
-    open class func getSubscribers(listId: String, page: Int? = nil, perPage: Int? = nil, status: Status_getSubscribers? = nil, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: GetSubscribers200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return getSubscribersWithRequestBuilder(listId: listId, page: page, perPage: perPage, status: status).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getSubscribers(listId: String, page: Int? = nil, perPage: Int? = nil, status: Status_getSubscribers? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> GetSubscribers200Response {
+        return try await getSubscribersWithRequestBuilder(listId: listId, page: page, perPage: perPage, status: status, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -302,32 +262,33 @@ open class SubscriberListsAPI {
      - parameter page: (query) Page number (optional, default to 1)
      - parameter perPage: (query) Items per page (optional, default to 50)
      - parameter status: (query) Filter by subscriber status (optional)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<GetSubscribers200Response> 
      */
-    open class func getSubscribersWithRequestBuilder(listId: String, page: Int? = nil, perPage: Int? = nil, status: Status_getSubscribers? = nil) -> RequestBuilder<GetSubscribers200Response> {
+    open class func getSubscribersWithRequestBuilder(listId: String, page: Int? = nil, perPage: Int? = nil, status: Status_getSubscribers? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<GetSubscribers200Response> {
         var localVariablePath = "/v1/lists/{list_id}/subscribers"
         let listIdPreEscape = "\(APIHelper.mapValueToPathItem(listId))"
         let listIdPostEscape = listIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{list_id}", with: listIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "page": (wrappedValue: page?.encodeToJSON(), isExplode: true),
-            "per_page": (wrappedValue: perPage?.encodeToJSON(), isExplode: true),
-            "status": (wrappedValue: status?.encodeToJSON(), isExplode: true),
+            "page": (wrappedValue: page?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "per_page": (wrappedValue: perPage?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "status": (wrappedValue: status?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
         ])
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<GetSubscribers200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<GetSubscribers200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
@@ -335,19 +296,12 @@ open class SubscriberListsAPI {
      
      - parameter listId: (path) List UUID 
      - parameter subscribeRequest: (body)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: UnsubscribeSubscriber200Response
      */
-    @discardableResult
-    open class func subscribe(listId: String, subscribeRequest: SubscribeRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: UnsubscribeSubscriber200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return subscribeWithRequestBuilder(listId: listId, subscribeRequest: subscribeRequest).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func subscribe(listId: String, subscribeRequest: SubscribeRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> UnsubscribeSubscriber200Response {
+        return try await subscribeWithRequestBuilder(listId: listId, subscribeRequest: subscribeRequest, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -359,27 +313,28 @@ open class SubscriberListsAPI {
        - name: BearerAuth
      - parameter listId: (path) List UUID 
      - parameter subscribeRequest: (body)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<UnsubscribeSubscriber200Response> 
      */
-    open class func subscribeWithRequestBuilder(listId: String, subscribeRequest: SubscribeRequest) -> RequestBuilder<UnsubscribeSubscriber200Response> {
+    open class func subscribeWithRequestBuilder(listId: String, subscribeRequest: SubscribeRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<UnsubscribeSubscriber200Response> {
         var localVariablePath = "/v1/subscribe/{list_id}"
         let listIdPreEscape = "\(APIHelper.mapValueToPathItem(listId))"
         let listIdPostEscape = listIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{list_id}", with: listIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: subscribeRequest)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: subscribeRequest, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<UnsubscribeSubscriber200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<UnsubscribeSubscriber200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
@@ -387,19 +342,12 @@ open class SubscriberListsAPI {
      
      - parameter listId: (path) List UUID 
      - parameter subscriberId: (path) Subscriber UUID 
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: UnsubscribeSubscriber200Response
      */
-    @discardableResult
-    open class func unsubscribeSubscriber(listId: String, subscriberId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: UnsubscribeSubscriber200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return unsubscribeSubscriberWithRequestBuilder(listId: listId, subscriberId: subscriberId).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func unsubscribeSubscriber(listId: String, subscriberId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> UnsubscribeSubscriber200Response {
+        return try await unsubscribeSubscriberWithRequestBuilder(listId: listId, subscriberId: subscriberId, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -411,9 +359,10 @@ open class SubscriberListsAPI {
        - name: BearerAuth
      - parameter listId: (path) List UUID 
      - parameter subscriberId: (path) Subscriber UUID 
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<UnsubscribeSubscriber200Response> 
      */
-    open class func unsubscribeSubscriberWithRequestBuilder(listId: String, subscriberId: String) -> RequestBuilder<UnsubscribeSubscriber200Response> {
+    open class func unsubscribeSubscriberWithRequestBuilder(listId: String, subscriberId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<UnsubscribeSubscriber200Response> {
         var localVariablePath = "/v1/lists/{list_id}/subscribers/{subscriber_id}"
         let listIdPreEscape = "\(APIHelper.mapValueToPathItem(listId))"
         let listIdPostEscape = listIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
@@ -421,19 +370,19 @@ open class SubscriberListsAPI {
         let subscriberIdPreEscape = "\(APIHelper.mapValueToPathItem(subscriberId))"
         let subscriberIdPostEscape = subscriberIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{subscriber_id}", with: subscriberIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<UnsubscribeSubscriber200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<UnsubscribeSubscriber200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 }

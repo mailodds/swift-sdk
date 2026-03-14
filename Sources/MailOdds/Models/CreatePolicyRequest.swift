@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct CreatePolicyRequest: Codable, JSONEncodable, Hashable {
+public struct CreatePolicyRequest: Sendable, Codable, Hashable {
 
     public static let nameRule = StringRule(minLength: nil, maxLength: 100, pattern: nil)
     public static let descriptionRule = StringRule(minLength: nil, maxLength: 500, pattern: nil)

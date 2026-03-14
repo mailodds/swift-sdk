@@ -6,35 +6,32 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public enum BatchDeliverRequestStructuredData: Codable, JSONEncodable, Hashable {
-    case typeAnyCodable(AnyCodable)
+public enum BatchDeliverRequestStructuredData: Sendable, Codable, Hashable {
+    case typeJSONValue(JSONValue)
     case typeString(String)
-    case typeAnyCodableArray([AnyCodable])
+    case typeArrayOfJSONValue([JSONValue])
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
-        case .typeAnyCodable(let value):
+        case .typeJSONValue(let value):
             try container.encode(value)
         case .typeString(let value):
             try container.encode(value)
-        case .typeAnyCodableArray(let value):
+        case .typeArrayOfJSONValue(let value):
             try container.encode(value)
         }
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(AnyCodable.self) {
-            self = .typeAnyCodable(value)
+        if let value = try? container.decode(JSONValue.self) {
+            self = .typeJSONValue(value)
         } else if let value = try? container.decode(String.self) {
             self = .typeString(value)
-        } else if let value = try? container.decode([AnyCodable].self) {
-            self = .typeAnyCodableArray(value)
+        } else if let value = try? container.decode([JSONValue].self) {
+            self = .typeArrayOfJSONValue(value)
         } else {
             throw DecodingError.typeMismatch(Self.Type.self, .init(codingPath: decoder.codingPath, debugDescription: "Unable to decode instance of BatchDeliverRequestStructuredData"))
         }

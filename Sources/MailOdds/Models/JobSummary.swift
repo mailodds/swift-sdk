@@ -6,12 +6,9 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Status breakdown. Present when processing has started. */
-public struct JobSummary: Codable, JSONEncodable, Hashable {
+public struct JobSummary: Sendable, Codable, Hashable {
 
     public var valid: Int?
     public var invalid: Int?

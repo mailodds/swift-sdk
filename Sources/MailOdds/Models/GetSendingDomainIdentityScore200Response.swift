@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct GetSendingDomainIdentityScore200Response: Codable, JSONEncodable, Hashable {
+public struct GetSendingDomainIdentityScore200Response: Sendable, Codable, Hashable {
 
     public var identityScore: SendingDomainIdentityScore?
 

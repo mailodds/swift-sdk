@@ -13,7 +13,7 @@ Name | Type | Description | Notes
 **startedAt** | **Date** | When processing began. Omitted if not yet started. | [optional] 
 **completedAt** | **Date** | Omitted if not yet completed. | [optional] 
 **resultsExpireAt** | **Date** | When job results will be purged | 
-**metadata** | **AnyCodable** | Custom metadata attached at creation | [optional] 
+**metadata** | **JSONValue** | Custom metadata attached at creation | [optional] 
 **errorMessage** | **String** | Error details. Present only for failed jobs. | [optional] 
 **requestId** | **String** | Request ID from the job creation request | [optional] 
 **artifacts** | [**JobArtifacts**](JobArtifacts.md) |  | [optional] 

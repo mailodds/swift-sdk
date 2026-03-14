@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct BatchDeliverResponse: Codable, JSONEncodable, Hashable {
+public struct BatchDeliverResponse: Sendable, Codable, Hashable {
 
-    public enum Status: String, Codable, CaseIterable {
+    public enum Status: String, Sendable, Codable, CaseIterable {
         case queued = "queued"
         case allRejected = "all_rejected"
     }

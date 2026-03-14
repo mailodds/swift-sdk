@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct DeliverRequest: Codable, JSONEncodable, Hashable {
+public struct DeliverRequest: Sendable, Codable, Hashable {
 
-    public enum CampaignType: String, Codable, CaseIterable {
+    public enum CampaignType: String, Sendable, Codable, CaseIterable {
         case orderConfirmation = "order_confirmation"
         case shippingNotification = "shipping_notification"
         case subscriptionConfirm = "subscription_confirm"
@@ -40,7 +37,7 @@ public struct DeliverRequest: Codable, JSONEncodable, Hashable {
     /** Reply-to address */
     public var replyTo: String?
     /** Extra email headers */
-    public var headers: AnyCodable?
+    public var headers: JSONValue?
     /** Tags for categorization */
     public var tags: [String]?
     /** Campaign type for JSON-LD auto-generation */
@@ -54,7 +51,7 @@ public struct DeliverRequest: Codable, JSONEncodable, Hashable {
     public var aiSummary: String?
     public var options: DeliverRequestOptions?
 
-    public init(to: [DeliverRequestToInner], from: String, subject: String, html: String? = nil, text: String? = nil, domainId: String, replyTo: String? = nil, headers: AnyCodable? = nil, tags: [String]? = nil, campaignType: CampaignType? = nil, structuredData: DeliverRequestStructuredData? = nil, schemaData: [String: String]? = nil, autoDetectSchema: Bool? = false, aiSummary: String? = nil, options: DeliverRequestOptions? = nil) {
+    public init(to: [DeliverRequestToInner], from: String, subject: String, html: String? = nil, text: String? = nil, domainId: String, replyTo: String? = nil, headers: JSONValue? = nil, tags: [String]? = nil, campaignType: CampaignType? = nil, structuredData: DeliverRequestStructuredData? = nil, schemaData: [String: String]? = nil, autoDetectSchema: Bool? = false, aiSummary: String? = nil, options: DeliverRequestOptions? = nil) {
         self.to = to
         self.from = from
         self.subject = subject

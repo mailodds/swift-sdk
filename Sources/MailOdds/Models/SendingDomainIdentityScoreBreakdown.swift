@@ -6,12 +6,9 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Per-check scoring breakdown */
-public struct SendingDomainIdentityScoreBreakdown: Codable, JSONEncodable, Hashable {
+public struct SendingDomainIdentityScoreBreakdown: Sendable, Codable, Hashable {
 
     public var dkim: IdentityScoreCheck?
     public var spf: IdentityScoreCheck?

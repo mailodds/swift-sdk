@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct TestPolicyRequest: Codable, JSONEncodable, Hashable {
+public struct TestPolicyRequest: Sendable, Codable, Hashable {
 
     public var policyId: Int
     public var testResult: TestPolicyRequestTestResult

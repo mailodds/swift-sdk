@@ -6,24 +6,21 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct SubscribeRequest: Codable, JSONEncodable, Hashable {
+public struct SubscribeRequest: Sendable, Codable, Hashable {
 
     /** Subscriber email address */
     public var email: String
     /** Subscriber name */
     public var name: String?
     /** Custom metadata key-value pairs */
-    public var metadata: AnyCodable?
+    public var metadata: JSONValue?
     /** URL of the page where the subscription form was submitted (for consent proof) */
     public var pageUrl: String?
     /** Identifier of the form used to subscribe (for consent proof) */
     public var formId: String?
 
-    public init(email: String, name: String? = nil, metadata: AnyCodable? = nil, pageUrl: String? = nil, formId: String? = nil) {
+    public init(email: String, name: String? = nil, metadata: JSONValue? = nil, pageUrl: String? = nil, formId: String? = nil) {
         self.email = email
         self.name = name
         self.metadata = metadata

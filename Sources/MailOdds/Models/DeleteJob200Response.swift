@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct DeleteJob200Response: Codable, JSONEncodable, Hashable {
+public struct DeleteJob200Response: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
     /** Unique request identifier */

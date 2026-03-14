@@ -6,12 +6,9 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Status distribution as decimals (0-1) */
-public struct TelemetrySummaryRates: Codable, JSONEncodable, Hashable {
+public struct TelemetrySummaryRates: Sendable, Codable, Hashable {
 
     /** Rate of valid + catch_all emails */
     public var deliverable: Double?

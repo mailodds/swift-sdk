@@ -6,9 +6,6 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 open class SendingDomainsAPI {
 
@@ -16,19 +13,12 @@ open class SendingDomainsAPI {
      Add a sending domain
      
      - parameter createSendingDomainRequest: (body)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: CreateSendingDomain201Response
      */
-    @discardableResult
-    open class func createSendingDomain(createSendingDomainRequest: CreateSendingDomainRequest, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: CreateSendingDomain201Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return createSendingDomainWithRequestBuilder(createSendingDomainRequest: createSendingDomainRequest).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func createSendingDomain(createSendingDomainRequest: CreateSendingDomainRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> CreateSendingDomain201Response {
+        return try await createSendingDomainWithRequestBuilder(createSendingDomainRequest: createSendingDomainRequest, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -39,43 +29,37 @@ open class SendingDomainsAPI {
        - type: http
        - name: BearerAuth
      - parameter createSendingDomainRequest: (body)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<CreateSendingDomain201Response> 
      */
-    open class func createSendingDomainWithRequestBuilder(createSendingDomainRequest: CreateSendingDomainRequest) -> RequestBuilder<CreateSendingDomain201Response> {
+    open class func createSendingDomainWithRequestBuilder(createSendingDomainRequest: CreateSendingDomainRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<CreateSendingDomain201Response> {
         let localVariablePath = "/v1/sending-domains"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createSendingDomainRequest)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createSendingDomainRequest, codableHelper: apiConfiguration.codableHelper)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             "Content-Type": "application/json",
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<CreateSendingDomain201Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<CreateSendingDomain201Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      Delete a sending domain
      
      - parameter domainId: (path)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: DeletePolicyRule200Response
      */
-    @discardableResult
-    open class func deleteSendingDomain(domainId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: DeletePolicyRule200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return deleteSendingDomainWithRequestBuilder(domainId: domainId).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func deleteSendingDomain(domainId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> DeletePolicyRule200Response {
+        return try await deleteSendingDomainWithRequestBuilder(domainId: domainId, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -86,46 +70,40 @@ open class SendingDomainsAPI {
        - type: http
        - name: BearerAuth
      - parameter domainId: (path)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<DeletePolicyRule200Response> 
      */
-    open class func deleteSendingDomainWithRequestBuilder(domainId: String) -> RequestBuilder<DeletePolicyRule200Response> {
+    open class func deleteSendingDomainWithRequestBuilder(domainId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<DeletePolicyRule200Response> {
         var localVariablePath = "/v1/sending-domains/{domain_id}"
         let domainIdPreEscape = "\(APIHelper.mapValueToPathItem(domainId))"
         let domainIdPostEscape = domainIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{domain_id}", with: domainIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<DeletePolicyRule200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<DeletePolicyRule200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      Get a sending domain
      
      - parameter domainId: (path)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: CreateSendingDomain201Response
      */
-    @discardableResult
-    open class func getSendingDomain(domainId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: CreateSendingDomain201Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return getSendingDomainWithRequestBuilder(domainId: domainId).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getSendingDomain(domainId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> CreateSendingDomain201Response {
+        return try await getSendingDomainWithRequestBuilder(domainId: domainId, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -136,46 +114,40 @@ open class SendingDomainsAPI {
        - type: http
        - name: BearerAuth
      - parameter domainId: (path)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<CreateSendingDomain201Response> 
      */
-    open class func getSendingDomainWithRequestBuilder(domainId: String) -> RequestBuilder<CreateSendingDomain201Response> {
+    open class func getSendingDomainWithRequestBuilder(domainId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<CreateSendingDomain201Response> {
         var localVariablePath = "/v1/sending-domains/{domain_id}"
         let domainIdPreEscape = "\(APIHelper.mapValueToPathItem(domainId))"
         let domainIdPostEscape = domainIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{domain_id}", with: domainIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<CreateSendingDomain201Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<CreateSendingDomain201Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      Get domain identity score
      
      - parameter domainId: (path)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: GetSendingDomainIdentityScore200Response
      */
-    @discardableResult
-    open class func getSendingDomainIdentityScore(domainId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: GetSendingDomainIdentityScore200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return getSendingDomainIdentityScoreWithRequestBuilder(domainId: domainId).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getSendingDomainIdentityScore(domainId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> GetSendingDomainIdentityScore200Response {
+        return try await getSendingDomainIdentityScoreWithRequestBuilder(domainId: domainId, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -186,33 +158,34 @@ open class SendingDomainsAPI {
        - type: http
        - name: BearerAuth
      - parameter domainId: (path)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<GetSendingDomainIdentityScore200Response> 
      */
-    open class func getSendingDomainIdentityScoreWithRequestBuilder(domainId: String) -> RequestBuilder<GetSendingDomainIdentityScore200Response> {
+    open class func getSendingDomainIdentityScoreWithRequestBuilder(domainId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<GetSendingDomainIdentityScore200Response> {
         var localVariablePath = "/v1/sending-domains/{domain_id}/identity-score"
         let domainIdPreEscape = "\(APIHelper.mapValueToPathItem(domainId))"
         let domainIdPostEscape = domainIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{domain_id}", with: domainIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<GetSendingDomainIdentityScore200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<GetSendingDomainIdentityScore200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      * enum for parameter period
      */
-    public enum Period_getSendingStats: String, CaseIterable {
+    public enum Period_getSendingStats: String, Sendable, CaseIterable {
         case _7d = "7d"
         case _30d = "30d"
         case _90d = "90d"
@@ -223,19 +196,12 @@ open class SendingDomainsAPI {
      
      - parameter period: (query) Time period (optional, default to ._7d)
      - parameter domainId: (query) Filter by domain (optional)
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: GetSendingStats200Response
      */
-    @discardableResult
-    open class func getSendingStats(period: Period_getSendingStats? = nil, domainId: String? = nil, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: GetSendingStats200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return getSendingStatsWithRequestBuilder(period: period, domainId: domainId).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func getSendingStats(period: Period_getSendingStats? = nil, domainId: String? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> GetSendingStats200Response {
+        return try await getSendingStatsWithRequestBuilder(period: period, domainId: domainId, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -247,46 +213,40 @@ open class SendingDomainsAPI {
        - name: BearerAuth
      - parameter period: (query) Time period (optional, default to ._7d)
      - parameter domainId: (query) Filter by domain (optional)
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<GetSendingStats200Response> 
      */
-    open class func getSendingStatsWithRequestBuilder(period: Period_getSendingStats? = nil, domainId: String? = nil) -> RequestBuilder<GetSendingStats200Response> {
+    open class func getSendingStatsWithRequestBuilder(period: Period_getSendingStats? = nil, domainId: String? = nil, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<GetSendingStats200Response> {
         let localVariablePath = "/v1/sending-stats"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "period": (wrappedValue: period?.encodeToJSON(), isExplode: true),
-            "domain_id": (wrappedValue: domainId?.encodeToJSON(), isExplode: true),
+            "period": (wrappedValue: period?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
+            "domain_id": (wrappedValue: domainId?.asParameter(codableHelper: apiConfiguration.codableHelper), isExplode: true),
         ])
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<GetSendingStats200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<GetSendingStats200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      List sending domains
      
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: ListSendingDomains200Response
      */
-    @discardableResult
-    open class func listSendingDomains(apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: ListSendingDomains200Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return listSendingDomainsWithRequestBuilder().execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func listSendingDomains(apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> ListSendingDomains200Response {
+        return try await listSendingDomainsWithRequestBuilder(apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -296,43 +256,37 @@ open class SendingDomainsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<ListSendingDomains200Response> 
      */
-    open class func listSendingDomainsWithRequestBuilder() -> RequestBuilder<ListSendingDomains200Response> {
+    open class func listSendingDomainsWithRequestBuilder(apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<ListSendingDomains200Response> {
         let localVariablePath = "/v1/sending-domains"
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<ListSendingDomains200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<ListSendingDomains200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "GET", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 
     /**
      Verify domain DNS records
      
      - parameter domainId: (path)  
-     - parameter apiResponseQueue: The queue on which api response is dispatched.
-     - parameter completion: completion handler to receive the data and the error objects
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: CreateSendingDomain201Response
      */
-    @discardableResult
-    open class func verifySendingDomain(domainId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: CreateSendingDomain201Response?, _ error: Error?) -> Void)) -> RequestTask {
-        return verifySendingDomainWithRequestBuilder(domainId: domainId).execute(apiResponseQueue) { result in
-            switch result {
-            case let .success(response):
-                completion(response.body, nil)
-            case let .failure(error):
-                completion(nil, error)
-            }
-        }
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func verifySendingDomain(domainId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> CreateSendingDomain201Response {
+        return try await verifySendingDomainWithRequestBuilder(domainId: domainId, apiConfiguration: apiConfiguration).execute().body
     }
 
     /**
@@ -343,26 +297,27 @@ open class SendingDomainsAPI {
        - type: http
        - name: BearerAuth
      - parameter domainId: (path)  
+     - parameter apiConfiguration: The configuration for the http request.
      - returns: RequestBuilder<CreateSendingDomain201Response> 
      */
-    open class func verifySendingDomainWithRequestBuilder(domainId: String) -> RequestBuilder<CreateSendingDomain201Response> {
+    open class func verifySendingDomainWithRequestBuilder(domainId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<CreateSendingDomain201Response> {
         var localVariablePath = "/v1/sending-domains/{domain_id}/verify"
         let domainIdPreEscape = "\(APIHelper.mapValueToPathItem(domainId))"
         let domainIdPostEscape = domainIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
         localVariablePath = localVariablePath.replacingOccurrences(of: "{domain_id}", with: domainIdPostEscape, options: .literal, range: nil)
-        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
-        let localVariableParameters: [String: Any]? = nil
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
-        let localVariableNillableHeaders: [String: Any?] = [
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
             :
         ]
 
         let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
 
-        let localVariableRequestBuilder: RequestBuilder<CreateSendingDomain201Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+        let localVariableRequestBuilder: RequestBuilder<CreateSendingDomain201Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
-        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 }

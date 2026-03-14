@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct ValidateBatchRequest: Codable, JSONEncodable, Hashable {
+public struct ValidateBatchRequest: Sendable, Codable, Hashable {
 
-    public enum Depth: String, Codable, CaseIterable {
+    public enum Depth: String, Sendable, Codable, CaseIterable {
         case standard = "standard"
         case enhanced = "enhanced"
     }

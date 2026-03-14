@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct PolicyRule: Codable, JSONEncodable, Hashable {
+public struct PolicyRule: Sendable, Codable, Hashable {
 
-    public enum ModelType: String, Codable, CaseIterable {
+    public enum ModelType: String, Sendable, Codable, CaseIterable {
         case statusOverride = "status_override"
         case domainFilter = "domain_filter"
         case checkRequirement = "check_requirement"
@@ -22,12 +19,12 @@ public struct PolicyRule: Codable, JSONEncodable, Hashable {
     /** Rule type determines how condition is evaluated */
     public var type: ModelType
     /** Condition depends on rule type. status_override: {status}, domain_filter: {domain_mode, domains}, check_requirement: {check, required}, sub_status_override: {sub_status} */
-    public var condition: AnyCodable
+    public var condition: JSONValue
     public var action: PolicyRuleAction
     public var sequence: Int?
     public var isEnabled: Bool?
 
-    public init(id: Int? = nil, type: ModelType, condition: AnyCodable, action: PolicyRuleAction, sequence: Int? = nil, isEnabled: Bool? = nil) {
+    public init(id: Int? = nil, type: ModelType, condition: JSONValue, action: PolicyRuleAction, sequence: Int? = nil, isEnabled: Bool? = nil) {
         self.id = id
         self.type = type
         self.condition = condition

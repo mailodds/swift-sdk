@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct SendingDomainIdentityScore: Codable, JSONEncodable, Hashable {
+public struct SendingDomainIdentityScore: Sendable, Codable, Hashable {
 
-    public enum Grade: String, Codable, CaseIterable {
+    public enum Grade: String, Sendable, Codable, CaseIterable {
         case aPlus = "A+"
         case a = "A"
         case b = "B"

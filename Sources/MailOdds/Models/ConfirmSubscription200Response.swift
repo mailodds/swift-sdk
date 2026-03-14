@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct ConfirmSubscription200Response: Codable, JSONEncodable, Hashable {
+public struct ConfirmSubscription200Response: Sendable, Codable, Hashable {
 
     public var confirmed: Bool?
     public var email: String?

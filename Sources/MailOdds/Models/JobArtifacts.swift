@@ -6,12 +6,9 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Download URLs for completed jobs. Present only when status is completed. */
-public struct JobArtifacts: Codable, JSONEncodable, Hashable {
+public struct JobArtifacts: Sendable, Codable, Hashable {
 
     /** CSV with all results */
     public var csvAll: String?

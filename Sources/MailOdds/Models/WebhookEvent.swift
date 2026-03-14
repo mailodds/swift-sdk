@@ -6,14 +6,11 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Webhook payload delivered to your endpoint. Fields vary by event type. */
-public struct WebhookEvent: Codable, JSONEncodable, Hashable {
+public struct WebhookEvent: Sendable, Codable, Hashable {
 
-    public enum Event: String, Codable, CaseIterable {
+    public enum Event: String, Sendable, Codable, CaseIterable {
         case jobPeriodCompleted = "job.completed"
         case jobPeriodFailed = "job.failed"
         case messagePeriodQueued = "message.queued"
@@ -25,7 +22,7 @@ public struct WebhookEvent: Codable, JSONEncodable, Hashable {
         case messagePeriodClicked = "message.clicked"
         case test = "test"
     }
-    public enum BounceType: String, Codable, CaseIterable {
+    public enum BounceType: String, Sendable, Codable, CaseIterable {
         case hard = "hard"
         case soft = "soft"
     }

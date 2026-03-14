@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct CreateJobFromS3Request: Codable, JSONEncodable, Hashable {
+public struct CreateJobFromS3Request: Sendable, Codable, Hashable {
 
     /** S3 key from presigned upload */
     public var s3Key: String

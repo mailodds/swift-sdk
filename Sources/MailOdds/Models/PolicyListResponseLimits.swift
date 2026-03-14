@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct PolicyListResponseLimits: Codable, JSONEncodable, Hashable {
+public struct PolicyListResponseLimits: Sendable, Codable, Hashable {
 
     /** -1 means unlimited */
     public var maxPolicies: Int?

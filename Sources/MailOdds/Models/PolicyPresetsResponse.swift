@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct PolicyPresetsResponse: Codable, JSONEncodable, Hashable {
+public struct PolicyPresetsResponse: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
     /** Unique request identifier */

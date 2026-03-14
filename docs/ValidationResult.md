@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **action** | **String** |  | 
 **domain** | **String** | Email domain | 
 **mxHost** | **String** | Primary MX hostname. Omitted when not resolved. | [optional] 
-**checks** | **[String: AnyCodable]** | Detailed check results (JSONB). Omitted when not available. | [optional] 
+**checks** | **[String: JSONValue]** | Detailed check results (JSONB). Omitted when not available. | [optional] 
 **suppression** | [**ValidationResultSuppression**](ValidationResultSuppression.md) |  | [optional] 
 **processedAt** | **Date** |  | 
 

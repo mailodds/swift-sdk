@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct SendingDomainDnsRecordsNs: Codable, JSONEncodable, Hashable {
+public struct SendingDomainDnsRecordsNs: Sendable, Codable, Hashable {
 
-    public enum Status: String, Codable, CaseIterable {
+    public enum Status: String, Sendable, Codable, CaseIterable {
         case pending = "pending"
         case verified = "verified"
     }

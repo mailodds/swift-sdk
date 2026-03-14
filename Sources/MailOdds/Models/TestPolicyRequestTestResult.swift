@@ -6,12 +6,9 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Mock validation result to test against */
-public struct TestPolicyRequestTestResult: Codable, JSONEncodable, Hashable {
+public struct TestPolicyRequestTestResult: Sendable, Codable, Hashable {
 
     public var email: String?
     public var status: String?

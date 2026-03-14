@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct Job: Codable, JSONEncodable, Hashable {
+public struct Job: Sendable, Codable, Hashable {
 
-    public enum Status: String, Codable, CaseIterable {
+    public enum Status: String, Sendable, Codable, CaseIterable {
         case pending = "pending"
         case processing = "processing"
         case completed = "completed"
@@ -34,14 +31,14 @@ public struct Job: Codable, JSONEncodable, Hashable {
     /** When job results will be purged */
     public var resultsExpireAt: Date
     /** Custom metadata attached at creation */
-    public var metadata: AnyCodable?
+    public var metadata: JSONValue?
     /** Error details. Present only for failed jobs. */
     public var errorMessage: String?
     /** Request ID from the job creation request */
     public var requestId: String?
     public var artifacts: JobArtifacts?
 
-    public init(id: String, name: String, status: Status, totalCount: Int, processedCount: Int, summary: JobSummary? = nil, createdAt: Date, startedAt: Date? = nil, completedAt: Date? = nil, resultsExpireAt: Date, metadata: AnyCodable? = nil, errorMessage: String? = nil, requestId: String? = nil, artifacts: JobArtifacts? = nil) {
+    public init(id: String, name: String, status: Status, totalCount: Int, processedCount: Int, summary: JobSummary? = nil, createdAt: Date, startedAt: Date? = nil, completedAt: Date? = nil, resultsExpireAt: Date, metadata: JSONValue? = nil, errorMessage: String? = nil, requestId: String? = nil, artifacts: JobArtifacts? = nil) {
         self.id = id
         self.name = name
         self.status = status

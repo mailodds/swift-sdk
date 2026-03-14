@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct DeliverResponse: Codable, JSONEncodable, Hashable {
+public struct DeliverResponse: Sendable, Codable, Hashable {
 
-    public enum Status: String, Codable, CaseIterable {
+    public enum Status: String, Sendable, Codable, CaseIterable {
         case queued = "queued"
     }
     public var schemaVersion: String?
@@ -24,11 +21,11 @@ public struct DeliverResponse: Codable, JSONEncodable, Hashable {
     public var status: Status?
     public var delivery: DeliverResponseDelivery?
     /** Pre-send validation results (when validate_first is true) */
-    public var validation: AnyCodable?
+    public var validation: JSONValue?
     /** Content scan results */
-    public var contentScan: AnyCodable?
+    public var contentScan: JSONValue?
 
-    public init(schemaVersion: String? = nil, requestId: String? = nil, messageId: String? = nil, status: Status? = nil, delivery: DeliverResponseDelivery? = nil, validation: AnyCodable? = nil, contentScan: AnyCodable? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, messageId: String? = nil, status: Status? = nil, delivery: DeliverResponseDelivery? = nil, validation: JSONValue? = nil, contentScan: JSONValue? = nil) {
         self.schemaVersion = schemaVersion
         self.requestId = requestId
         self.messageId = messageId

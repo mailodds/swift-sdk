@@ -6,12 +6,9 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Delivery routing info (present when status is queued) */
-public struct BatchDeliverResponseDelivery: Codable, JSONEncodable, Hashable {
+public struct BatchDeliverResponseDelivery: Sendable, Codable, Hashable {
 
     /** IP pool used */
     public var pool: String?

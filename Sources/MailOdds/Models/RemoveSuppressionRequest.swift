@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct RemoveSuppressionRequest: Codable, JSONEncodable, Hashable {
+public struct RemoveSuppressionRequest: Sendable, Codable, Hashable {
 
     public var entries: [String]
 

@@ -6,13 +6,10 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct SuppressionCheckResponse: Codable, JSONEncodable, Hashable {
+public struct SuppressionCheckResponse: Sendable, Codable, Hashable {
 
-    public enum MatchType: String, Codable, CaseIterable {
+    public enum MatchType: String, Sendable, Codable, CaseIterable {
         case email = "email"
         case domain = "domain"
     }

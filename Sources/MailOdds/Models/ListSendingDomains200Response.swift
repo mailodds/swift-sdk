@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct ListSendingDomains200Response: Codable, JSONEncodable, Hashable {
+public struct ListSendingDomains200Response: Sendable, Codable, Hashable {
 
     public var domains: [SendingDomain]?
 

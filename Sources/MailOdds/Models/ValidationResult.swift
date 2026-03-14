@@ -6,21 +6,18 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Individual result from a bulk validation job */
-public struct ValidationResult: Codable, JSONEncodable, Hashable {
+public struct ValidationResult: Sendable, Codable, Hashable {
 
-    public enum Status: String, Codable, CaseIterable {
+    public enum Status: String, Sendable, Codable, CaseIterable {
         case valid = "valid"
         case invalid = "invalid"
         case catchAll = "catch_all"
         case doNotMail = "do_not_mail"
         case unknown = "unknown"
     }
-    public enum Action: String, Codable, CaseIterable {
+    public enum Action: String, Sendable, Codable, CaseIterable {
         case accept = "accept"
         case acceptWithCaution = "accept_with_caution"
         case reject = "reject"
@@ -36,11 +33,11 @@ public struct ValidationResult: Codable, JSONEncodable, Hashable {
     /** Primary MX hostname. Omitted when not resolved. */
     public var mxHost: String?
     /** Detailed check results (JSONB). Omitted when not available. */
-    public var checks: [String: AnyCodable]?
+    public var checks: [String: JSONValue]?
     public var suppression: ValidationResultSuppression?
     public var processedAt: Date
 
-    public init(email: String, status: Status, subStatus: String? = nil, action: Action, domain: String, mxHost: String? = nil, checks: [String: AnyCodable]? = nil, suppression: ValidationResultSuppression? = nil, processedAt: Date) {
+    public init(email: String, status: Status, subStatus: String? = nil, action: Action, domain: String, mxHost: String? = nil, checks: [String: JSONValue]? = nil, suppression: ValidationResultSuppression? = nil, processedAt: Date) {
         self.email = email
         self.status = status
         self.subStatus = subStatus

@@ -6,14 +6,11 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
 /** Present only when email matched a suppression entry. */
-public struct ValidationResultSuppression: Codable, JSONEncodable, Hashable {
+public struct ValidationResultSuppression: Sendable, Codable, Hashable {
 
-    public enum MatchType: String, Codable, CaseIterable {
+    public enum MatchType: String, Sendable, Codable, CaseIterable {
         case email = "email"
         case domain = "domain"
     }

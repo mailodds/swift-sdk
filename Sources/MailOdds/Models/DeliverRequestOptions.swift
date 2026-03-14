@@ -6,11 +6,8 @@
 //
 
 import Foundation
-#if canImport(AnyCodable)
-import AnyCodable
-#endif
 
-public struct DeliverRequestOptions: Codable, JSONEncodable, Hashable {
+public struct DeliverRequestOptions: Sendable, Codable, Hashable {
 
     /** Validate recipients before sending */
     public var validateFirst: Bool?
