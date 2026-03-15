@@ -30,3 +30,4 @@ ci/**
 Package.swift
 # Preserve Linux compatibility fix (MobileCoreServices guard)
 Sources/MailOdds/Infrastructure/URLSessionImplementations.swift
+README.md
