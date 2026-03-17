@@ -25,7 +25,7 @@ Submit bounce log data for analysis. Identifies patterns, categorizes bounce typ
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let createBounceAnalysisRequest = createBounceAnalysis_request(domainId: "domainId_example", period: "period_example") // CreateBounceAnalysisRequest | 
+let createBounceAnalysisRequest = createBounceAnalysis_request(text: "text_example", name: "name_example") // CreateBounceAnalysisRequest | 
 
 // Analyze bounce logs
 BounceAnalysisAPI.createBounceAnalysis(createBounceAnalysisRequest: createBounceAnalysisRequest) { (response, error) in

@@ -9,32 +9,26 @@ import Foundation
 
 public struct CreateBounceAnalysisRequest: Sendable, Codable, Hashable {
 
-    public enum Period: String, Sendable, Codable, CaseIterable {
-        case _7d = "7d"
-        case _30d = "30d"
-        case _90d = "90d"
-    }
-    /** Sending domain UUID to analyze bounces for */
-    public var domainId: String
-    /** Time period to analyze */
-    public var period: Period? = ._30d
+    /** Bounce log text to analyze. Identifies patterns, categorizes bounce types, and provides remediation recommendations. */
+    public var text: String
+    /** Optional name for this bounce analysis */
+    public var name: String?
 
-    public init(domainId: String, period: Period? = ._30d) {
-        self.domainId = domainId
-        self.period = period
+    public init(text: String, name: String? = nil) {
+        self.text = text
+        self.name = name
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
-        case domainId = "domain_id"
-        case period
+        case text
+        case name
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(domainId, forKey: .domainId)
-        try container.encodeIfPresent(period, forKey: .period)
+        try container.encode(text, forKey: .text)
+        try container.encodeIfPresent(name, forKey: .name)
     }
 }
-

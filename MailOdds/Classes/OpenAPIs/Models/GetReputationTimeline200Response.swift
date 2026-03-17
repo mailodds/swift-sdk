@@ -14,9 +14,9 @@ public struct GetReputationTimeline200Response: Codable, JSONEncodable, Hashable
 
     public var schemaVersion: String?
     public var requestId: String?
-    public var timeline: [AnyCodable]?
+    public var timeline: GetReputationTimeline200ResponseTimeline?
 
-    public init(schemaVersion: String? = nil, requestId: String? = nil, timeline: [AnyCodable]? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, timeline: GetReputationTimeline200ResponseTimeline? = nil) {
         self.schemaVersion = schemaVersion
         self.requestId = requestId
         self.timeline = timeline

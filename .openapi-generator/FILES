@@ -176,6 +176,8 @@ MailOdds/Classes/OpenAPIs/Models/GetProduct200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetReplyForwarding200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetReputation200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetReputationTimeline200Response.swift
+MailOdds/Classes/OpenAPIs/Models/GetReputationTimeline200ResponseTimeline.swift
+MailOdds/Classes/OpenAPIs/Models/GetReputationTimeline200ResponseTimelineTimelineInner.swift
 MailOdds/Classes/OpenAPIs/Models/GetSenderHealth200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetSenderHealth200ResponseComponents.swift
 MailOdds/Classes/OpenAPIs/Models/GetSenderHealth200ResponseComponentsDeliveryRate.swift
@@ -456,6 +458,8 @@ docs/GetProduct200Response.md
 docs/GetReplyForwarding200Response.md
 docs/GetReputation200Response.md
 docs/GetReputationTimeline200Response.md
+docs/GetReputationTimeline200ResponseTimeline.md
+docs/GetReputationTimeline200ResponseTimelineTimelineInner.md
 docs/GetSenderHealth200Response.md
 docs/GetSenderHealth200ResponseComponents.md
 docs/GetSenderHealth200ResponseComponentsDeliveryRate.md
