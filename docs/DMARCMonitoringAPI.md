@@ -5,6 +5,7 @@ All URIs are relative to *https://api.mailodds.com/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**addDmarcDomain**](DMARCMonitoringAPI.md#adddmarcdomain) | **POST** /v1/dmarc-domains | Add DMARC domain
+[**deleteDmarcDomain**](DMARCMonitoringAPI.md#deletedmarcdomain) | **DELETE** /v1/dmarc-domains/{domain_id} | Delete a DMARC domain
 [**getDmarcDomain**](DMARCMonitoringAPI.md#getdmarcdomain) | **GET** /v1/dmarc-domains/{domain_id} | Get DMARC domain
 [**getDmarcRecommendation**](DMARCMonitoringAPI.md#getdmarcrecommendation) | **GET** /v1/dmarc-domains/{domain_id}/recommendation | Get DMARC policy recommendation
 [**getDmarcSources**](DMARCMonitoringAPI.md#getdmarcsources) | **GET** /v1/dmarc-domains/{domain_id}/sources | Get DMARC sending sources
@@ -59,6 +60,56 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deleteDmarcDomain**
+```swift
+    open class func deleteDmarcDomain(domainId: String, completion: @escaping (_ data: DeletePolicyRule200Response?, _ error: Error?) -> Void)
+```
+
+Delete a DMARC domain
+
+Delete a DMARC domain and all its associated reports.
+
+### Example
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import MailOdds
+
+let domainId = "domainId_example" // String | DMARC domain UUID
+
+// Delete a DMARC domain
+DMARCMonitoringAPI.deleteDmarcDomain(domainId: domainId) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **domainId** | **String** | DMARC domain UUID | 
+
+### Return type
+
+[**DeletePolicyRule200Response**](DeletePolicyRule200Response.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

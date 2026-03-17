@@ -9,41 +9,52 @@ import Foundation
 
 public struct ClassifyContent200ResponseContentCheck: Sendable, Codable, Hashable {
 
-    public enum Verdict: String, Sendable, Codable, CaseIterable {
+    public enum Status: String, Sendable, Codable, CaseIterable {
         case clean = "clean"
         case warning = "warning"
         case risky = "risky"
     }
-    /** Overall content quality score (0-100) */
-    public var score: Double?
-    /** Overall verdict */
-    public var verdict: Verdict?
-    public var categories: [ClassifyContent200ResponseContentCheckCategoriesInner]?
+    /** Overall content status */
+    public var status: Status?
+    /** Whether the content is flagged */
+    public var flag: Bool?
+    /** Human-readable reason for the status */
+    public var reason: String?
+    /** Priority level (1=lowest, 5=highest) */
+    public var priority: Int?
     /** Improvement suggestions */
     public var suggestions: [String]?
+    /** Classification duration in milliseconds */
+    public var durationMs: Int?
 
-    public init(score: Double? = nil, verdict: Verdict? = nil, categories: [ClassifyContent200ResponseContentCheckCategoriesInner]? = nil, suggestions: [String]? = nil) {
-        self.score = score
-        self.verdict = verdict
-        self.categories = categories
+    public init(status: Status? = nil, flag: Bool? = nil, reason: String? = nil, priority: Int? = nil, suggestions: [String]? = nil, durationMs: Int? = nil) {
+        self.status = status
+        self.flag = flag
+        self.reason = reason
+        self.priority = priority
         self.suggestions = suggestions
+        self.durationMs = durationMs
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
-        case score
-        case verdict
-        case categories
+        case status
+        case flag
+        case reason
+        case priority
         case suggestions
+        case durationMs = "duration_ms"
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(score, forKey: .score)
-        try container.encodeIfPresent(verdict, forKey: .verdict)
-        try container.encodeIfPresent(categories, forKey: .categories)
+        try container.encodeIfPresent(status, forKey: .status)
+        try container.encodeIfPresent(flag, forKey: .flag)
+        try container.encodeIfPresent(reason, forKey: .reason)
+        try container.encodeIfPresent(priority, forKey: .priority)
         try container.encodeIfPresent(suggestions, forKey: .suggestions)
+        try container.encodeIfPresent(durationMs, forKey: .durationMs)
     }
 }
 

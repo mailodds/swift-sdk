@@ -9,41 +9,45 @@ import Foundation
 
 public struct GetDmarcDomain200ResponseDomainAllOfSummary: Sendable, Codable, Hashable {
 
-    public var totalReports: Int?
-    public var totalRecords: Int?
+    public var days: Int?
+    public var reportCount: Int?
+    public var sourceCount: Int?
+    public var totalMessages: Int?
+    public var totalPass: Int?
+    public var totalFail: Int?
     public var passRate: Double?
-    public var failRate: Double?
-    public var dkimAligned: Double?
-    public var spfAligned: Double?
 
-    public init(totalReports: Int? = nil, totalRecords: Int? = nil, passRate: Double? = nil, failRate: Double? = nil, dkimAligned: Double? = nil, spfAligned: Double? = nil) {
-        self.totalReports = totalReports
-        self.totalRecords = totalRecords
+    public init(days: Int? = nil, reportCount: Int? = nil, sourceCount: Int? = nil, totalMessages: Int? = nil, totalPass: Int? = nil, totalFail: Int? = nil, passRate: Double? = nil) {
+        self.days = days
+        self.reportCount = reportCount
+        self.sourceCount = sourceCount
+        self.totalMessages = totalMessages
+        self.totalPass = totalPass
+        self.totalFail = totalFail
         self.passRate = passRate
-        self.failRate = failRate
-        self.dkimAligned = dkimAligned
-        self.spfAligned = spfAligned
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
-        case totalReports = "total_reports"
-        case totalRecords = "total_records"
+        case days
+        case reportCount = "report_count"
+        case sourceCount = "source_count"
+        case totalMessages = "total_messages"
+        case totalPass = "total_pass"
+        case totalFail = "total_fail"
         case passRate = "pass_rate"
-        case failRate = "fail_rate"
-        case dkimAligned = "dkim_aligned"
-        case spfAligned = "spf_aligned"
     }
 
     // Encodable protocol methods
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(totalReports, forKey: .totalReports)
-        try container.encodeIfPresent(totalRecords, forKey: .totalRecords)
+        try container.encodeIfPresent(days, forKey: .days)
+        try container.encodeIfPresent(reportCount, forKey: .reportCount)
+        try container.encodeIfPresent(sourceCount, forKey: .sourceCount)
+        try container.encodeIfPresent(totalMessages, forKey: .totalMessages)
+        try container.encodeIfPresent(totalPass, forKey: .totalPass)
+        try container.encodeIfPresent(totalFail, forKey: .totalFail)
         try container.encodeIfPresent(passRate, forKey: .passRate)
-        try container.encodeIfPresent(failRate, forKey: .failRate)
-        try container.encodeIfPresent(dkimAligned, forKey: .dkimAligned)
-        try container.encodeIfPresent(spfAligned, forKey: .spfAligned)
     }
 }
 

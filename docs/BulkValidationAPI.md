@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**getJobResults**](BulkValidationAPI.md#getjobresults) | **GET** /v1/jobs/{job_id}/results | Get job results
 [**getPresignedUpload**](BulkValidationAPI.md#getpresignedupload) | **POST** /v1/jobs/upload/presigned | Get S3 presigned upload URL
 [**listJobs**](BulkValidationAPI.md#listjobs) | **GET** /v1/jobs | List validation jobs
+[**retryJob**](BulkValidationAPI.md#retryjob) | **POST** /v1/jobs/{job_id}/retry | Retry failed job
 
 
 # **cancelJob**
@@ -469,6 +470,56 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**JobListResponse**](JobListResponse.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **retryJob**
+```swift
+    open class func retryJob(jobId: String, completion: @escaping (_ data: RetryJob200Response?, _ error: Error?) -> Void)
+```
+
+Retry failed job
+
+Retry processing for a failed or cancelled validation job. Re-queues unprocessed emails.
+
+### Example
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import MailOdds
+
+let jobId = "jobId_example" // String | Job ID
+
+// Retry failed job
+BulkValidationAPI.retryJob(jobId: jobId) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **jobId** | **String** | Job ID | 
+
+### Return type
+
+[**RetryJob200Response**](RetryJob200Response.md)
 
 ### Authorization
 

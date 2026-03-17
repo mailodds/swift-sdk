@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **Int** |  | [optional] 
 **type** | **String** | Rule type determines how condition is evaluated | 
-**condition** | **JSONValue** | Condition depends on rule type. status_override: {status}, domain_filter: {domain_mode, domains}, check_requirement: {check, required}, sub_status_override: {sub_status} | 
+**condition** | **AnyCodable** | Condition depends on rule type. status_override: {status}, domain_filter: {domain_mode, domains}, check_requirement: {check, required}, sub_status_override: {sub_status} | 
 **action** | [**PolicyRuleAction**](PolicyRuleAction.md) |  | 
 **sequence** | **Int** |  | [optional] 
 **isEnabled** | **Bool** |  | [optional] 

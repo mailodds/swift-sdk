@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createBounceAnalysis**](BounceAnalysisAPI.md#createbounceanalysis) | **POST** /v1/bounce-analyses | Analyze bounce logs
 [**crossReferenceBounces**](BounceAnalysisAPI.md#crossreferencebounces) | **GET** /v1/bounce-analyses/{analysis_id}/cross-reference | Cross-reference bounces with validation logs
+[**deleteBounceAnalysis**](BounceAnalysisAPI.md#deletebounceanalysis) | **DELETE** /v1/bounce-analyses/{analysis_id} | Delete bounce analysis
 [**getBounceAnalysis**](BounceAnalysisAPI.md#getbounceanalysis) | **GET** /v1/bounce-analyses/{analysis_id} | Get bounce analysis
 [**getBounceRecords**](BounceAnalysisAPI.md#getbouncerecords) | **GET** /v1/bounce-analyses/{analysis_id}/records | Get bounce records
 
@@ -98,6 +99,56 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**CrossReferenceBounces200Response**](CrossReferenceBounces200Response.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deleteBounceAnalysis**
+```swift
+    open class func deleteBounceAnalysis(analysisId: String, completion: @escaping (_ data: DeletePolicyRule200Response?, _ error: Error?) -> Void)
+```
+
+Delete bounce analysis
+
+Delete a bounce analysis and all associated records.
+
+### Example
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import MailOdds
+
+let analysisId = "analysisId_example" // String | Bounce analysis ID
+
+// Delete bounce analysis
+BounceAnalysisAPI.deleteBounceAnalysis(analysisId: analysisId) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **analysisId** | **String** | Bounce analysis ID | 
+
+### Return type
+
+[**DeletePolicyRule200Response**](DeletePolicyRule200Response.md)
 
 ### Authorization
 

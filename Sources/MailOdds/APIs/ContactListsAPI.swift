@@ -97,6 +97,50 @@ open class ContactListsAPI {
     }
 
     /**
+     Delete a contact list
+     
+     - parameter listId: (path) Contact list UUID 
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: DeletePolicyRule200Response
+     */
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func deleteContactList(listId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> DeletePolicyRule200Response {
+        return try await deleteContactListWithRequestBuilder(listId: listId, apiConfiguration: apiConfiguration).execute().body
+    }
+
+    /**
+     Delete a contact list
+     - DELETE /v1/contact-lists/{list_id}
+     - Permanently delete a contact list and all its entries.
+     - Bearer Token:
+       - type: http
+       - name: BearerAuth
+     - parameter listId: (path) Contact list UUID 
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: RequestBuilder<DeletePolicyRule200Response> 
+     */
+    open class func deleteContactListWithRequestBuilder(listId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<DeletePolicyRule200Response> {
+        var localVariablePath = "/v1/contact-lists/{list_id}"
+        let listIdPreEscape = "\(APIHelper.mapValueToPathItem(listId))"
+        let listIdPostEscape = listIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{list_id}", with: listIdPostEscape, options: .literal, range: nil)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+            :
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<DeletePolicyRule200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+    }
+
+    /**
      Get inactive contacts report
      
      - parameter days: (query) Inactivity threshold in days (optional, default to 90)
@@ -231,5 +275,139 @@ open class ContactListsAPI {
         let localVariableRequestBuilder: RequestBuilder<QueryContactList200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
         return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+    }
+
+    /**
+     Add contact to list
+
+     - parameter listId: (path) Contact list ID
+     - parameter addContactRequest: (body)
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: AddContact201Response
+     */
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func addContact(listId: String, addContactRequest: AddContactRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> AddContact201Response {
+        return try await addContactWithRequestBuilder(listId: listId, addContactRequest: addContactRequest, apiConfiguration: apiConfiguration).execute().body
+    }
+
+    /**
+     Add contact to list
+     - POST /v1/contact-lists/{list_id}/contacts
+     - parameter listId: (path) Contact list ID
+     - parameter addContactRequest: (body)
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: RequestBuilder<AddContact201Response>
+     */
+    open class func addContactWithRequestBuilder(listId: String, addContactRequest: AddContactRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<AddContact201Response> {
+        var localVariablePath = "/v1/contact-lists/{list_id}/contacts"
+        let listIdPreEscape = "\(APIHelper.mapValueToPathItem(listId))"
+        let listIdPostEscape = listIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{list_id}", with: listIdPostEscape, options: .literal, range: nil)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: addContactRequest, codableHelper: apiConfiguration.codableHelper)
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+            "Content-Type": "application/json",
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<AddContact201Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+    }
+
+    /**
+     Update contact
+
+     - parameter listId: (path) Contact list ID
+     - parameter contactId: (path) Contact ID
+     - parameter updateContactRequest: (body)
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: AddContact201Response
+     */
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func updateContact(listId: String, contactId: String, updateContactRequest: UpdateContactRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> AddContact201Response {
+        return try await updateContactWithRequestBuilder(listId: listId, contactId: contactId, updateContactRequest: updateContactRequest, apiConfiguration: apiConfiguration).execute().body
+    }
+
+    /**
+     Update contact
+     - PATCH /v1/contact-lists/{list_id}/contacts/{contact_id}
+     - parameter listId: (path) Contact list ID
+     - parameter contactId: (path) Contact ID
+     - parameter updateContactRequest: (body)
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: RequestBuilder<AddContact201Response>
+     */
+    open class func updateContactWithRequestBuilder(listId: String, contactId: String, updateContactRequest: UpdateContactRequest, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<AddContact201Response> {
+        var localVariablePath = "/v1/contact-lists/{list_id}/contacts/{contact_id}"
+        let listIdPreEscape = "\(APIHelper.mapValueToPathItem(listId))"
+        let listIdPostEscape = listIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{list_id}", with: listIdPostEscape, options: .literal, range: nil)
+        let contactIdPreEscape = "\(APIHelper.mapValueToPathItem(contactId))"
+        let contactIdPostEscape = contactIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{contact_id}", with: contactIdPostEscape, options: .literal, range: nil)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: updateContactRequest, codableHelper: apiConfiguration.codableHelper)
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+            "Content-Type": "application/json",
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<AddContact201Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "PATCH", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+    }
+
+    /**
+     Delete contact
+
+     - parameter listId: (path) Contact list ID
+     - parameter contactId: (path) Contact ID
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: DeletePolicyRule200Response
+     */
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func deleteContact(listId: String, contactId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> DeletePolicyRule200Response {
+        return try await deleteContactWithRequestBuilder(listId: listId, contactId: contactId, apiConfiguration: apiConfiguration).execute().body
+    }
+
+    /**
+     Delete contact
+     - DELETE /v1/contact-lists/{list_id}/contacts/{contact_id}
+     - parameter listId: (path) Contact list ID
+     - parameter contactId: (path) Contact ID
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: RequestBuilder<DeletePolicyRule200Response>
+     */
+    open class func deleteContactWithRequestBuilder(listId: String, contactId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<DeletePolicyRule200Response> {
+        var localVariablePath = "/v1/contact-lists/{list_id}/contacts/{contact_id}"
+        let listIdPreEscape = "\(APIHelper.mapValueToPathItem(listId))"
+        let listIdPostEscape = listIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{list_id}", with: listIdPostEscape, options: .literal, range: nil)
+        let contactIdPreEscape = "\(APIHelper.mapValueToPathItem(contactId))"
+        let contactIdPostEscape = contactIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{contact_id}", with: contactIdPostEscape, options: .literal, range: nil)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+            :
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<DeletePolicyRule200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 }

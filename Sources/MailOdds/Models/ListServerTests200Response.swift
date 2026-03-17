@@ -11,20 +11,20 @@ public struct ListServerTests200Response: Sendable, Codable, Hashable {
 
     public var schemaVersion: String?
     public var requestId: String?
-    public var tests: [ServerTest]?
+    public var data: [ServerTest]?
     public var pagination: Pagination?
 
-    public init(schemaVersion: String? = nil, requestId: String? = nil, tests: [ServerTest]? = nil, pagination: Pagination? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, data: [ServerTest]? = nil, pagination: Pagination? = nil) {
         self.schemaVersion = schemaVersion
         self.requestId = requestId
-        self.tests = tests
+        self.data = data
         self.pagination = pagination
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case schemaVersion = "schema_version"
         case requestId = "request_id"
-        case tests
+        case data
         case pagination
     }
 
@@ -34,7 +34,7 @@ public struct ListServerTests200Response: Sendable, Codable, Hashable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(schemaVersion, forKey: .schemaVersion)
         try container.encodeIfPresent(requestId, forKey: .requestId)
-        try container.encodeIfPresent(tests, forKey: .tests)
+        try container.encodeIfPresent(data, forKey: .data)
         try container.encodeIfPresent(pagination, forKey: .pagination)
     }
 }

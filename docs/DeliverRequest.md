@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **text** | **String** | Plain text email body | [optional] 
 **domainId** | **String** | Sending domain UUID | 
 **replyTo** | **String** | Reply-to address | [optional] 
-**headers** | **JSONValue** | Extra email headers | [optional] 
+**headers** | **AnyCodable** | Extra email headers | [optional] 
 **tags** | **[String]** | Tags for categorization | [optional] 
 **campaignType** | **String** | Campaign type for JSON-LD auto-generation | [optional] 
 **structuredData** | [**DeliverRequestStructuredData**](DeliverRequestStructuredData.md) |  | [optional] 

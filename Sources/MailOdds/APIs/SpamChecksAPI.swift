@@ -24,7 +24,7 @@ open class SpamChecksAPI {
     /**
      Get spam check
      - GET /v1/spam-checks/{check_id}
-     - Get the detailed result of a specific spam check. Currently available to beta accounts only.
+     - Get the detailed result of a specific spam check.
      - Bearer Token:
        - type: http
        - name: BearerAuth
@@ -69,7 +69,7 @@ open class SpamChecksAPI {
     /**
      List spam checks
      - GET /v1/spam-checks
-     - List past spam check results with pagination. Currently available to beta accounts only.
+     - List past spam check results with pagination.
      - Bearer Token:
        - type: http
        - name: BearerAuth
@@ -115,7 +115,7 @@ open class SpamChecksAPI {
     /**
      Run spam check
      - POST /v1/spam-checks
-     - Run backend spam checks on email sending parameters. Checks domain reputation, link safety, and subject line quality. Currently available to beta accounts only.
+     - Run backend spam checks on email sending parameters. Checks domain reputation, link safety, and subject line quality.
      - Bearer Token:
        - type: http
        - name: BearerAuth
@@ -139,5 +139,45 @@ open class SpamChecksAPI {
         let localVariableRequestBuilder: RequestBuilder<RunSpamCheck201Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
 
         return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
+    }
+
+    /**
+     Delete spam check
+
+     - parameter checkId: (path) Spam check ID
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: DeletePolicyRule200Response
+     */
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+    open class func deleteSpamCheck(checkId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) async throws(ErrorResponse) -> DeletePolicyRule200Response {
+        return try await deleteSpamCheckWithRequestBuilder(checkId: checkId, apiConfiguration: apiConfiguration).execute().body
+    }
+
+    /**
+     Delete spam check
+     - DELETE /v1/spam-checks/{check_id}
+     - parameter checkId: (path) Spam check ID
+     - parameter apiConfiguration: The configuration for the http request.
+     - returns: RequestBuilder<DeletePolicyRule200Response>
+     */
+    open class func deleteSpamCheckWithRequestBuilder(checkId: String, apiConfiguration: MailOddsAPIConfiguration = MailOddsAPIConfiguration.shared) -> RequestBuilder<DeletePolicyRule200Response> {
+        var localVariablePath = "/v1/spam-checks/{check_id}"
+        let checkIdPreEscape = "\(APIHelper.mapValueToPathItem(checkId))"
+        let checkIdPostEscape = checkIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{check_id}", with: checkIdPostEscape, options: .literal, range: nil)
+        let localVariableURLString = apiConfiguration.basePath + localVariablePath
+        let localVariableParameters: [String: any Sendable]? = nil
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: (any Sendable)?] = [
+            :
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<DeletePolicyRule200Response>.Type = apiConfiguration.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true, apiConfiguration: apiConfiguration)
     }
 }

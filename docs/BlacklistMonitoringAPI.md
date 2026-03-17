@@ -5,6 +5,7 @@ All URIs are relative to *https://api.mailodds.com/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**addBlacklistMonitor**](BlacklistMonitoringAPI.md#addblacklistmonitor) | **POST** /v1/blacklist-monitors | Add blacklist monitor
+[**deleteBlacklistMonitor**](BlacklistMonitoringAPI.md#deleteblacklistmonitor) | **DELETE** /v1/blacklist-monitors/{monitor_id} | Delete a blacklist monitor
 [**getBlacklistHistory**](BlacklistMonitoringAPI.md#getblacklisthistory) | **GET** /v1/blacklist-monitors/{monitor_id}/history | Get blacklist check history
 [**listBlacklistMonitors**](BlacklistMonitoringAPI.md#listblacklistmonitors) | **GET** /v1/blacklist-monitors | List blacklist monitors
 [**runBlacklistCheck**](BlacklistMonitoringAPI.md#runblacklistcheck) | **POST** /v1/blacklist-monitors/{monitor_id}/check | Run blacklist check
@@ -56,6 +57,56 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deleteBlacklistMonitor**
+```swift
+    open class func deleteBlacklistMonitor(monitorId: String, completion: @escaping (_ data: DeletePolicyRule200Response?, _ error: Error?) -> Void)
+```
+
+Delete a blacklist monitor
+
+Permanently remove a blacklist monitor and its check history.
+
+### Example
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import MailOdds
+
+let monitorId = "monitorId_example" // String | Monitor UUID
+
+// Delete a blacklist monitor
+BlacklistMonitoringAPI.deleteBlacklistMonitor(monitorId: monitorId) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **monitorId** | **String** | Monitor UUID | 
+
+### Return type
+
+[**DeletePolicyRule200Response**](DeletePolicyRule200Response.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

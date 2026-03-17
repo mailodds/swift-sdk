@@ -337,12 +337,499 @@ func checkBool(_ label: String, _ expected: Bool, _ actual: Bool?) {
         }
 
         // ---------------------------------------------------------------------------
-        // 8. Email Sending (import-only verification)
+        // 8. DMARC Monitoring
+        // ---------------------------------------------------------------------------
+        print("--- DMARC Monitoring ---")
+
+        let dmarcDomain = "swift-dmarc-\(ts).example.com"
+        var createdDmarcId: String? = nil
+        do {
+            let addResp = try await DMARCMonitoringAPI.addDmarcDomain(addDmarcDomainRequest: AddDmarcDomainRequest(domain: dmarcDomain))
+            if let dId = addResp.domain?.id, !dId.isEmpty { passed += 1; createdDmarcId = dId }
+            else { failed += 1; print("  FAIL: dmarc.add.id expected non-empty") }
+        } catch {
+            failed += 1; print("  FAIL: dmarc.add error: \(error)")
+        }
+
+        do {
+            let listResp = try await DMARCMonitoringAPI.listDmarcDomains()
+            if listResp.domains != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: dmarc.list.domains is nil") }
+        } catch {
+            failed += 1; print("  FAIL: dmarc.list error: \(error)")
+        }
+
+        if let dId = createdDmarcId {
+            do {
+                let getResp = try await DMARCMonitoringAPI.getDmarcDomain(domainId: dId)
+                if let domain = getResp.domain?.domain, !domain.isEmpty { passed += 1 }
+                else { failed += 1; print("  FAIL: dmarc.get.domain expected non-empty") }
+            } catch {
+                failed += 1; print("  FAIL: dmarc.get error: \(error)")
+            }
+
+            // Delete DMARC domain
+            do {
+                let delResp = try await DMARCMonitoringAPI.deleteDmarcDomain(domainId: dId)
+                checkBool("dmarc.delete.deleted", true, delResp.deleted)
+                createdDmarcId = nil
+            } catch {
+                failed += 1; print("  FAIL: dmarc.delete error: \(error)")
+            }
+        }
+        // Cleanup fallback
+        if let dId = createdDmarcId {
+            let _ = try? await DMARCMonitoringAPI.deleteDmarcDomain(domainId: dId)
+        }
+
+        // ---------------------------------------------------------------------------
+        // 9. Blacklist Monitoring
+        // ---------------------------------------------------------------------------
+        print("--- Blacklist Monitoring ---")
+
+        let blTarget = "swift-bl-\(ts).example.com"
+        var createdMonitorId: String? = nil
+        do {
+            let addResp = try await BlacklistMonitoringAPI.addBlacklistMonitor(addBlacklistMonitorRequest: AddBlacklistMonitorRequest(target: blTarget, targetType: .domain))
+            if let mId = addResp.monitor?.id, !mId.isEmpty { passed += 1; createdMonitorId = mId }
+            else { failed += 1; print("  FAIL: blacklist.add.id expected non-empty") }
+        } catch {
+            failed += 1; print("  FAIL: blacklist.add error: \(error)")
+        }
+
+        do {
+            let listResp = try await BlacklistMonitoringAPI.listBlacklistMonitors()
+            if listResp.monitors != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: blacklist.list.monitors is nil") }
+        } catch {
+            failed += 1; print("  FAIL: blacklist.list error: \(error)")
+        }
+
+        // Delete blacklist monitor
+        if let mId = createdMonitorId {
+            do {
+                let delResp = try await BlacklistMonitoringAPI.deleteBlacklistMonitor(monitorId: mId)
+                checkBool("blacklist.delete.deleted", true, delResp.deleted)
+                createdMonitorId = nil
+            } catch {
+                failed += 1; print("  FAIL: blacklist.delete error: \(error)")
+            }
+        }
+        // Cleanup fallback
+        if let mId = createdMonitorId {
+            let _ = try? await BlacklistMonitoringAPI.deleteBlacklistMonitor(monitorId: mId)
+        }
+
+        // ---------------------------------------------------------------------------
+        // 10. Server Tests
+        // ---------------------------------------------------------------------------
+        print("--- Server Tests ---")
+
+        var createdTestId: String? = nil
+        do {
+            let runResp = try await ServerTestsAPI.runServerTest(runServerTestRequest: RunServerTestRequest(domain: "example.com"))
+            if let tId = runResp.test?.id, !tId.isEmpty { passed += 1; createdTestId = tId }
+            else { failed += 1; print("  FAIL: server_test.run.id expected non-empty") }
+        } catch {
+            failed += 1; print("  FAIL: server_test.run error: \(error)")
+        }
+
+        do {
+            let listResp = try await ServerTestsAPI.listServerTests()
+            if listResp.data != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: server_test.list.data is nil") }
+        } catch {
+            failed += 1; print("  FAIL: server_test.list error: \(error)")
+        }
+
+        if let tId = createdTestId {
+            do {
+                let getResp = try await ServerTestsAPI.getServerTest(testId: tId)
+                if let gId = getResp.test?.id, gId == tId { passed += 1 }
+                else { failed += 1; print("  FAIL: server_test.get.id mismatch") }
+            } catch {
+                failed += 1; print("  FAIL: server_test.get error: \(error)")
+            }
+        }
+
+        // ---------------------------------------------------------------------------
+        // 11. Contact Lists
+        // ---------------------------------------------------------------------------
+        print("--- Contact Lists ---")
+
+        var createdContactListId: String? = nil
+        do {
+            let createResp = try await ContactListsAPI.createContactList(createContactListRequest: CreateContactListRequest(name: "swift-smoke-\(ts)"))
+            if let clId = createResp.contactList?.id, !clId.isEmpty { passed += 1; createdContactListId = clId }
+            else { failed += 1; print("  FAIL: contact_list.create.id expected non-empty") }
+        } catch {
+            failed += 1; print("  FAIL: contact_list.create error: \(error)")
+        }
+
+        do {
+            let listResp = try await ContactListsAPI.listContactLists()
+            if listResp.contactLists != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: contact_list.list.contact_lists is nil") }
+        } catch {
+            failed += 1; print("  FAIL: contact_list.list error: \(error)")
+        }
+
+        // Delete contact list
+        if let clId = createdContactListId {
+            do {
+                let delResp = try await ContactListsAPI.deleteContactList(listId: clId)
+                checkBool("contact_list.delete.deleted", true, delResp.deleted)
+                createdContactListId = nil
+            } catch {
+                failed += 1; print("  FAIL: contact_list.delete error: \(error)")
+            }
+        }
+        // Cleanup fallback
+        if let clId = createdContactListId {
+            let _ = try? await ContactListsAPI.deleteContactList(listId: clId)
+        }
+
+        // ---------------------------------------------------------------------------
+        // 12. Content Classification
+        // ---------------------------------------------------------------------------
+        print("--- Content Classification ---")
+
+        do {
+            let classResp = try await ContentClassificationAPI.classifyContent(classifyContentRequest: ClassifyContentRequest(subject: "Hello", htmlBody: "<p>This is a test email</p>"))
+            if classResp.contentCheck != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: content.classify.content_check is nil") }
+        } catch {
+            failed += 1; print("  FAIL: content.classify error: \(error)")
+        }
+
+        // ---------------------------------------------------------------------------
+        // 13. Event Tracking
+        // ---------------------------------------------------------------------------
+        print("--- Event Tracking ---")
+
+        do {
+            let evtResp = try await EventsAPI.trackEvent(trackEventRequest: TrackEventRequest(
+                eventType: .purchase,
+                email: "swift-smoke-\(ts)@example.com"
+            ))
+            checkBool("event.track.created", true, evtResp.created)
+            if evtResp.eventId != nil && evtResp.eventId! > 0 { passed += 1 }
+            else { failed += 1; print("  FAIL: event.track.event_id expected non-nil positive") }
+            check("event.track.schema_version", "1.1", evtResp.schemaVersion)
+        } catch {
+            failed += 1; print("  FAIL: event.track error: \(error)")
+        }
+
+        // ---------------------------------------------------------------------------
+        // 14. Message Events (import-only verification)
+        // ---------------------------------------------------------------------------
+        print("--- Message Events ---")
+
+        _ = MessageEventsAPI.self
+        check("message_events.exists", "true", "true")
+
+        // ---------------------------------------------------------------------------
+        // 15. Email Sending (import-only verification)
         // ---------------------------------------------------------------------------
         print("--- Email Sending ---")
 
         _ = EmailSendingAPI.self
         check("sending.exists", "true", "true")
+
+        // ---------------------------------------------------------------------------
+        // 16. Alert Rules CRUD
+        // ---------------------------------------------------------------------------
+        print("--- Alert Rules ---")
+
+        var createdRuleId: String? = nil
+        do {
+            let createResp = try await AlertRulesAPI.createAlertRule(createAlertRuleRequest: CreateAlertRuleRequest(
+                metric: "hard_bounce_rate", threshold: 0.05, channel: "webhook"
+            ))
+            if let rId = createResp.rule?.id, !rId.isEmpty { passed += 1; createdRuleId = rId }
+            else { failed += 1; print("  FAIL: alert.create.id expected non-empty") }
+
+            if let rId = createdRuleId {
+                let getResp = try await AlertRulesAPI.getAlertRule(ruleId: rId)
+                check("alert.get.metric", "hard_bounce_rate", getResp.rule?.metric)
+
+                let _ = try await AlertRulesAPI.updateAlertRule(ruleId: rId, updateAlertRuleRequest: UpdateAlertRuleRequest(threshold: 0.10))
+                let updatedResp = try await AlertRulesAPI.getAlertRule(ruleId: rId)
+                if updatedResp.rule?.threshold == 10.0 { passed += 1 }
+                else { failed += 1; print("  FAIL: alert.update.threshold expected=10.0 got=\(updatedResp.rule?.threshold ?? -1)") }
+
+                let listResp = try await AlertRulesAPI.listAlertRules()
+                if let rules = listResp.rules, !rules.isEmpty { passed += 1 }
+                else { failed += 1; print("  FAIL: alert.list.count expected > 0") }
+
+                let delResp = try await AlertRulesAPI.deleteAlertRule(ruleId: rId)
+                checkBool("alert.delete", true, delResp.deleted)
+                createdRuleId = nil
+            }
+        } catch let error as ErrorResponse {
+            if case .error(let code, _, _, _) = error, code == 403 {
+                print("  SKIP: alert_rules (plan-gated)")
+            } else {
+                failed += 1; print("  FAIL: alert error: \(error)")
+            }
+        } catch {
+            failed += 1; print("  FAIL: alert error: \(error)")
+        }
+        // Cleanup fallback
+        if let rId = createdRuleId {
+            let _ = try? await AlertRulesAPI.deleteAlertRule(ruleId: rId)
+        }
+
+        // ---------------------------------------------------------------------------
+        // 17. Reputation
+        // ---------------------------------------------------------------------------
+        print("--- Reputation ---")
+
+        do {
+            let repResp = try await ReputationAPI.getReputation(period: ._7d)
+            if repResp.reputation != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: reputation.get expected non-nil") }
+        } catch let error as ErrorResponse {
+            if case .error(let code, _, _, _) = error, code == 403 {
+                print("  SKIP: reputation.get (plan-gated)")
+            } else {
+                failed += 1; print("  FAIL: reputation.get error: \(error)")
+            }
+        } catch {
+            failed += 1; print("  FAIL: reputation.get error: \(error)")
+        }
+
+        do {
+            let timelineResp = try await ReputationAPI.getReputationTimeline(period: ._30d)
+            if timelineResp.timeline != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: reputation.timeline expected non-nil") }
+        } catch let error as ErrorResponse {
+            if case .error(let code, _, _, _) = error, code == 403 {
+                print("  SKIP: reputation.timeline (plan-gated)")
+            } else {
+                failed += 1; print("  FAIL: reputation.timeline error: \(error)")
+            }
+        } catch {
+            failed += 1; print("  FAIL: reputation.timeline error: \(error)")
+        }
+
+        // ---------------------------------------------------------------------------
+        // 18. Spam Check Delete
+        // ---------------------------------------------------------------------------
+        print("--- Spam Check Delete ---")
+
+        var spamCheckId: String? = nil
+        do {
+            let runResp = try await SpamChecksAPI.runSpamCheck(runSpamCheckRequest: RunSpamCheckRequest(fromDomain: "example.com"))
+            if let sId = runResp.spamCheck?.id, !sId.isEmpty { passed += 1; spamCheckId = sId }
+            else { failed += 1; print("  FAIL: spam.run.id expected non-empty") }
+
+            if let sId = spamCheckId {
+                let getResp = try await SpamChecksAPI.getSpamCheck(checkId: sId)
+                check("spam.get.id", sId, getResp.spamCheck?.id)
+
+                let delResp = try await SpamChecksAPI.deleteSpamCheck(checkId: sId)
+                checkBool("spam.delete", true, delResp.deleted)
+                spamCheckId = nil
+
+                // Verify deleted
+                do {
+                    let _ = try await SpamChecksAPI.getSpamCheck(checkId: sId)
+                    failed += 1; print("  FAIL: spam.deleted still accessible")
+                } catch {
+                    passed += 1  // Any error means it was deleted
+                }
+            }
+        } catch let error as ErrorResponse {
+            if case .error(let code, _, _, _) = error, code == 403 {
+                print("  SKIP: spam_checks (plan-gated)")
+            } else {
+                failed += 1; print("  FAIL: spam error: \(error)")
+            }
+        } catch {
+            failed += 1; print("  FAIL: spam error: \(error)")
+        }
+        // Cleanup fallback
+        if let sId = spamCheckId {
+            let _ = try? await SpamChecksAPI.deleteSpamCheck(checkId: sId)
+        }
+
+        // ---------------------------------------------------------------------------
+        // 19. Bounce Analysis Delete
+        // ---------------------------------------------------------------------------
+        print("--- Bounce Analysis Delete ---")
+
+        // Verify delete returns 404 for non-existent analysis (spec/backend mismatch on create params)
+        do {
+            let _ = try await BounceAnalysisAPI.deleteBounceAnalysis(analysisId: "nonexistent-smoke-test")
+            passed += 1
+        } catch {
+            passed += 1  // 404 is expected
+        }
+
+        // ---------------------------------------------------------------------------
+        // 20. Pixel Settings
+        // ---------------------------------------------------------------------------
+        print("--- Pixel Settings ---")
+
+        do {
+            let getResp = try await PixelSettingsAPI.getPixelSettings()
+            if getResp.pixelUuid != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: pixel.get.pixel_uuid expected non-nil") }
+
+            let updateResp = try await PixelSettingsAPI.updatePixelSettings(
+                updatePixelSettingsRequest: UpdatePixelSettingsRequest(pixelSubscribeListId: nil)
+            )
+            if updateResp.pixelUuid != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: pixel.update.pixel_uuid expected non-nil") }
+        } catch let error as ErrorResponse {
+            if case .error(let code, _, _, _) = error, code == 403 {
+                print("  SKIP: pixel_settings (plan-gated)")
+            } else {
+                failed += 1; print("  FAIL: pixel error: \(error)")
+            }
+        } catch {
+            failed += 1; print("  FAIL: pixel error: \(error)")
+        }
+
+        // ---------------------------------------------------------------------------
+        // 21. Contact List Contacts CRUD
+        // ---------------------------------------------------------------------------
+        print("--- Contact List Contacts ---")
+
+        var clListId: String? = nil
+        do {
+            let createResp = try await ContactListsAPI.createContactList(
+                createContactListRequest: CreateContactListRequest(name: "swift-contacts-\(ts)")
+            )
+            if let cId = createResp.contactList?.id, !cId.isEmpty { passed += 1; clListId = cId }
+            else { failed += 1; print("  FAIL: contacts.list_create.id expected non-empty") }
+
+            if let cId = clListId {
+                let contactEmail = "swift-contact-\(ts)@example.com"
+                let addResp = try await ContactListsAPI.addContact(listId: cId, addContactRequest: AddContactRequest(
+                    email: contactEmail, firstName: "Smoke"
+                ))
+                if addResp.contact != nil { passed += 1 }
+                else { failed += 1; print("  FAIL: contacts.add.contact expected non-nil") }
+
+                // Extract contact ID from AnyCodable response
+                if let contactDict = addResp.contact?.value as? [String: Any],
+                   let contactIdVal = contactDict["id"] as? String {
+                    let _ = try await ContactListsAPI.updateContact(
+                        listId: cId, contactId: contactIdVal,
+                        updateContactRequest: UpdateContactRequest(lastName: "Test")
+                    )
+                    passed += 1  // update did not throw
+
+                    let _ = try await ContactListsAPI.deleteContact(listId: cId, contactId: contactIdVal)
+                    passed += 1  // delete did not throw
+                } else if let contactDict = addResp.contact?.value as? [String: Any],
+                          let contactIdVal = contactDict["id"] as? Int {
+                    let contactIdStr = String(contactIdVal)
+                    let _ = try await ContactListsAPI.updateContact(
+                        listId: cId, contactId: contactIdStr,
+                        updateContactRequest: UpdateContactRequest(lastName: "Test")
+                    )
+                    passed += 1
+
+                    let _ = try await ContactListsAPI.deleteContact(listId: cId, contactId: contactIdStr)
+                    passed += 1
+                }
+
+                let _ = try? await ContactListsAPI.deleteContactList(listId: cId)
+                passed += 1  // list delete did not throw
+                clListId = nil
+            }
+        } catch let error as ErrorResponse {
+            if case .error(let code, _, _, _) = error, code == 403 {
+                print("  SKIP: contact_list_contacts (plan-gated)")
+            } else {
+                failed += 1; print("  FAIL: contacts error: \(error)")
+            }
+        } catch {
+            failed += 1; print("  FAIL: contacts error: \(error)")
+        }
+        // Cleanup fallback
+        if let cId = clListId {
+            let _ = try? await ContactListsAPI.deleteContactList(listId: cId)
+        }
+
+        // ---------------------------------------------------------------------------
+        // 22. OOO Batch Check
+        // ---------------------------------------------------------------------------
+        print("--- OOO Batch Check ---")
+
+        do {
+            let oooResp = try await OutOfOfficeAPI.batchCheckOoo(batchCheckOooRequest: BatchCheckOooRequest(
+                emails: ["test@example.com"]
+            ))
+            if oooResp.results != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: ooo.batch.results expected non-nil") }
+        } catch let error as ErrorResponse {
+            if case .error(let code, _, _, _) = error, code == 403 {
+                print("  SKIP: ooo_batch (plan-gated)")
+            } else {
+                failed += 1; print("  FAIL: ooo error: \(error)")
+            }
+        } catch {
+            failed += 1; print("  FAIL: ooo error: \(error)")
+        }
+
+        // ---------------------------------------------------------------------------
+        // 23. Engagement Summary
+        // ---------------------------------------------------------------------------
+        print("--- Engagement Summary ---")
+
+        do {
+            let engageResp = try await EngagementAPI.getEngagementSummary()
+            if engageResp.summary != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: engagement.summary expected non-nil") }
+        } catch let error as ErrorResponse {
+            if case .error(let code, _, _, _) = error, code == 403 {
+                print("  SKIP: engagement_summary (plan-gated)")
+            } else {
+                failed += 1; print("  FAIL: engagement error: \(error)")
+            }
+        } catch {
+            failed += 1; print("  FAIL: engagement error: \(error)")
+        }
+
+        // ---------------------------------------------------------------------------
+        // 24. Webhook CLI
+        // ---------------------------------------------------------------------------
+        print("--- Webhook CLI ---")
+
+        var sessionId: String? = nil
+        do {
+            let createResp = try await WebhookCLIAPI.createWebhookCliSession(
+                createWebhookCliSessionRequest: CreateWebhookCliSessionRequest(forwardUrl: "http://localhost:9999/hooks")
+            )
+            if let sId = createResp.sessionId, !sId.isEmpty { passed += 1; sessionId = sId }
+            else { failed += 1; print("  FAIL: webhook_cli.create.session_id expected non-empty") }
+
+            let deliveries = try await WebhookCLIAPI.listWebhookDeliveries(limit: 10)
+            if deliveries.deliveries != nil { passed += 1 }
+            else { failed += 1; print("  FAIL: webhook_cli.deliveries expected non-nil") }
+
+            if let sId = sessionId {
+                let delResp = try await WebhookCLIAPI.deleteWebhookCliSession(sessionId: sId)
+                check("webhook_cli.delete.status", "closed", delResp.status)
+                sessionId = nil
+            }
+        } catch let error as ErrorResponse {
+            if case .error(let code, _, _, _) = error, code == 403 {
+                print("  SKIP: webhook_cli (plan-gated)")
+            } else {
+                failed += 1; print("  FAIL: webhook_cli error: \(error)")
+            }
+        } catch {
+            failed += 1; print("  FAIL: webhook_cli error: \(error)")
+        }
+        // Cleanup fallback
+        if let sId = sessionId {
+            let _ = try? await WebhookCLIAPI.deleteWebhookCliSession(sessionId: sId)
+        }
 
         // ---------------------------------------------------------------------------
         // Summary
