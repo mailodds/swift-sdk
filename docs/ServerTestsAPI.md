@@ -23,7 +23,7 @@ Get the detailed results of a specific server test.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let testId = "testId_example" // String | Server test UUID
+let testId = "testId_example" // String | 
 
 // Get server test
 ServerTestsAPI.getServerTest(testId: testId) { (response, error) in
@@ -42,7 +42,7 @@ ServerTestsAPI.getServerTest(testId: testId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **testId** | **String** | Server test UUID | 
+ **testId** | **String** |  | 
 
 ### Return type
 

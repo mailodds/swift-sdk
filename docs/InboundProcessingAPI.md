@@ -26,7 +26,7 @@ Submit a human correction for an inbound message classification. Requires Pro+ p
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let messageId = "messageId_example" // String | Message ID
+let messageId = "messageId_example" // String | 
 let correctInboundMessageRequest = correctInboundMessage_request(correction: "correction_example") // CorrectInboundMessageRequest | 
 
 // Correct inbound message classification
@@ -46,7 +46,7 @@ InboundProcessingAPI.correctInboundMessage(messageId: messageId, correctInboundM
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **messageId** | **String** | Message ID | 
+ **messageId** | **String** |  | 
  **correctInboundMessageRequest** | [**CorrectInboundMessageRequest**](CorrectInboundMessageRequest.md) |  | 
 
 ### Return type
@@ -236,7 +236,7 @@ Get a single inbound message with full body content. Requires Growth+ plan.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let messageId = "messageId_example" // String | Message ID
+let messageId = "messageId_example" // String | 
 
 // Get inbound message
 InboundProcessingAPI.getInboundMessage(messageId: messageId) { (response, error) in
@@ -255,7 +255,7 @@ InboundProcessingAPI.getInboundMessage(messageId: messageId) { (response, error)
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **messageId** | **String** | Message ID | 
+ **messageId** | **String** |  | 
 
 ### Return type
 

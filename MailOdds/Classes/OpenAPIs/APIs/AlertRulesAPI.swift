@@ -62,7 +62,7 @@ open class AlertRulesAPI {
     /**
      Delete alert rule
      
-     - parameter ruleId: (path) Alert rule ID 
+     - parameter ruleId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -85,7 +85,7 @@ open class AlertRulesAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter ruleId: (path) Alert rule ID 
+     - parameter ruleId: (path)  
      - returns: RequestBuilder<DeletePolicyRule200Response> 
      */
     open class func deleteAlertRuleWithRequestBuilder(ruleId: String) -> RequestBuilder<DeletePolicyRule200Response> {
@@ -112,7 +112,7 @@ open class AlertRulesAPI {
     /**
      Get alert rule
      
-     - parameter ruleId: (path) Alert rule ID 
+     - parameter ruleId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -135,7 +135,7 @@ open class AlertRulesAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter ruleId: (path) Alert rule ID 
+     - parameter ruleId: (path)  
      - returns: RequestBuilder<CreateAlertRule201Response> 
      */
     open class func getAlertRuleWithRequestBuilder(ruleId: String) -> RequestBuilder<CreateAlertRule201Response> {
@@ -207,7 +207,7 @@ open class AlertRulesAPI {
     /**
      Update alert rule
      
-     - parameter ruleId: (path) Alert rule ID 
+     - parameter ruleId: (path)  
      - parameter updateAlertRuleRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
@@ -231,7 +231,7 @@ open class AlertRulesAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter ruleId: (path) Alert rule ID 
+     - parameter ruleId: (path)  
      - parameter updateAlertRuleRequest: (body)  
      - returns: RequestBuilder<CreateAlertRule201Response> 
      */

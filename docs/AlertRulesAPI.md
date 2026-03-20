@@ -75,7 +75,7 @@ Delete an alert rule. Requires Growth+ plan.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let ruleId = "ruleId_example" // String | Alert rule ID
+let ruleId = "ruleId_example" // String | 
 
 // Delete alert rule
 AlertRulesAPI.deleteAlertRule(ruleId: ruleId) { (response, error) in
@@ -94,7 +94,7 @@ AlertRulesAPI.deleteAlertRule(ruleId: ruleId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ruleId** | **String** | Alert rule ID | 
+ **ruleId** | **String** |  | 
 
 ### Return type
 
@@ -125,7 +125,7 @@ Get a single alert rule by ID. Requires Growth+ plan.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let ruleId = "ruleId_example" // String | Alert rule ID
+let ruleId = "ruleId_example" // String | 
 
 // Get alert rule
 AlertRulesAPI.getAlertRule(ruleId: ruleId) { (response, error) in
@@ -144,7 +144,7 @@ AlertRulesAPI.getAlertRule(ruleId: ruleId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ruleId** | **String** | Alert rule ID | 
+ **ruleId** | **String** |  | 
 
 ### Return type
 
@@ -221,7 +221,7 @@ Update an existing alert rule. Requires Growth+ plan.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let ruleId = "ruleId_example" // String | Alert rule ID
+let ruleId = "ruleId_example" // String | 
 let updateAlertRuleRequest = updateAlertRule_request(metric: "metric_example", threshold: 123, channel: "channel_example", windowMinutes: 123, enabled: false) // UpdateAlertRuleRequest | 
 
 // Update alert rule
@@ -241,7 +241,7 @@ AlertRulesAPI.updateAlertRule(ruleId: ruleId, updateAlertRuleRequest: updateAler
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **ruleId** | **String** | Alert rule ID | 
+ **ruleId** | **String** |  | 
  **updateAlertRuleRequest** | [**UpdateAlertRuleRequest**](UpdateAlertRuleRequest.md) |  | 
 
 ### Return type

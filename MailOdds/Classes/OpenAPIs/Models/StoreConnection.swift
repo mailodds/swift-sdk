@@ -17,6 +17,7 @@ public struct StoreConnection: Codable, JSONEncodable, Hashable {
         case prestashop = "prestashop"
         case shopify = "shopify"
         case feed = "feed"
+        case custom = "custom"
     }
     public enum Status: String, Codable, CaseIterable {
         case pending = "pending"

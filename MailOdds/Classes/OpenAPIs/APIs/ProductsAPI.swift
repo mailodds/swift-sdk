@@ -15,7 +15,7 @@ open class ProductsAPI {
     /**
      Batch push products
      
-     - parameter storeId: (path) Store connection UUID 
+     - parameter storeId: (path)  
      - parameter batchProductsRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
@@ -39,7 +39,7 @@ open class ProductsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter storeId: (path) Store connection UUID 
+     - parameter storeId: (path)  
      - parameter batchProductsRequest: (body)  
      - returns: RequestBuilder<BatchProductsResponse> 
      */
@@ -114,7 +114,7 @@ open class ProductsAPI {
     /**
      Get a product
      
-     - parameter productId: (path) Product UUID 
+     - parameter productId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -137,7 +137,7 @@ open class ProductsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter productId: (path) Product UUID 
+     - parameter productId: (path)  
      - returns: RequestBuilder<GetProduct200Response> 
      */
     open class func getProductWithRequestBuilder(productId: String) -> RequestBuilder<GetProduct200Response> {

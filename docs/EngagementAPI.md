@@ -82,7 +82,7 @@ Get the engagement score for a specific email address. Requires Growth+ plan.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let email = "email_example" // String | Email address
+let email = "email_example" // String | 
 
 // Get engagement score
 EngagementAPI.getEngagementScore(email: email) { (response, error) in
@@ -101,7 +101,7 @@ EngagementAPI.getEngagementScore(email: email) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **email** | **String** | Email address | 
+ **email** | **String** |  | 
 
 ### Return type
 

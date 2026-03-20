@@ -10,7 +10,7 @@ import Foundation
 import AnyCodable
 #endif
 
-/** Delivery and engagement statistics. Present when the campaign has started sending. */
+/** Delivery and engagement statistics. */
 public struct CampaignStats: Codable, JSONEncodable, Hashable {
 
     public var sent: Int?
@@ -19,22 +19,20 @@ public struct CampaignStats: Codable, JSONEncodable, Hashable {
     public var clicked: Int?
     public var bounced: Int?
     public var unsubscribed: Int?
-    public var complained: Int?
-    public var deliveryRate: Double?
-    public var openRate: Double?
-    public var clickRate: Double?
+    public var suppressed: Int?
+    public var failed: Int?
+    public var conversions: Int?
 
-    public init(sent: Int? = nil, delivered: Int? = nil, opened: Int? = nil, clicked: Int? = nil, bounced: Int? = nil, unsubscribed: Int? = nil, complained: Int? = nil, deliveryRate: Double? = nil, openRate: Double? = nil, clickRate: Double? = nil) {
+    public init(sent: Int? = nil, delivered: Int? = nil, opened: Int? = nil, clicked: Int? = nil, bounced: Int? = nil, unsubscribed: Int? = nil, suppressed: Int? = nil, failed: Int? = nil, conversions: Int? = nil) {
         self.sent = sent
         self.delivered = delivered
         self.opened = opened
         self.clicked = clicked
         self.bounced = bounced
         self.unsubscribed = unsubscribed
-        self.complained = complained
-        self.deliveryRate = deliveryRate
-        self.openRate = openRate
-        self.clickRate = clickRate
+        self.suppressed = suppressed
+        self.failed = failed
+        self.conversions = conversions
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
@@ -44,10 +42,9 @@ public struct CampaignStats: Codable, JSONEncodable, Hashable {
         case clicked
         case bounced
         case unsubscribed
-        case complained
-        case deliveryRate = "delivery_rate"
-        case openRate = "open_rate"
-        case clickRate = "click_rate"
+        case suppressed
+        case failed
+        case conversions
     }
 
     // Encodable protocol methods
@@ -60,10 +57,9 @@ public struct CampaignStats: Codable, JSONEncodable, Hashable {
         try container.encodeIfPresent(clicked, forKey: .clicked)
         try container.encodeIfPresent(bounced, forKey: .bounced)
         try container.encodeIfPresent(unsubscribed, forKey: .unsubscribed)
-        try container.encodeIfPresent(complained, forKey: .complained)
-        try container.encodeIfPresent(deliveryRate, forKey: .deliveryRate)
-        try container.encodeIfPresent(openRate, forKey: .openRate)
-        try container.encodeIfPresent(clickRate, forKey: .clickRate)
+        try container.encodeIfPresent(suppressed, forKey: .suppressed)
+        try container.encodeIfPresent(failed, forKey: .failed)
+        try container.encodeIfPresent(conversions, forKey: .conversions)
     }
 }
 

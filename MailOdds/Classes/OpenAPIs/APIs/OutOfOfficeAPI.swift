@@ -62,7 +62,7 @@ open class OutOfOfficeAPI {
     /**
      Delete OOO contact
      
-     - parameter email: (path) Email address 
+     - parameter email: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -85,7 +85,7 @@ open class OutOfOfficeAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter email: (path) Email address 
+     - parameter email: (path)  
      - returns: RequestBuilder<DeleteOooContact200Response> 
      */
     open class func deleteOooContactWithRequestBuilder(email: String) -> RequestBuilder<DeleteOooContact200Response> {
@@ -112,7 +112,7 @@ open class OutOfOfficeAPI {
     /**
      Get OOO status for email
      
-     - parameter email: (path) Email address to check 
+     - parameter email: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -135,7 +135,7 @@ open class OutOfOfficeAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter email: (path) Email address to check 
+     - parameter email: (path)  
      - returns: RequestBuilder<GetOooStatus200Response> 
      */
     open class func getOooStatusWithRequestBuilder(email: String) -> RequestBuilder<GetOooStatus200Response> {
@@ -218,7 +218,7 @@ open class OutOfOfficeAPI {
     /**
      Update OOO contact
      
-     - parameter email: (path) Email address 
+     - parameter email: (path)  
      - parameter updateOooContactRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
@@ -242,7 +242,7 @@ open class OutOfOfficeAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter email: (path) Email address 
+     - parameter email: (path)  
      - parameter updateOooContactRequest: (body)  
      - returns: RequestBuilder<AnyCodable> 
      */

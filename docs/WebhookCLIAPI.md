@@ -74,7 +74,7 @@ Close a webhook CLI forwarding session.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let sessionId = "sessionId_example" // String | Session ID
+let sessionId = "sessionId_example" // String | 
 
 // Close CLI session
 WebhookCLIAPI.deleteWebhookCliSession(sessionId: sessionId) { (response, error) in
@@ -93,7 +93,7 @@ WebhookCLIAPI.deleteWebhookCliSession(sessionId: sessionId) { (response, error) 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sessionId** | **String** | Session ID | 
+ **sessionId** | **String** |  | 
 
 ### Return type
 
@@ -174,7 +174,7 @@ Replay a historical webhook delivery to active CLI sessions.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let deliveryId = 987 // Int | Delivery ID
+let deliveryId = 987 // Int | 
 
 // Replay webhook delivery
 WebhookCLIAPI.replayWebhookDelivery(deliveryId: deliveryId) { (response, error) in
@@ -193,7 +193,7 @@ WebhookCLIAPI.replayWebhookDelivery(deliveryId: deliveryId) { (response, error) 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **deliveryId** | **Int** | Delivery ID | 
+ **deliveryId** | **Int** |  | 
 
 ### Return type
 

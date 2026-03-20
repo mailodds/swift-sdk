@@ -62,7 +62,7 @@ open class BlacklistMonitoringAPI {
     /**
      Delete a blacklist monitor
      
-     - parameter monitorId: (path) Monitor UUID 
+     - parameter monitorId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -85,7 +85,7 @@ open class BlacklistMonitoringAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter monitorId: (path) Monitor UUID 
+     - parameter monitorId: (path)  
      - returns: RequestBuilder<DeletePolicyRule200Response> 
      */
     open class func deleteBlacklistMonitorWithRequestBuilder(monitorId: String) -> RequestBuilder<DeletePolicyRule200Response> {
@@ -112,7 +112,7 @@ open class BlacklistMonitoringAPI {
     /**
      Get blacklist check history
      
-     - parameter monitorId: (path) Monitor UUID 
+     - parameter monitorId: (path)  
      - parameter page: (query)  (optional, default to 1)
      - parameter perPage: (query)  (optional, default to 20)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
@@ -137,7 +137,7 @@ open class BlacklistMonitoringAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter monitorId: (path) Monitor UUID 
+     - parameter monitorId: (path)  
      - parameter page: (query)  (optional, default to 1)
      - parameter perPage: (query)  (optional, default to 20)
      - returns: RequestBuilder<GetBlacklistHistory200Response> 
@@ -215,7 +215,7 @@ open class BlacklistMonitoringAPI {
     /**
      Run blacklist check
      
-     - parameter monitorId: (path) Monitor UUID 
+     - parameter monitorId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -238,7 +238,7 @@ open class BlacklistMonitoringAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter monitorId: (path) Monitor UUID 
+     - parameter monitorId: (path)  
      - returns: RequestBuilder<RunBlacklistCheck200Response> 
      */
     open class func runBlacklistCheckWithRequestBuilder(monitorId: String) -> RequestBuilder<RunBlacklistCheck200Response> {

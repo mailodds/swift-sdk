@@ -4,18 +4,32 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **String** | Campaign UUID | 
+**accountId** | **Int** |  | [optional] 
 **name** | **String** | Campaign name | 
 **status** | **String** |  | 
-**listId** | **String** | Target subscriber list UUID | 
 **domainId** | **String** | Sending domain UUID | 
-**fromEmail** | **String** |  | 
-**fromName** | **String** |  | [optional] 
+**subject** | **String** |  | [optional] 
+**fromAddress** | **String** | Sender email address | 
 **replyTo** | **String** |  | [optional] 
+**htmlBody** | **String** |  | [optional] 
+**textBody** | **String** |  | [optional] 
+**htmlBodyDark** | **String** |  | [optional] 
+**textBodyDark** | **String** |  | [optional] 
+**campaignType** | **String** |  | [optional] 
+**autoDetectSchema** | **Bool** |  | [optional] 
+**promoAnnotations** | **AnyCodable** |  | [optional] 
+**throwawayPolicy** | **String** |  | [optional] 
 **scheduledAt** | **Date** |  | [optional] 
-**sentAt** | **Date** |  | [optional] 
-**cancelledAt** | **Date** |  | [optional] 
-**variantCount** | **Int** | Number of A/B variants | [optional] 
+**startedAt** | **Date** |  | [optional] 
+**completedAt** | **Date** |  | [optional] 
+**recipientCount** | **Int** |  | [optional] 
+**isAbTest** | **Bool** |  | [optional] 
+**winningVariantId** | **String** |  | [optional] 
+**abTestConfig** | **AnyCodable** |  | [optional] 
+**errorMessage** | **String** |  | [optional] 
 **stats** | [**CampaignStats**](CampaignStats.md) |  | [optional] 
+**openRate** | **Double** |  | [optional] 
+**clickRate** | **Double** |  | [optional] 
 **createdAt** | **Date** |  | 
 **updatedAt** | **Date** |  | [optional] 
 

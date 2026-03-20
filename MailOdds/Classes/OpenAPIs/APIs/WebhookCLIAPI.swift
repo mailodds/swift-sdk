@@ -62,7 +62,7 @@ open class WebhookCLIAPI {
     /**
      Close CLI session
      
-     - parameter sessionId: (path) Session ID 
+     - parameter sessionId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -85,7 +85,7 @@ open class WebhookCLIAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter sessionId: (path) Session ID 
+     - parameter sessionId: (path)  
      - returns: RequestBuilder<DeleteWebhookCliSession200Response> 
      */
     open class func deleteWebhookCliSessionWithRequestBuilder(sessionId: String) -> RequestBuilder<DeleteWebhookCliSession200Response> {
@@ -162,7 +162,7 @@ open class WebhookCLIAPI {
     /**
      Replay webhook delivery
      
-     - parameter deliveryId: (path) Delivery ID 
+     - parameter deliveryId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -185,7 +185,7 @@ open class WebhookCLIAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter deliveryId: (path) Delivery ID 
+     - parameter deliveryId: (path)  
      - returns: RequestBuilder<ReplayWebhookDelivery200Response> 
      */
     open class func replayWebhookDeliveryWithRequestBuilder(deliveryId: Int) -> RequestBuilder<ReplayWebhookDelivery200Response> {

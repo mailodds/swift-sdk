@@ -31,7 +31,7 @@ Add a single contact to a contact list.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let listId = "listId_example" // String | Contact list ID
+let listId = "listId_example" // String | 
 let addContactRequest = addContact_request(email: "email_example", firstName: "firstName_example", lastName: "lastName_example", customFields: 123) // AddContactRequest | 
 
 // Add contact to list
@@ -51,7 +51,7 @@ ContactListsAPI.addContact(listId: listId, addContactRequest: addContactRequest)
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listId** | **String** | Contact list ID | 
+ **listId** | **String** |  | 
  **addContactRequest** | [**AddContactRequest**](AddContactRequest.md) |  | 
 
 ### Return type
@@ -83,7 +83,7 @@ Append validated emails from additional jobs to an existing contact list. Duplic
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let listId = "listId_example" // String | Contact list UUID
+let listId = "listId_example" // String | 
 let appendToContactListRequest = appendToContactList_request(sourceJobIds: ["sourceJobIds_example"], includeCatchAll: false) // AppendToContactListRequest | 
 
 // Append to contact list
@@ -103,7 +103,7 @@ ContactListsAPI.appendToContactList(listId: listId, appendToContactListRequest: 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listId** | **String** | Contact list UUID | 
+ **listId** | **String** |  | 
  **appendToContactListRequest** | [**AppendToContactListRequest**](AppendToContactListRequest.md) |  | 
 
 ### Return type
@@ -185,8 +185,8 @@ Remove a single contact from a contact list.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let listId = "listId_example" // String | Contact list ID
-let contactId = "contactId_example" // String | Contact ID
+let listId = "listId_example" // String | 
+let contactId = "contactId_example" // String | 
 
 // Delete contact
 ContactListsAPI.deleteContact(listId: listId, contactId: contactId) { (response, error) in
@@ -205,8 +205,8 @@ ContactListsAPI.deleteContact(listId: listId, contactId: contactId) { (response,
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listId** | **String** | Contact list ID | 
- **contactId** | **String** | Contact ID | 
+ **listId** | **String** |  | 
+ **contactId** | **String** |  | 
 
 ### Return type
 
@@ -237,7 +237,7 @@ Permanently delete a contact list and all its entries.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let listId = "listId_example" // String | Contact list UUID
+let listId = "listId_example" // String | 
 
 // Delete a contact list
 ContactListsAPI.deleteContactList(listId: listId) { (response, error) in
@@ -256,7 +256,7 @@ ContactListsAPI.deleteContactList(listId: listId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listId** | **String** | Contact list UUID | 
+ **listId** | **String** |  | 
 
 ### Return type
 
@@ -287,7 +287,7 @@ Export a contact list as CSV.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let listId = "listId_example" // String | Contact list ID
+let listId = "listId_example" // String | 
 
 // Export contact list
 ContactListsAPI.exportContactList(listId: listId) { (response, error) in
@@ -306,7 +306,7 @@ ContactListsAPI.exportContactList(listId: listId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listId** | **String** | Contact list ID | 
+ **listId** | **String** |  | 
 
 ### Return type
 
@@ -387,7 +387,7 @@ Import contacts into a list from a CSV file (max 10MB).
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let listId = "listId_example" // String | Contact list ID
+let listId = "listId_example" // String | 
 let file = URL(string: "https://example.com")! // URL | CSV file (max 10MB)
 let columnMapping = "columnMapping_example" // String | JSON mapping of CSV columns to contact fields (optional)
 let consentSource = "consentSource_example" // String | Source of consent for imported contacts (optional)
@@ -410,7 +410,7 @@ ContactListsAPI.importContactList(listId: listId, file: file, columnMapping: col
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listId** | **String** | Contact list ID | 
+ **listId** | **String** |  | 
  **file** | **URL** | CSV file (max 10MB) | 
  **columnMapping** | **String** | JSON mapping of CSV columns to contact fields | [optional] 
  **consentSource** | **String** | Source of consent for imported contacts | [optional] 
@@ -497,7 +497,7 @@ Query contact list entries with structured filters. Supports filtering by valida
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let listId = "listId_example" // String | Contact list UUID
+let listId = "listId_example" // String | 
 let queryContactListRequest = queryContactList_request(filters: [queryContactList_request_filters_inner(field: "field_example", _operator: "_operator_example", value: 123)], page: 123, perPage: 123) // QueryContactListRequest | 
 
 // Query contact list
@@ -517,7 +517,7 @@ ContactListsAPI.queryContactList(listId: listId, queryContactListRequest: queryC
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listId** | **String** | Contact list UUID | 
+ **listId** | **String** |  | 
  **queryContactListRequest** | [**QueryContactListRequest**](QueryContactListRequest.md) |  | 
 
 ### Return type
@@ -549,8 +549,8 @@ Update a single contact in a contact list.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let listId = "listId_example" // String | Contact list ID
-let contactId = "contactId_example" // String | Contact ID
+let listId = "listId_example" // String | 
+let contactId = "contactId_example" // String | 
 let updateContactRequest = updateContact_request(firstName: "firstName_example", lastName: "lastName_example", customFields: 123) // UpdateContactRequest | 
 
 // Update contact
@@ -570,8 +570,8 @@ ContactListsAPI.updateContact(listId: listId, contactId: contactId, updateContac
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **listId** | **String** | Contact list ID | 
- **contactId** | **String** | Contact ID | 
+ **listId** | **String** |  | 
+ **contactId** | **String** |  | 
  **updateContactRequest** | [**UpdateContactRequest**](UpdateContactRequest.md) |  | 
 
 ### Return type

@@ -128,6 +128,7 @@ MailOdds/Classes/OpenAPIs/Models/GetBlacklistHistory200ResponseChecksInner.swift
 MailOdds/Classes/OpenAPIs/Models/GetBounceRecords200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetBounceRecords200ResponseRecordsInner.swift
 MailOdds/Classes/OpenAPIs/Models/GetBounceStats200Response.swift
+MailOdds/Classes/OpenAPIs/Models/GetBounceStats200ResponseStats.swift
 MailOdds/Classes/OpenAPIs/Models/GetBounceStatsSummary200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetCampaignABResults200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetCampaignABResults200ResponseVariantsInner.swift
@@ -410,6 +411,7 @@ docs/GetBlacklistHistory200ResponseChecksInner.md
 docs/GetBounceRecords200Response.md
 docs/GetBounceRecords200ResponseRecordsInner.md
 docs/GetBounceStats200Response.md
+docs/GetBounceStats200ResponseStats.md
 docs/GetBounceStatsSummary200Response.md
 docs/GetCampaignABResults200Response.md
 docs/GetCampaignABResults200ResponseVariantsInner.md

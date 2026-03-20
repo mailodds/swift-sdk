@@ -21,57 +21,98 @@ public struct Campaign: Codable, JSONEncodable, Hashable {
     }
     /** Campaign UUID */
     public var id: String
+    public var accountId: Int?
     /** Campaign name */
     public var name: String
     public var status: Status
-    /** Target subscriber list UUID */
-    public var listId: String
     /** Sending domain UUID */
     public var domainId: String
-    public var fromEmail: String
-    public var fromName: String?
+    public var subject: String?
+    /** Sender email address */
+    public var fromAddress: String
     public var replyTo: String?
+    public var htmlBody: String?
+    public var textBody: String?
+    public var htmlBodyDark: String?
+    public var textBodyDark: String?
+    public var campaignType: String?
+    public var autoDetectSchema: Bool?
+    public var promoAnnotations: AnyCodable?
+    public var throwawayPolicy: String?
     public var scheduledAt: Date?
-    public var sentAt: Date?
-    public var cancelledAt: Date?
-    /** Number of A/B variants */
-    public var variantCount: Int?
+    public var startedAt: Date?
+    public var completedAt: Date?
+    public var recipientCount: Int?
+    public var isAbTest: Bool?
+    public var winningVariantId: String?
+    public var abTestConfig: AnyCodable?
+    public var errorMessage: String?
     public var stats: CampaignStats?
+    public var openRate: Double?
+    public var clickRate: Double?
     public var createdAt: Date
     public var updatedAt: Date?
 
-    public init(id: String, name: String, status: Status, listId: String, domainId: String, fromEmail: String, fromName: String? = nil, replyTo: String? = nil, scheduledAt: Date? = nil, sentAt: Date? = nil, cancelledAt: Date? = nil, variantCount: Int? = nil, stats: CampaignStats? = nil, createdAt: Date, updatedAt: Date? = nil) {
+    public init(id: String, accountId: Int? = nil, name: String, status: Status, domainId: String, subject: String? = nil, fromAddress: String, replyTo: String? = nil, htmlBody: String? = nil, textBody: String? = nil, htmlBodyDark: String? = nil, textBodyDark: String? = nil, campaignType: String? = nil, autoDetectSchema: Bool? = nil, promoAnnotations: AnyCodable? = nil, throwawayPolicy: String? = nil, scheduledAt: Date? = nil, startedAt: Date? = nil, completedAt: Date? = nil, recipientCount: Int? = nil, isAbTest: Bool? = nil, winningVariantId: String? = nil, abTestConfig: AnyCodable? = nil, errorMessage: String? = nil, stats: CampaignStats? = nil, openRate: Double? = nil, clickRate: Double? = nil, createdAt: Date, updatedAt: Date? = nil) {
         self.id = id
+        self.accountId = accountId
         self.name = name
         self.status = status
-        self.listId = listId
         self.domainId = domainId
-        self.fromEmail = fromEmail
-        self.fromName = fromName
+        self.subject = subject
+        self.fromAddress = fromAddress
         self.replyTo = replyTo
+        self.htmlBody = htmlBody
+        self.textBody = textBody
+        self.htmlBodyDark = htmlBodyDark
+        self.textBodyDark = textBodyDark
+        self.campaignType = campaignType
+        self.autoDetectSchema = autoDetectSchema
+        self.promoAnnotations = promoAnnotations
+        self.throwawayPolicy = throwawayPolicy
         self.scheduledAt = scheduledAt
-        self.sentAt = sentAt
-        self.cancelledAt = cancelledAt
-        self.variantCount = variantCount
+        self.startedAt = startedAt
+        self.completedAt = completedAt
+        self.recipientCount = recipientCount
+        self.isAbTest = isAbTest
+        self.winningVariantId = winningVariantId
+        self.abTestConfig = abTestConfig
+        self.errorMessage = errorMessage
         self.stats = stats
+        self.openRate = openRate
+        self.clickRate = clickRate
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
         case id
+        case accountId = "account_id"
         case name
         case status
-        case listId = "list_id"
         case domainId = "domain_id"
-        case fromEmail = "from_email"
-        case fromName = "from_name"
+        case subject
+        case fromAddress = "from_address"
         case replyTo = "reply_to"
+        case htmlBody = "html_body"
+        case textBody = "text_body"
+        case htmlBodyDark = "html_body_dark"
+        case textBodyDark = "text_body_dark"
+        case campaignType = "campaign_type"
+        case autoDetectSchema = "auto_detect_schema"
+        case promoAnnotations = "promo_annotations"
+        case throwawayPolicy = "throwaway_policy"
         case scheduledAt = "scheduled_at"
-        case sentAt = "sent_at"
-        case cancelledAt = "cancelled_at"
-        case variantCount = "variant_count"
+        case startedAt = "started_at"
+        case completedAt = "completed_at"
+        case recipientCount = "recipient_count"
+        case isAbTest = "is_ab_test"
+        case winningVariantId = "winning_variant_id"
+        case abTestConfig = "ab_test_config"
+        case errorMessage = "error_message"
         case stats
+        case openRate = "open_rate"
+        case clickRate = "click_rate"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
@@ -81,18 +122,32 @@ public struct Campaign: Codable, JSONEncodable, Hashable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
+        try container.encodeIfPresent(accountId, forKey: .accountId)
         try container.encode(name, forKey: .name)
         try container.encode(status, forKey: .status)
-        try container.encode(listId, forKey: .listId)
         try container.encode(domainId, forKey: .domainId)
-        try container.encode(fromEmail, forKey: .fromEmail)
-        try container.encodeIfPresent(fromName, forKey: .fromName)
+        try container.encodeIfPresent(subject, forKey: .subject)
+        try container.encode(fromAddress, forKey: .fromAddress)
         try container.encodeIfPresent(replyTo, forKey: .replyTo)
+        try container.encodeIfPresent(htmlBody, forKey: .htmlBody)
+        try container.encodeIfPresent(textBody, forKey: .textBody)
+        try container.encodeIfPresent(htmlBodyDark, forKey: .htmlBodyDark)
+        try container.encodeIfPresent(textBodyDark, forKey: .textBodyDark)
+        try container.encodeIfPresent(campaignType, forKey: .campaignType)
+        try container.encodeIfPresent(autoDetectSchema, forKey: .autoDetectSchema)
+        try container.encodeIfPresent(promoAnnotations, forKey: .promoAnnotations)
+        try container.encodeIfPresent(throwawayPolicy, forKey: .throwawayPolicy)
         try container.encodeIfPresent(scheduledAt, forKey: .scheduledAt)
-        try container.encodeIfPresent(sentAt, forKey: .sentAt)
-        try container.encodeIfPresent(cancelledAt, forKey: .cancelledAt)
-        try container.encodeIfPresent(variantCount, forKey: .variantCount)
+        try container.encodeIfPresent(startedAt, forKey: .startedAt)
+        try container.encodeIfPresent(completedAt, forKey: .completedAt)
+        try container.encodeIfPresent(recipientCount, forKey: .recipientCount)
+        try container.encodeIfPresent(isAbTest, forKey: .isAbTest)
+        try container.encodeIfPresent(winningVariantId, forKey: .winningVariantId)
+        try container.encodeIfPresent(abTestConfig, forKey: .abTestConfig)
+        try container.encodeIfPresent(errorMessage, forKey: .errorMessage)
         try container.encodeIfPresent(stats, forKey: .stats)
+        try container.encodeIfPresent(openRate, forKey: .openRate)
+        try container.encodeIfPresent(clickRate, forKey: .clickRate)
         try container.encode(createdAt, forKey: .createdAt)
         try container.encodeIfPresent(updatedAt, forKey: .updatedAt)
     }

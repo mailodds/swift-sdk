@@ -15,7 +15,7 @@ open class SpamChecksAPI {
     /**
      Delete spam check
      
-     - parameter checkId: (path) Spam check ID 
+     - parameter checkId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -38,7 +38,7 @@ open class SpamChecksAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter checkId: (path) Spam check ID 
+     - parameter checkId: (path)  
      - returns: RequestBuilder<DeletePolicyRule200Response> 
      */
     open class func deleteSpamCheckWithRequestBuilder(checkId: String) -> RequestBuilder<DeletePolicyRule200Response> {
@@ -65,7 +65,7 @@ open class SpamChecksAPI {
     /**
      Get spam check
      
-     - parameter checkId: (path) Spam check UUID 
+     - parameter checkId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -88,7 +88,7 @@ open class SpamChecksAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter checkId: (path) Spam check UUID 
+     - parameter checkId: (path)  
      - returns: RequestBuilder<RunSpamCheck201Response> 
      */
     open class func getSpamCheckWithRequestBuilder(checkId: String) -> RequestBuilder<RunSpamCheck201Response> {

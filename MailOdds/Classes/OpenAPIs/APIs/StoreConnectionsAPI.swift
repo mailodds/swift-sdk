@@ -62,7 +62,7 @@ open class StoreConnectionsAPI {
     /**
      Disconnect a store
      
-     - parameter storeId: (path) Store connection UUID 
+     - parameter storeId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -85,7 +85,7 @@ open class StoreConnectionsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter storeId: (path) Store connection UUID 
+     - parameter storeId: (path)  
      - returns: RequestBuilder<DisconnectStore200Response> 
      */
     open class func disconnectStoreWithRequestBuilder(storeId: String) -> RequestBuilder<DisconnectStore200Response> {
@@ -112,7 +112,7 @@ open class StoreConnectionsAPI {
     /**
      Get a store connection
      
-     - parameter storeId: (path) Store connection UUID 
+     - parameter storeId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -135,7 +135,7 @@ open class StoreConnectionsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter storeId: (path) Store connection UUID 
+     - parameter storeId: (path)  
      - returns: RequestBuilder<CreateStore201Response> 
      */
     open class func getStoreWithRequestBuilder(storeId: String) -> RequestBuilder<CreateStore201Response> {
@@ -162,8 +162,8 @@ open class StoreConnectionsAPI {
     /**
      Get sync job errors
      
-     - parameter storeId: (path) Store ID 
-     - parameter jobId: (path) Sync job ID 
+     - parameter storeId: (path)  
+     - parameter jobId: (path)  
      - parameter page: (query)  (optional, default to 1)
      - parameter perPage: (query)  (optional, default to 50)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
@@ -188,8 +188,8 @@ open class StoreConnectionsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter storeId: (path) Store ID 
-     - parameter jobId: (path) Sync job ID 
+     - parameter storeId: (path)  
+     - parameter jobId: (path)  
      - parameter page: (query)  (optional, default to 1)
      - parameter perPage: (query)  (optional, default to 50)
      - returns: RequestBuilder<GetSyncJobErrors200Response> 
@@ -285,7 +285,7 @@ open class StoreConnectionsAPI {
     /**
      List sync jobs
      
-     - parameter storeId: (path) Store ID 
+     - parameter storeId: (path)  
      - parameter page: (query)  (optional, default to 1)
      - parameter perPage: (query)  (optional, default to 20)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
@@ -310,7 +310,7 @@ open class StoreConnectionsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter storeId: (path) Store ID 
+     - parameter storeId: (path)  
      - parameter page: (query)  (optional, default to 1)
      - parameter perPage: (query)  (optional, default to 20)
      - returns: RequestBuilder<ListSyncJobs200Response> 
@@ -343,7 +343,7 @@ open class StoreConnectionsAPI {
     /**
      Trigger product sync
      
-     - parameter storeId: (path) Store connection UUID 
+     - parameter storeId: (path)  
      - parameter idempotencyKey: (header) Idempotency key to prevent duplicate syncs (5 min TTL) (optional)
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
@@ -367,7 +367,7 @@ open class StoreConnectionsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter storeId: (path) Store connection UUID 
+     - parameter storeId: (path)  
      - parameter idempotencyKey: (header) Idempotency key to prevent duplicate syncs (5 min TTL) (optional)
      - returns: RequestBuilder<SyncResponse> 
      */
@@ -395,7 +395,7 @@ open class StoreConnectionsAPI {
     /**
      Update a store connection
      
-     - parameter storeId: (path) Store connection UUID 
+     - parameter storeId: (path)  
      - parameter updateStoreRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
@@ -419,7 +419,7 @@ open class StoreConnectionsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter storeId: (path) Store connection UUID 
+     - parameter storeId: (path)  
      - parameter updateStoreRequest: (body)  
      - returns: RequestBuilder<CreateStore201Response> 
      */

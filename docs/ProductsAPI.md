@@ -24,7 +24,7 @@ Push up to 100 products to a custom platform store. Creates new products or upda
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let storeId = "storeId_example" // String | Store connection UUID
+let storeId = "storeId_example" // String | 
 let batchProductsRequest = BatchProductsRequest(products: [BatchProductsRequest_products_inner(externalId: "externalId_example", title: "title_example", productUrl: "productUrl_example", sku: "sku_example", description: "description_example", priceCurrent: 123, priceOriginal: 123, currency: "currency_example", stockStatus: "stockStatus_example", stockQuantity: 123, imageUrl: "imageUrl_example", additionalImages: ["additionalImages_example"], categories: ["categories_example"], tags: ["tags_example"], variants: [123])]) // BatchProductsRequest | 
 
 // Batch push products
@@ -44,7 +44,7 @@ ProductsAPI.batchProducts(storeId: storeId, batchProductsRequest: batchProductsR
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **storeId** | **String** | Store connection UUID | 
+ **storeId** | **String** |  | 
  **batchProductsRequest** | [**BatchProductsRequest**](BatchProductsRequest.md) |  | 
 
 ### Return type
@@ -126,7 +126,7 @@ Get detailed information about a specific product.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let productId = "productId_example" // String | Product UUID
+let productId = "productId_example" // String | 
 
 // Get a product
 ProductsAPI.getProduct(productId: productId) { (response, error) in
@@ -145,7 +145,7 @@ ProductsAPI.getProduct(productId: productId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **productId** | **String** | Product UUID | 
+ **productId** | **String** |  | 
 
 ### Return type
 

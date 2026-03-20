@@ -78,7 +78,7 @@ Disconnect a store and deactivate its products. Products are retained but marked
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let storeId = "storeId_example" // String | Store connection UUID
+let storeId = "storeId_example" // String | 
 
 // Disconnect a store
 StoreConnectionsAPI.disconnectStore(storeId: storeId) { (response, error) in
@@ -97,7 +97,7 @@ StoreConnectionsAPI.disconnectStore(storeId: storeId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **storeId** | **String** | Store connection UUID | 
+ **storeId** | **String** |  | 
 
 ### Return type
 
@@ -128,7 +128,7 @@ Get details of a specific store connection including sync status and product cou
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let storeId = "storeId_example" // String | Store connection UUID
+let storeId = "storeId_example" // String | 
 
 // Get a store connection
 StoreConnectionsAPI.getStore(storeId: storeId) { (response, error) in
@@ -147,7 +147,7 @@ StoreConnectionsAPI.getStore(storeId: storeId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **storeId** | **String** | Store connection UUID | 
+ **storeId** | **String** |  | 
 
 ### Return type
 
@@ -178,8 +178,8 @@ Get error details for a sync job.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let storeId = "storeId_example" // String | Store ID
-let jobId = "jobId_example" // String | Sync job ID
+let storeId = "storeId_example" // String | 
+let jobId = "jobId_example" // String | 
 let page = 987 // Int |  (optional) (default to 1)
 let perPage = 987 // Int |  (optional) (default to 50)
 
@@ -200,8 +200,8 @@ StoreConnectionsAPI.getSyncJobErrors(storeId: storeId, jobId: jobId, page: page,
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **storeId** | **String** | Store ID | 
- **jobId** | **String** | Sync job ID | 
+ **storeId** | **String** |  | 
+ **jobId** | **String** |  | 
  **page** | **Int** |  | [optional] [default to 1]
  **perPage** | **Int** |  | [optional] [default to 50]
 
@@ -284,7 +284,7 @@ List sync job history for a store.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let storeId = "storeId_example" // String | Store ID
+let storeId = "storeId_example" // String | 
 let page = 987 // Int |  (optional) (default to 1)
 let perPage = 987 // Int |  (optional) (default to 20)
 
@@ -305,7 +305,7 @@ StoreConnectionsAPI.listSyncJobs(storeId: storeId, page: page, perPage: perPage)
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **storeId** | **String** | Store ID | 
+ **storeId** | **String** |  | 
  **page** | **Int** |  | [optional] [default to 1]
  **perPage** | **Int** |  | [optional] [default to 20]
 
@@ -338,7 +338,7 @@ Trigger a manual product sync for a store. Supports idempotency via the Idempote
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let storeId = "storeId_example" // String | Store connection UUID
+let storeId = "storeId_example" // String | 
 let idempotencyKey = "idempotencyKey_example" // String | Idempotency key to prevent duplicate syncs (5 min TTL) (optional)
 
 // Trigger product sync
@@ -358,7 +358,7 @@ StoreConnectionsAPI.triggerSync(storeId: storeId, idempotencyKey: idempotencyKey
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **storeId** | **String** | Store connection UUID | 
+ **storeId** | **String** |  | 
  **idempotencyKey** | **String** | Idempotency key to prevent duplicate syncs (5 min TTL) | [optional] 
 
 ### Return type
@@ -390,7 +390,7 @@ Update store settings such as name, sync interval, or credentials.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let storeId = "storeId_example" // String | Store connection UUID
+let storeId = "storeId_example" // String | 
 let updateStoreRequest = updateStore_request(storeName: "storeName_example", syncIntervalSeconds: 123, settings: 123, credentials: 123) // UpdateStoreRequest | 
 
 // Update a store connection
@@ -410,7 +410,7 @@ StoreConnectionsAPI.updateStore(storeId: storeId, updateStoreRequest: updateStor
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **storeId** | **String** | Store connection UUID | 
+ **storeId** | **String** |  | 
  **updateStoreRequest** | [**UpdateStoreRequest**](UpdateStoreRequest.md) |  | 
 
 ### Return type

@@ -496,7 +496,7 @@ Retry processing for a failed or cancelled validation job. Re-queues unprocessed
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let jobId = "jobId_example" // String | Job ID
+let jobId = "jobId_example" // String | 
 
 // Retry failed job
 BulkValidationAPI.retryJob(jobId: jobId) { (response, error) in
@@ -515,7 +515,7 @@ BulkValidationAPI.retryJob(jobId: jobId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **jobId** | **String** | Job ID | 
+ **jobId** | **String** |  | 
 
 ### Return type
 

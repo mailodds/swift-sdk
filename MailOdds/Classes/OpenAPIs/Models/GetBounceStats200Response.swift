@@ -14,9 +14,9 @@ public struct GetBounceStats200Response: Codable, JSONEncodable, Hashable {
 
     public var schemaVersion: String?
     public var requestId: String?
-    public var stats: [AnyCodable]?
+    public var stats: GetBounceStats200ResponseStats?
 
-    public init(schemaVersion: String? = nil, requestId: String? = nil, stats: [AnyCodable]? = nil) {
+    public init(schemaVersion: String? = nil, requestId: String? = nil, stats: GetBounceStats200ResponseStats? = nil) {
         self.schemaVersion = schemaVersion
         self.requestId = requestId
         self.stats = stats

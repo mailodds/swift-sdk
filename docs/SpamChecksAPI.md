@@ -24,7 +24,7 @@ Delete a spam check result.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let checkId = "checkId_example" // String | Spam check ID
+let checkId = "checkId_example" // String | 
 
 // Delete spam check
 SpamChecksAPI.deleteSpamCheck(checkId: checkId) { (response, error) in
@@ -43,7 +43,7 @@ SpamChecksAPI.deleteSpamCheck(checkId: checkId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **checkId** | **String** | Spam check ID | 
+ **checkId** | **String** |  | 
 
 ### Return type
 
@@ -74,7 +74,7 @@ Get the detailed result of a specific spam check.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let checkId = "checkId_example" // String | Spam check UUID
+let checkId = "checkId_example" // String | 
 
 // Get spam check
 SpamChecksAPI.getSpamCheck(checkId: checkId) { (response, error) in
@@ -93,7 +93,7 @@ SpamChecksAPI.getSpamCheck(checkId: checkId) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **checkId** | **String** | Spam check UUID | 
+ **checkId** | **String** |  | 
 
 ### Return type
 

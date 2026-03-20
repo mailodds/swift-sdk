@@ -75,7 +75,7 @@ Permanently remove a blacklist monitor and its check history.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let monitorId = "monitorId_example" // String | Monitor UUID
+let monitorId = "monitorId_example" // String | 
 
 // Delete a blacklist monitor
 BlacklistMonitoringAPI.deleteBlacklistMonitor(monitorId: monitorId) { (response, error) in
@@ -94,7 +94,7 @@ BlacklistMonitoringAPI.deleteBlacklistMonitor(monitorId: monitorId) { (response,
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **monitorId** | **String** | Monitor UUID | 
+ **monitorId** | **String** |  | 
 
 ### Return type
 
@@ -125,7 +125,7 @@ Get the listing and delisting timeline for a monitored IP or domain.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let monitorId = "monitorId_example" // String | Monitor UUID
+let monitorId = "monitorId_example" // String | 
 let page = 987 // Int |  (optional) (default to 1)
 let perPage = 987 // Int |  (optional) (default to 20)
 
@@ -146,7 +146,7 @@ BlacklistMonitoringAPI.getBlacklistHistory(monitorId: monitorId, page: page, per
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **monitorId** | **String** | Monitor UUID | 
+ **monitorId** | **String** |  | 
  **page** | **Int** |  | [optional] [default to 1]
  **perPage** | **Int** |  | [optional] [default to 20]
 
@@ -225,7 +225,7 @@ Run an on-demand DNSBL check for a monitored IP or domain.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let monitorId = "monitorId_example" // String | Monitor UUID
+let monitorId = "monitorId_example" // String | 
 
 // Run blacklist check
 BlacklistMonitoringAPI.runBlacklistCheck(monitorId: monitorId) { (response, error) in
@@ -244,7 +244,7 @@ BlacklistMonitoringAPI.runBlacklistCheck(monitorId: monitorId) { (response, erro
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **monitorId** | **String** | Monitor UUID | 
+ **monitorId** | **String** |  | 
 
 ### Return type
 

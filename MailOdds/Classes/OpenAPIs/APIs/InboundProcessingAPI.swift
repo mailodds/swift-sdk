@@ -15,7 +15,7 @@ open class InboundProcessingAPI {
     /**
      Correct inbound message classification
      
-     - parameter messageId: (path) Message ID 
+     - parameter messageId: (path)  
      - parameter correctInboundMessageRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
@@ -39,7 +39,7 @@ open class InboundProcessingAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter messageId: (path) Message ID 
+     - parameter messageId: (path)  
      - parameter correctInboundMessageRequest: (body)  
      - returns: RequestBuilder<GetInboundMessage200Response> 
      */
@@ -266,7 +266,7 @@ open class InboundProcessingAPI {
     /**
      Get inbound message
      
-     - parameter messageId: (path) Message ID 
+     - parameter messageId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -289,7 +289,7 @@ open class InboundProcessingAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter messageId: (path) Message ID 
+     - parameter messageId: (path)  
      - returns: RequestBuilder<GetInboundMessage200Response> 
      */
     open class func getInboundMessageWithRequestBuilder(messageId: String) -> RequestBuilder<GetInboundMessage200Response> {

@@ -77,7 +77,7 @@ open class EngagementAPI {
     /**
      Get engagement score
      
-     - parameter email: (path) Email address 
+     - parameter email: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -100,7 +100,7 @@ open class EngagementAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter email: (path) Email address 
+     - parameter email: (path)  
      - returns: RequestBuilder<GetEngagementScore200Response> 
      */
     open class func getEngagementScoreWithRequestBuilder(email: String) -> RequestBuilder<GetEngagementScore200Response> {

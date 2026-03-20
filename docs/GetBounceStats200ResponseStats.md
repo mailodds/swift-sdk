@@ -1,11 +1,11 @@
-# GetBounceStats200Response
+# GetBounceStats200ResponseStats
 
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**schemaVersion** | **String** |  | [optional] 
-**requestId** | **String** |  | [optional] 
-**stats** | [**GetBounceStats200ResponseStats**](GetBounceStats200ResponseStats.md) |  | [optional] 
+**period** | **String** |  | [optional] 
+**groupBy** | **String** |  | [optional] 
+**data** | **[AnyCodable]** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

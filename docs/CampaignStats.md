@@ -9,10 +9,9 @@ Name | Type | Description | Notes
 **clicked** | **Int** |  | [optional] 
 **bounced** | **Int** |  | [optional] 
 **unsubscribed** | **Int** |  | [optional] 
-**complained** | **Int** |  | [optional] 
-**deliveryRate** | **Double** |  | [optional] 
-**openRate** | **Double** |  | [optional] 
-**clickRate** | **Double** |  | [optional] 
+**suppressed** | **Int** |  | [optional] 
+**failed** | **Int** |  | [optional] 
+**conversions** | **Int** |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

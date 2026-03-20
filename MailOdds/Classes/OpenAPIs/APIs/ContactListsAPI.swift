@@ -15,7 +15,7 @@ open class ContactListsAPI {
     /**
      Add contact to list
      
-     - parameter listId: (path) Contact list ID 
+     - parameter listId: (path)  
      - parameter addContactRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
@@ -39,7 +39,7 @@ open class ContactListsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter listId: (path) Contact list ID 
+     - parameter listId: (path)  
      - parameter addContactRequest: (body)  
      - returns: RequestBuilder<AddContact201Response> 
      */
@@ -67,7 +67,7 @@ open class ContactListsAPI {
     /**
      Append to contact list
      
-     - parameter listId: (path) Contact list UUID 
+     - parameter listId: (path)  
      - parameter appendToContactListRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
@@ -91,7 +91,7 @@ open class ContactListsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter listId: (path) Contact list UUID 
+     - parameter listId: (path)  
      - parameter appendToContactListRequest: (body)  
      - returns: RequestBuilder<AppendToContactList200Response> 
      */
@@ -166,8 +166,8 @@ open class ContactListsAPI {
     /**
      Delete contact
      
-     - parameter listId: (path) Contact list ID 
-     - parameter contactId: (path) Contact ID 
+     - parameter listId: (path)  
+     - parameter contactId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -190,8 +190,8 @@ open class ContactListsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter listId: (path) Contact list ID 
-     - parameter contactId: (path) Contact ID 
+     - parameter listId: (path)  
+     - parameter contactId: (path)  
      - returns: RequestBuilder<DeletePolicyRule200Response> 
      */
     open class func deleteContactWithRequestBuilder(listId: String, contactId: String) -> RequestBuilder<DeletePolicyRule200Response> {
@@ -221,7 +221,7 @@ open class ContactListsAPI {
     /**
      Delete a contact list
      
-     - parameter listId: (path) Contact list UUID 
+     - parameter listId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -244,7 +244,7 @@ open class ContactListsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter listId: (path) Contact list UUID 
+     - parameter listId: (path)  
      - returns: RequestBuilder<DeletePolicyRule200Response> 
      */
     open class func deleteContactListWithRequestBuilder(listId: String) -> RequestBuilder<DeletePolicyRule200Response> {
@@ -271,7 +271,7 @@ open class ContactListsAPI {
     /**
      Export contact list
      
-     - parameter listId: (path) Contact list ID 
+     - parameter listId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -294,7 +294,7 @@ open class ContactListsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter listId: (path) Contact list ID 
+     - parameter listId: (path)  
      - returns: RequestBuilder<String> 
      */
     open class func exportContactListWithRequestBuilder(listId: String) -> RequestBuilder<String> {
@@ -371,7 +371,7 @@ open class ContactListsAPI {
     /**
      Import contacts from CSV
      
-     - parameter listId: (path) Contact list ID 
+     - parameter listId: (path)  
      - parameter file: (form) CSV file (max 10MB) 
      - parameter columnMapping: (form) JSON mapping of CSV columns to contact fields (optional)
      - parameter consentSource: (form) Source of consent for imported contacts (optional)
@@ -398,7 +398,7 @@ open class ContactListsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter listId: (path) Contact list ID 
+     - parameter listId: (path)  
      - parameter file: (form) CSV file (max 10MB) 
      - parameter columnMapping: (form) JSON mapping of CSV columns to contact fields (optional)
      - parameter consentSource: (form) Source of consent for imported contacts (optional)
@@ -490,7 +490,7 @@ open class ContactListsAPI {
     /**
      Query contact list
      
-     - parameter listId: (path) Contact list UUID 
+     - parameter listId: (path)  
      - parameter queryContactListRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
@@ -514,7 +514,7 @@ open class ContactListsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter listId: (path) Contact list UUID 
+     - parameter listId: (path)  
      - parameter queryContactListRequest: (body)  
      - returns: RequestBuilder<QueryContactList200Response> 
      */
@@ -542,8 +542,8 @@ open class ContactListsAPI {
     /**
      Update contact
      
-     - parameter listId: (path) Contact list ID 
-     - parameter contactId: (path) Contact ID 
+     - parameter listId: (path)  
+     - parameter contactId: (path)  
      - parameter updateContactRequest: (body)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
@@ -567,8 +567,8 @@ open class ContactListsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter listId: (path) Contact list ID 
-     - parameter contactId: (path) Contact ID 
+     - parameter listId: (path)  
+     - parameter contactId: (path)  
      - parameter updateContactRequest: (body)  
      - returns: RequestBuilder<AddContact201Response> 
      */

@@ -513,7 +513,7 @@ open class BulkValidationAPI {
     /**
      Retry failed job
      
-     - parameter jobId: (path) Job ID 
+     - parameter jobId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -536,7 +536,7 @@ open class BulkValidationAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter jobId: (path) Job ID 
+     - parameter jobId: (path)  
      - returns: RequestBuilder<RetryJob200Response> 
      */
     open class func retryJobWithRequestBuilder(jobId: String) -> RequestBuilder<RetryJob200Response> {

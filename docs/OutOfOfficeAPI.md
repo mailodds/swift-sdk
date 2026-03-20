@@ -75,7 +75,7 @@ Clear out-of-office status for an email address. Requires Growth+ plan.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let email = "email_example" // String | Email address
+let email = "email_example" // String | 
 
 // Delete OOO contact
 OutOfOfficeAPI.deleteOooContact(email: email) { (response, error) in
@@ -94,7 +94,7 @@ OutOfOfficeAPI.deleteOooContact(email: email) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **email** | **String** | Email address | 
+ **email** | **String** |  | 
 
 ### Return type
 
@@ -125,7 +125,7 @@ Check if a specific email address is currently out-of-office. Requires Growth+ p
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let email = "email_example" // String | Email address to check
+let email = "email_example" // String | 
 
 // Get OOO status for email
 OutOfOfficeAPI.getOooStatus(email: email) { (response, error) in
@@ -144,7 +144,7 @@ OutOfOfficeAPI.getOooStatus(email: email) { (response, error) in
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **email** | **String** | Email address to check | 
+ **email** | **String** |  | 
 
 ### Return type
 
@@ -229,7 +229,7 @@ Manually set or clear out-of-office status for an email. Requires Growth+ plan.
 // The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
 import MailOdds
 
-let email = "email_example" // String | Email address
+let email = "email_example" // String | 
 let updateOooContactRequest = updateOooContact_request(isActive: false, oooType: "oooType_example", durationDays: 123) // UpdateOooContactRequest | 
 
 // Update OOO contact
@@ -249,7 +249,7 @@ OutOfOfficeAPI.updateOooContact(email: email, updateOooContactRequest: updateOoo
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **email** | **String** | Email address | 
+ **email** | **String** |  | 
  **updateOooContactRequest** | [**UpdateOooContactRequest**](UpdateOooContactRequest.md) |  | 
 
 ### Return type

@@ -15,7 +15,7 @@ open class ServerTestsAPI {
     /**
      Get server test
      
-     - parameter testId: (path) Server test UUID 
+     - parameter testId: (path)  
      - parameter apiResponseQueue: The queue on which api response is dispatched.
      - parameter completion: completion handler to receive the data and the error objects
      */
@@ -38,7 +38,7 @@ open class ServerTestsAPI {
      - Bearer Token:
        - type: http
        - name: BearerAuth
-     - parameter testId: (path) Server test UUID 
+     - parameter testId: (path)  
      - returns: RequestBuilder<RunServerTest201Response> 
      */
     open class func getServerTestWithRequestBuilder(testId: String) -> RequestBuilder<RunServerTest201Response> {

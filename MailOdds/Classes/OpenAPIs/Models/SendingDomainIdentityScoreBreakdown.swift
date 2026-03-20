@@ -13,28 +13,28 @@ import AnyCodable
 /** Per-check scoring breakdown */
 public struct SendingDomainIdentityScoreBreakdown: Codable, JSONEncodable, Hashable {
 
-    public var dkim: IdentityScoreCheck?
     public var spf: IdentityScoreCheck?
+    public var dkim: IdentityScoreCheck?
     public var dmarc: IdentityScoreCheck?
-    public var mx: IdentityScoreCheck?
-    public var returnPath: IdentityScoreCheck?
+    public var bounce: IdentityScoreCheck?
+    public var tracking: IdentityScoreCheck?
     public var bimi: IdentityScoreCheck?
 
-    public init(dkim: IdentityScoreCheck? = nil, spf: IdentityScoreCheck? = nil, dmarc: IdentityScoreCheck? = nil, mx: IdentityScoreCheck? = nil, returnPath: IdentityScoreCheck? = nil, bimi: IdentityScoreCheck? = nil) {
-        self.dkim = dkim
+    public init(spf: IdentityScoreCheck? = nil, dkim: IdentityScoreCheck? = nil, dmarc: IdentityScoreCheck? = nil, bounce: IdentityScoreCheck? = nil, tracking: IdentityScoreCheck? = nil, bimi: IdentityScoreCheck? = nil) {
         self.spf = spf
+        self.dkim = dkim
         self.dmarc = dmarc
-        self.mx = mx
-        self.returnPath = returnPath
+        self.bounce = bounce
+        self.tracking = tracking
         self.bimi = bimi
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
-        case dkim
         case spf
+        case dkim
         case dmarc
-        case mx
-        case returnPath = "return_path"
+        case bounce
+        case tracking
         case bimi
     }
 
@@ -42,11 +42,11 @@ public struct SendingDomainIdentityScoreBreakdown: Codable, JSONEncodable, Hasha
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encodeIfPresent(dkim, forKey: .dkim)
         try container.encodeIfPresent(spf, forKey: .spf)
+        try container.encodeIfPresent(dkim, forKey: .dkim)
         try container.encodeIfPresent(dmarc, forKey: .dmarc)
-        try container.encodeIfPresent(mx, forKey: .mx)
-        try container.encodeIfPresent(returnPath, forKey: .returnPath)
+        try container.encodeIfPresent(bounce, forKey: .bounce)
+        try container.encodeIfPresent(tracking, forKey: .tracking)
         try container.encodeIfPresent(bimi, forKey: .bimi)
     }
 }
