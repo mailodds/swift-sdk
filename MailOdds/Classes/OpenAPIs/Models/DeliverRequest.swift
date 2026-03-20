@@ -35,8 +35,8 @@ public struct DeliverRequest: Codable, JSONEncodable, Hashable {
     public var html: String?
     /** Plain text email body */
     public var text: String?
-    /** Sending domain UUID */
-    public var domainId: String
+    /** Sending domain UUID. Optional -- auto-resolved from the from address, or falls back to primary domain. */
+    public var domainId: String?
     /** Reply-to address */
     public var replyTo: String?
     /** Extra email headers */
@@ -54,7 +54,7 @@ public struct DeliverRequest: Codable, JSONEncodable, Hashable {
     public var aiSummary: String?
     public var options: DeliverRequestOptions?
 
-    public init(to: [DeliverRequestToInner], from: String, subject: String, html: String? = nil, text: String? = nil, domainId: String, replyTo: String? = nil, headers: AnyCodable? = nil, tags: [String]? = nil, campaignType: CampaignType? = nil, structuredData: DeliverRequestStructuredData? = nil, schemaData: [String: String]? = nil, autoDetectSchema: Bool? = false, aiSummary: String? = nil, options: DeliverRequestOptions? = nil) {
+    public init(to: [DeliverRequestToInner], from: String, subject: String, html: String? = nil, text: String? = nil, domainId: String? = nil, replyTo: String? = nil, headers: AnyCodable? = nil, tags: [String]? = nil, campaignType: CampaignType? = nil, structuredData: DeliverRequestStructuredData? = nil, schemaData: [String: String]? = nil, autoDetectSchema: Bool? = false, aiSummary: String? = nil, options: DeliverRequestOptions? = nil) {
         self.to = to
         self.from = from
         self.subject = subject
@@ -99,7 +99,7 @@ public struct DeliverRequest: Codable, JSONEncodable, Hashable {
         try container.encode(subject, forKey: .subject)
         try container.encodeIfPresent(html, forKey: .html)
         try container.encodeIfPresent(text, forKey: .text)
-        try container.encode(domainId, forKey: .domainId)
+        try container.encodeIfPresent(domainId, forKey: .domainId)
         try container.encodeIfPresent(replyTo, forKey: .replyTo)
         try container.encodeIfPresent(headers, forKey: .headers)
         try container.encodeIfPresent(tags, forKey: .tags)

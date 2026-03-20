@@ -37,10 +37,12 @@ public struct SendingDomain: Codable, JSONEncodable, Hashable {
     public var bimiEnabled: Bool?
     /** Reply forwarding address */
     public var forwardRepliesTo: String?
+    /** Whether this is the account primary/default sending domain */
+    public var isPrimary: Bool?
     public var createdAt: Date?
     public var updatedAt: Date?
 
-    public init(id: String? = nil, domain: String? = nil, domainType: String? = nil, status: Status? = nil, dkimSelector: String? = nil, dnsRecords: SendingDomainDnsRecords? = nil, bimiSvgUrl: String? = nil, bimiVmcUrl: String? = nil, bimiEnabled: Bool? = nil, forwardRepliesTo: String? = nil, createdAt: Date? = nil, updatedAt: Date? = nil) {
+    public init(id: String? = nil, domain: String? = nil, domainType: String? = nil, status: Status? = nil, dkimSelector: String? = nil, dnsRecords: SendingDomainDnsRecords? = nil, bimiSvgUrl: String? = nil, bimiVmcUrl: String? = nil, bimiEnabled: Bool? = nil, forwardRepliesTo: String? = nil, isPrimary: Bool? = nil, createdAt: Date? = nil, updatedAt: Date? = nil) {
         self.id = id
         self.domain = domain
         self.domainType = domainType
@@ -51,6 +53,7 @@ public struct SendingDomain: Codable, JSONEncodable, Hashable {
         self.bimiVmcUrl = bimiVmcUrl
         self.bimiEnabled = bimiEnabled
         self.forwardRepliesTo = forwardRepliesTo
+        self.isPrimary = isPrimary
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
@@ -66,6 +69,7 @@ public struct SendingDomain: Codable, JSONEncodable, Hashable {
         case bimiVmcUrl = "bimi_vmc_url"
         case bimiEnabled = "bimi_enabled"
         case forwardRepliesTo = "forward_replies_to"
+        case isPrimary = "is_primary"
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }
@@ -84,6 +88,7 @@ public struct SendingDomain: Codable, JSONEncodable, Hashable {
         try container.encodeIfPresent(bimiVmcUrl, forKey: .bimiVmcUrl)
         try container.encodeIfPresent(bimiEnabled, forKey: .bimiEnabled)
         try container.encodeIfPresent(forwardRepliesTo, forKey: .forwardRepliesTo)
+        try container.encodeIfPresent(isPrimary, forKey: .isPrimary)
         try container.encodeIfPresent(createdAt, forKey: .createdAt)
         try container.encodeIfPresent(updatedAt, forKey: .updatedAt)
     }

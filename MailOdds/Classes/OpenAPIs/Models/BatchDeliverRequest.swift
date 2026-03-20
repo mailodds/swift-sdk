@@ -20,7 +20,8 @@ public struct BatchDeliverRequest: Codable, JSONEncodable, Hashable {
     public var subject: String
     public var html: String?
     public var text: String?
-    public var domainId: String
+    /** Sending domain UUID. Optional -- auto-resolved from the from address, or falls back to primary domain. */
+    public var domainId: String?
     public var replyTo: String?
     public var headers: AnyCodable?
     public var tags: [String]?
@@ -28,7 +29,7 @@ public struct BatchDeliverRequest: Codable, JSONEncodable, Hashable {
     public var structuredData: BatchDeliverRequestStructuredData?
     public var options: AnyCodable?
 
-    public init(to: [String], from: String, subject: String, html: String? = nil, text: String? = nil, domainId: String, replyTo: String? = nil, headers: AnyCodable? = nil, tags: [String]? = nil, campaignType: String? = nil, structuredData: BatchDeliverRequestStructuredData? = nil, options: AnyCodable? = nil) {
+    public init(to: [String], from: String, subject: String, html: String? = nil, text: String? = nil, domainId: String? = nil, replyTo: String? = nil, headers: AnyCodable? = nil, tags: [String]? = nil, campaignType: String? = nil, structuredData: BatchDeliverRequestStructuredData? = nil, options: AnyCodable? = nil) {
         self.to = to
         self.from = from
         self.subject = subject
@@ -67,7 +68,7 @@ public struct BatchDeliverRequest: Codable, JSONEncodable, Hashable {
         try container.encode(subject, forKey: .subject)
         try container.encodeIfPresent(html, forKey: .html)
         try container.encodeIfPresent(text, forKey: .text)
-        try container.encode(domainId, forKey: .domainId)
+        try container.encodeIfPresent(domainId, forKey: .domainId)
         try container.encodeIfPresent(replyTo, forKey: .replyTo)
         try container.encodeIfPresent(headers, forKey: .headers)
         try container.encodeIfPresent(tags, forKey: .tags)

@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **subject** | **String** | Email subject line | 
 **html** | **String** | HTML email body | [optional] 
 **text** | **String** | Plain text email body | [optional] 
-**domainId** | **String** | Sending domain UUID | 
+**domainId** | **String** | Sending domain UUID. Optional -- auto-resolved from the from address, or falls back to primary domain. | [optional] 
 **replyTo** | **String** | Reply-to address | [optional] 
 **headers** | **AnyCodable** | Extra email headers | [optional] 
 **tags** | **[String]** | Tags for categorization | [optional] 

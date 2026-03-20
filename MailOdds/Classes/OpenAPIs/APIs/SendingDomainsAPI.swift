@@ -367,6 +367,56 @@ open class SendingDomainsAPI {
     }
 
     /**
+     Set primary sending domain
+     
+     - parameter domainId: (path)  
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    @discardableResult
+    open class func setPrimarySendingDomain(domainId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: CreateSendingDomain201Response?, _ error: Error?) -> Void)) -> RequestTask {
+        return setPrimarySendingDomainWithRequestBuilder(domainId: domainId).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     Set primary sending domain
+     - POST /v1/sending-domains/{domain_id}/set-primary
+     - Designate a domain as the primary/default sending domain. When domain_id is omitted from deliver calls, the primary domain is used automatically.
+     - Bearer Token:
+       - type: http
+       - name: BearerAuth
+     - parameter domainId: (path)  
+     - returns: RequestBuilder<CreateSendingDomain201Response> 
+     */
+    open class func setPrimarySendingDomainWithRequestBuilder(domainId: String) -> RequestBuilder<CreateSendingDomain201Response> {
+        var localVariablePath = "/v1/sending-domains/{domain_id}/set-primary"
+        let domainIdPreEscape = "\(APIHelper.mapValueToPathItem(domainId))"
+        let domainIdPostEscape = domainIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{domain_id}", with: domainIdPostEscape, options: .literal, range: nil)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: Any?] = [
+            :
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<CreateSendingDomain201Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+    }
+
+    /**
      Update reply forwarding config
      
      - parameter domainId: (path) Sending domain ID 

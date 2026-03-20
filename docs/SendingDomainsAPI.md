@@ -11,6 +11,7 @@ Method | HTTP request | Description
 [**getSendingDomainIdentityScore**](SendingDomainsAPI.md#getsendingdomainidentityscore) | **GET** /v1/sending-domains/{domain_id}/identity-score | Get domain identity score
 [**getSendingStats**](SendingDomainsAPI.md#getsendingstats) | **GET** /v1/sending-stats | Get sending statistics
 [**listSendingDomains**](SendingDomainsAPI.md#listsendingdomains) | **GET** /v1/sending-domains | List sending domains
+[**setPrimarySendingDomain**](SendingDomainsAPI.md#setprimarysendingdomain) | **POST** /v1/sending-domains/{domain_id}/set-primary | Set primary sending domain
 [**updateReplyForwarding**](SendingDomainsAPI.md#updatereplyforwarding) | **PATCH** /v1/sending-domains/{domain_id}/reply-forwarding | Update reply forwarding config
 [**verifySendingDomain**](SendingDomainsAPI.md#verifysendingdomain) | **POST** /v1/sending-domains/{domain_id}/verify | Verify domain DNS records
 
@@ -351,6 +352,56 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**ListSendingDomains200Response**](ListSendingDomains200Response.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **setPrimarySendingDomain**
+```swift
+    open class func setPrimarySendingDomain(domainId: String, completion: @escaping (_ data: CreateSendingDomain201Response?, _ error: Error?) -> Void)
+```
+
+Set primary sending domain
+
+Designate a domain as the primary/default sending domain. When domain_id is omitted from deliver calls, the primary domain is used automatically.
+
+### Example
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import MailOdds
+
+let domainId = "domainId_example" // String | 
+
+// Set primary sending domain
+SendingDomainsAPI.setPrimarySendingDomain(domainId: domainId) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **domainId** | **String** |  | 
+
+### Return type
+
+[**CreateSendingDomain201Response**](CreateSendingDomain201Response.md)
 
 ### Authorization
 
