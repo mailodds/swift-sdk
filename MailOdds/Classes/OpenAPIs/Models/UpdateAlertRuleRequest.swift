@@ -12,13 +12,20 @@ import AnyCodable
 
 public struct UpdateAlertRuleRequest: Codable, JSONEncodable, Hashable {
 
+    public enum WindowMinutes: Int, Codable, CaseIterable {
+        case _15 = 15
+        case _60 = 60
+        case _1440 = 1440
+        case _2880 = 2880
+    }
+    public static let thresholdRule = NumericRule<Double>(minimum: 0, exclusiveMinimum: true, maximum: 1, exclusiveMaximum: false, multipleOf: nil)
     public var metric: String?
     public var threshold: Double?
     public var channel: String?
-    public var windowMinutes: Int?
+    public var windowMinutes: WindowMinutes?
     public var enabled: Bool?
 
-    public init(metric: String? = nil, threshold: Double? = nil, channel: String? = nil, windowMinutes: Int? = nil, enabled: Bool? = nil) {
+    public init(metric: String? = nil, threshold: Double? = nil, channel: String? = nil, windowMinutes: WindowMinutes? = nil, enabled: Bool? = nil) {
         self.metric = metric
         self.threshold = threshold
         self.channel = channel

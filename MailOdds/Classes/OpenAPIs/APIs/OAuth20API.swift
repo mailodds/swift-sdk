@@ -200,6 +200,48 @@ open class OAuth20API {
     }
 
     /**
+     Register OAuth client
+     
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    @discardableResult
+    open class func oauthRegisterClient(apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: OAuthClientRegistration?, _ error: Error?) -> Void)) -> RequestTask {
+        return oauthRegisterClientWithRequestBuilder().execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     Register OAuth client
+     - POST /oauth/register
+     - Dynamic Client Registration (RFC 7591). Allows MCP clients to auto-register without user interaction.
+     - returns: RequestBuilder<OAuthClientRegistration> 
+     */
+    open class func oauthRegisterClientWithRequestBuilder() -> RequestBuilder<OAuthClientRegistration> {
+        let localVariablePath = "/oauth/register"
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: Any?] = [
+            :
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<OAuthClientRegistration>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "POST", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: false)
+    }
+
+    /**
      OAuth server metadata
      
      - parameter apiResponseQueue: The queue on which api response is dispatched.

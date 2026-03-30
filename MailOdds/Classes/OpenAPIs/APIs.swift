@@ -9,7 +9,7 @@ import Foundation
 import FoundationNetworking
 #endif
 open class MailOddsAPI {
-    public static var basePath = "https://api.mailodds.com/v1"
+    public static var basePath = "https://api.mailodds.com"
     public static var customHeaders: [String: String] = [:]
     public static var credential: URLCredential?
     public static var requestBuilderFactory: RequestBuilderFactory = URLSessionRequestBuilderFactory()

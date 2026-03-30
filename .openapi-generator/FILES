@@ -33,7 +33,6 @@ MailOdds/Classes/OpenAPIs/APIs/OAuth20API.swift
 MailOdds/Classes/OpenAPIs/APIs/OutOfOfficeAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/PipelineSimulationAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/PixelSettingsAPI.swift
-MailOdds/Classes/OpenAPIs/APIs/ProductsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/ReputationAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/ReputationPoliciesAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SenderHealthAPI.swift
@@ -41,7 +40,6 @@ MailOdds/Classes/OpenAPIs/APIs/SendingDelegationsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SendingDomainsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/ServerTestsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SpamChecksAPI.swift
-MailOdds/Classes/OpenAPIs/APIs/StoreConnectionsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SubscriberListsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SuppressionListsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SystemAPI.swift
@@ -85,8 +83,6 @@ MailOdds/Classes/OpenAPIs/Models/BounceAnalysisResponse.swift
 MailOdds/Classes/OpenAPIs/Models/BounceAnalysisResponseAnalysis.swift
 MailOdds/Classes/OpenAPIs/Models/BounceAnalysisResponseAnalysisCategories.swift
 MailOdds/Classes/OpenAPIs/Models/BounceAnalysisResponseAnalysisTopDomainsInner.swift
-MailOdds/Classes/OpenAPIs/Models/BulkUpdateProducts200Response.swift
-MailOdds/Classes/OpenAPIs/Models/BulkUpdateProductsRequest.swift
 MailOdds/Classes/OpenAPIs/Models/Campaign.swift
 MailOdds/Classes/OpenAPIs/Models/CampaignResponse.swift
 MailOdds/Classes/OpenAPIs/Models/CampaignStats.swift
@@ -113,7 +109,6 @@ MailOdds/Classes/OpenAPIs/Models/CreatePolicyFromPresetRequest.swift
 MailOdds/Classes/OpenAPIs/Models/CreatePolicyRequest.swift
 MailOdds/Classes/OpenAPIs/Models/CreateSendingDomain201Response.swift
 MailOdds/Classes/OpenAPIs/Models/CreateSendingDomainRequest.swift
-MailOdds/Classes/OpenAPIs/Models/CreateStore201Response.swift
 MailOdds/Classes/OpenAPIs/Models/CreateStoreRequest.swift
 MailOdds/Classes/OpenAPIs/Models/CreateToken200Response.swift
 MailOdds/Classes/OpenAPIs/Models/CreateVariantRequest.swift
@@ -133,7 +128,6 @@ MailOdds/Classes/OpenAPIs/Models/DeliverRequestStructuredData.swift
 MailOdds/Classes/OpenAPIs/Models/DeliverRequestToInner.swift
 MailOdds/Classes/OpenAPIs/Models/DeliverResponse.swift
 MailOdds/Classes/OpenAPIs/Models/DeliverResponseDelivery.swift
-MailOdds/Classes/OpenAPIs/Models/DisconnectStore200Response.swift
 MailOdds/Classes/OpenAPIs/Models/DmarcDomain.swift
 MailOdds/Classes/OpenAPIs/Models/GetBlacklistHistory200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetBlacklistHistory200ResponseChecksInner.swift
@@ -185,7 +179,6 @@ MailOdds/Classes/OpenAPIs/Models/GetMessageEvents200ResponseSummary.swift
 MailOdds/Classes/OpenAPIs/Models/GetOooStatus200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetPixelSettings200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetPresignedUploadRequest.swift
-MailOdds/Classes/OpenAPIs/Models/GetProduct200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetReplyForwarding200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetReputation200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetReputationTimeline200Response.swift
@@ -201,7 +194,6 @@ MailOdds/Classes/OpenAPIs/Models/GetSendingDomainIdentityScore200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetSendingStats200Response.swift
 MailOdds/Classes/OpenAPIs/Models/GetSendingStats200ResponseStats.swift
 MailOdds/Classes/OpenAPIs/Models/GetSubscribers200Response.swift
-MailOdds/Classes/OpenAPIs/Models/GetSyncJobErrors200Response.swift
 MailOdds/Classes/OpenAPIs/Models/HealthCheck200Response.swift
 MailOdds/Classes/OpenAPIs/Models/IdentityScoreCheck.swift
 MailOdds/Classes/OpenAPIs/Models/ImportContactList200Response.swift
@@ -223,14 +215,13 @@ MailOdds/Classes/OpenAPIs/Models/ListOooContacts200Response.swift
 MailOdds/Classes/OpenAPIs/Models/ListSendingDomains200Response.swift
 MailOdds/Classes/OpenAPIs/Models/ListServerTests200Response.swift
 MailOdds/Classes/OpenAPIs/Models/ListSpamChecks200Response.swift
-MailOdds/Classes/OpenAPIs/Models/ListStores200Response.swift
-MailOdds/Classes/OpenAPIs/Models/ListSyncJobs200Response.swift
 MailOdds/Classes/OpenAPIs/Models/ListWebhookDeliveries200Response.swift
 MailOdds/Classes/OpenAPIs/Models/ListWebhookDeliveries200ResponseDeliveriesInner.swift
 MailOdds/Classes/OpenAPIs/Models/McpCapabilities.swift
 MailOdds/Classes/OpenAPIs/Models/McpCapabilitiesPillarsInner.swift
 MailOdds/Classes/OpenAPIs/Models/McpCapabilitiesPillarsInnerToolsInner.swift
 MailOdds/Classes/OpenAPIs/Models/ModelErrorResponse.swift
+MailOdds/Classes/OpenAPIs/Models/OAuthClientRegistration.swift
 MailOdds/Classes/OpenAPIs/Models/OAuthServerMetadata.swift
 MailOdds/Classes/OpenAPIs/Models/Pagination.swift
 MailOdds/Classes/OpenAPIs/Models/Policy.swift
@@ -252,7 +243,6 @@ MailOdds/Classes/OpenAPIs/Models/QueryContactList200Response.swift
 MailOdds/Classes/OpenAPIs/Models/QueryContactList200ResponseEmailsInner.swift
 MailOdds/Classes/OpenAPIs/Models/QueryContactListRequest.swift
 MailOdds/Classes/OpenAPIs/Models/QueryContactListRequestFiltersInner.swift
-MailOdds/Classes/OpenAPIs/Models/QueryProducts200Response.swift
 MailOdds/Classes/OpenAPIs/Models/RemoveSuppression200Response.swift
 MailOdds/Classes/OpenAPIs/Models/RemoveSuppressionRequest.swift
 MailOdds/Classes/OpenAPIs/Models/ReplayWebhookDelivery200Response.swift
@@ -307,7 +297,6 @@ MailOdds/Classes/OpenAPIs/Models/UpdateOooContactRequest.swift
 MailOdds/Classes/OpenAPIs/Models/UpdatePixelSettingsRequest.swift
 MailOdds/Classes/OpenAPIs/Models/UpdatePolicyRequest.swift
 MailOdds/Classes/OpenAPIs/Models/UpdateReplyForwardingRequest.swift
-MailOdds/Classes/OpenAPIs/Models/UpdateStoreRequest.swift
 MailOdds/Classes/OpenAPIs/Models/ValidateBatch200Response.swift
 MailOdds/Classes/OpenAPIs/Models/ValidateBatch200ResponseSummary.swift
 MailOdds/Classes/OpenAPIs/Models/ValidateBatchRequest.swift
@@ -357,8 +346,6 @@ docs/BounceAnalysisResponse.md
 docs/BounceAnalysisResponseAnalysis.md
 docs/BounceAnalysisResponseAnalysisCategories.md
 docs/BounceAnalysisResponseAnalysisTopDomainsInner.md
-docs/BulkUpdateProducts200Response.md
-docs/BulkUpdateProductsRequest.md
 docs/BulkValidationAPI.md
 docs/Campaign.md
 docs/CampaignAnalyticsAPI.md
@@ -391,7 +378,6 @@ docs/CreatePolicyFromPresetRequest.md
 docs/CreatePolicyRequest.md
 docs/CreateSendingDomain201Response.md
 docs/CreateSendingDomainRequest.md
-docs/CreateStore201Response.md
 docs/CreateStoreRequest.md
 docs/CreateToken200Response.md
 docs/CreateVariantRequest.md
@@ -414,7 +400,6 @@ docs/DeliverRequestToInner.md
 docs/DeliverResponse.md
 docs/DeliverResponseDelivery.md
 docs/DeliverabilityAdvisorAPI.md
-docs/DisconnectStore200Response.md
 docs/DmarcDomain.md
 docs/DomainInsightsAPI.md
 docs/EmailSendingAPI.md
@@ -472,7 +457,6 @@ docs/GetMessageEvents200ResponseSummary.md
 docs/GetOooStatus200Response.md
 docs/GetPixelSettings200Response.md
 docs/GetPresignedUploadRequest.md
-docs/GetProduct200Response.md
 docs/GetReplyForwarding200Response.md
 docs/GetReputation200Response.md
 docs/GetReputationTimeline200Response.md
@@ -488,7 +472,6 @@ docs/GetSendingDomainIdentityScore200Response.md
 docs/GetSendingStats200Response.md
 docs/GetSendingStats200ResponseStats.md
 docs/GetSubscribers200Response.md
-docs/GetSyncJobErrors200Response.md
 docs/GlobalSuppressionsAPI.md
 docs/HealthCheck200Response.md
 docs/ISPFBLGuidesAPI.md
@@ -514,8 +497,6 @@ docs/ListOooContacts200Response.md
 docs/ListSendingDomains200Response.md
 docs/ListServerTests200Response.md
 docs/ListSpamChecks200Response.md
-docs/ListStores200Response.md
-docs/ListSyncJobs200Response.md
 docs/ListWebhookDeliveries200Response.md
 docs/ListWebhookDeliveries200ResponseDeliveriesInner.md
 docs/ManagedSPFAPI.md
@@ -525,6 +506,7 @@ docs/McpCapabilitiesPillarsInnerToolsInner.md
 docs/MessageEventsAPI.md
 docs/ModelErrorResponse.md
 docs/OAuth20API.md
+docs/OAuthClientRegistration.md
 docs/OAuthServerMetadata.md
 docs/OutOfOfficeAPI.md
 docs/Pagination.md
@@ -545,12 +527,10 @@ docs/ProductFacets.md
 docs/ProductFacetsCategoriesInner.md
 docs/ProductFacetsPriceRangesInner.md
 docs/ProductFacetsStoresInner.md
-docs/ProductsAPI.md
 docs/QueryContactList200Response.md
 docs/QueryContactList200ResponseEmailsInner.md
 docs/QueryContactListRequest.md
 docs/QueryContactListRequestFiltersInner.md
-docs/QueryProducts200Response.md
 docs/RemoveSuppression200Response.md
 docs/RemoveSuppressionRequest.md
 docs/ReplayWebhookDelivery200Response.md
@@ -582,7 +562,6 @@ docs/SpamCheck.md
 docs/SpamCheckChecks.md
 docs/SpamChecksAPI.md
 docs/StoreConnection.md
-docs/StoreConnectionsAPI.md
 docs/StoreProduct.md
 docs/SubscribeRequest.md
 docs/Subscriber.md
@@ -617,7 +596,6 @@ docs/UpdateOooContactRequest.md
 docs/UpdatePixelSettingsRequest.md
 docs/UpdatePolicyRequest.md
 docs/UpdateReplyForwardingRequest.md
-docs/UpdateStoreRequest.md
 docs/ValidateBatch200Response.md
 docs/ValidateBatch200ResponseSummary.md
 docs/ValidateBatchRequest.md

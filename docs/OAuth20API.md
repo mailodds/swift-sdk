@@ -1,12 +1,13 @@
 # OAuth20API
 
-All URIs are relative to *https://api.mailodds.com/v1*
+All URIs are relative to *https://api.mailodds.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**createToken**](OAuth20API.md#createtoken) | **POST** /oauth/token | Create token
 [**getJwks**](OAuth20API.md#getjwks) | **GET** /.well-known/jwks.json | Get JSON Web Key Set
 [**introspectToken**](OAuth20API.md#introspecttoken) | **POST** /oauth/introspect | Introspect token
+[**oauthRegisterClient**](OAuth20API.md#oauthregisterclient) | **POST** /oauth/register | Register OAuth client
 [**oauthServerMetadata**](OAuth20API.md#oauthservermetadata) | **GET** /.well-known/oauth-authorization-server | OAuth server metadata
 [**revokeToken**](OAuth20API.md#revoketoken) | **POST** /oauth/revoke | Revoke token
 
@@ -173,6 +174,52 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/x-www-form-urlencoded
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **oauthRegisterClient**
+```swift
+    open class func oauthRegisterClient(completion: @escaping (_ data: OAuthClientRegistration?, _ error: Error?) -> Void)
+```
+
+Register OAuth client
+
+Dynamic Client Registration (RFC 7591). Allows MCP clients to auto-register without user interaction.
+
+### Example
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import MailOdds
+
+
+// Register OAuth client
+OAuth20API.oauthRegisterClient() { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**OAuthClientRegistration**](OAuthClientRegistration.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

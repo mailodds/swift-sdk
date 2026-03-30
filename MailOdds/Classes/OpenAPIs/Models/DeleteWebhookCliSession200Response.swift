@@ -12,13 +12,16 @@ import AnyCodable
 
 public struct DeleteWebhookCliSession200Response: Codable, JSONEncodable, Hashable {
 
+    public var deleted: Bool?
     public var status: String?
 
-    public init(status: String? = nil) {
+    public init(deleted: Bool? = nil, status: String? = nil) {
+        self.deleted = deleted
         self.status = status
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
+        case deleted
         case status
     }
 
@@ -26,6 +29,7 @@ public struct DeleteWebhookCliSession200Response: Codable, JSONEncodable, Hashab
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(deleted, forKey: .deleted)
         try container.encodeIfPresent(status, forKey: .status)
     }
 }
