@@ -12,12 +12,6 @@ import AnyCodable
 
 public struct CreateAlertRuleRequest: Codable, JSONEncodable, Hashable {
 
-    public enum WindowMinutes: Int, Codable, CaseIterable {
-        case _15 = 15
-        case _60 = 60
-        case _1440 = 1440
-        case _2880 = 2880
-    }
     public static let thresholdRule = NumericRule<Double>(minimum: 0, exclusiveMinimum: true, maximum: 1, exclusiveMaximum: false, multipleOf: nil)
     /** Metric to monitor (e.g., bounce_rate, complaint_rate) */
     public var metric: String
@@ -25,11 +19,11 @@ public struct CreateAlertRuleRequest: Codable, JSONEncodable, Hashable {
     public var threshold: Double
     /** Notification channel (e.g., webhook) */
     public var channel: String
-    /** Evaluation window in minutes */
-    public var windowMinutes: WindowMinutes? = ._60
+    /** Evaluation window in minutes (15, 60, 1440, or 2880) */
+    public var windowMinutes: Int? = 60
     public var enabled: Bool? = true
 
-    public init(metric: String, threshold: Double, channel: String, windowMinutes: WindowMinutes? = ._60, enabled: Bool? = true) {
+    public init(metric: String, threshold: Double, channel: String, windowMinutes: Int? = 60, enabled: Bool? = true) {
         self.metric = metric
         self.threshold = threshold
         self.channel = channel
