@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**cancelCampaign**](CampaignsAPI.md#cancelcampaign) | **POST** /v1/campaigns/{campaign_id}/cancel | Cancel a campaign
 [**createCampaign**](CampaignsAPI.md#createcampaign) | **POST** /v1/campaigns | Create a campaign
 [**createCampaignVariant**](CampaignsAPI.md#createcampaignvariant) | **POST** /v1/campaigns/{campaign_id}/variants | Create A/B variant
+[**deleteCampaign**](CampaignsAPI.md#deletecampaign) | **DELETE** /v1/campaigns/{campaign_id} | Delete a campaign
 [**getCampaign**](CampaignsAPI.md#getcampaign) | **GET** /v1/campaigns/{campaign_id} | Get campaign with stats
 [**listCampaigns**](CampaignsAPI.md#listcampaigns) | **GET** /v1/campaigns | List campaigns
 [**scheduleCampaign**](CampaignsAPI.md#schedulecampaign) | **POST** /v1/campaigns/{campaign_id}/schedule | Schedule a campaign
@@ -161,6 +162,56 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deleteCampaign**
+```swift
+    open class func deleteCampaign(campaignId: String, completion: @escaping (_ data: DeletePolicyRule200Response?, _ error: Error?) -> Void)
+```
+
+Delete a campaign
+
+Permanently delete a campaign. Only campaigns in draft, sent, failed, or cancelled status can be deleted.
+
+### Example
+```swift
+// The following code samples are still beta. For any issue, please report via http://github.com/OpenAPITools/openapi-generator/issues/new
+import MailOdds
+
+let campaignId = "campaignId_example" // String | Campaign UUID
+
+// Delete a campaign
+CampaignsAPI.deleteCampaign(campaignId: campaignId) { (response, error) in
+    guard error == nil else {
+        print(error)
+        return
+    }
+
+    if (response) {
+        dump(response)
+    }
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **campaignId** | **String** | Campaign UUID | 
+
+### Return type
+
+[**DeletePolicyRule200Response**](DeletePolicyRule200Response.md)
+
+### Authorization
+
+[BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

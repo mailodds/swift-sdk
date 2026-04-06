@@ -162,6 +162,56 @@ open class CampaignsAPI {
     }
 
     /**
+     Delete a campaign
+     
+     - parameter campaignId: (path) Campaign UUID 
+     - parameter apiResponseQueue: The queue on which api response is dispatched.
+     - parameter completion: completion handler to receive the data and the error objects
+     */
+    @discardableResult
+    open class func deleteCampaign(campaignId: String, apiResponseQueue: DispatchQueue = MailOddsAPI.apiResponseQueue, completion: @escaping ((_ data: DeletePolicyRule200Response?, _ error: Error?) -> Void)) -> RequestTask {
+        return deleteCampaignWithRequestBuilder(campaignId: campaignId).execute(apiResponseQueue) { result in
+            switch result {
+            case let .success(response):
+                completion(response.body, nil)
+            case let .failure(error):
+                completion(nil, error)
+            }
+        }
+    }
+
+    /**
+     Delete a campaign
+     - DELETE /v1/campaigns/{campaign_id}
+     - Permanently delete a campaign. Only campaigns in draft, sent, failed, or cancelled status can be deleted.
+     - Bearer Token:
+       - type: http
+       - name: BearerAuth
+     - parameter campaignId: (path) Campaign UUID 
+     - returns: RequestBuilder<DeletePolicyRule200Response> 
+     */
+    open class func deleteCampaignWithRequestBuilder(campaignId: String) -> RequestBuilder<DeletePolicyRule200Response> {
+        var localVariablePath = "/v1/campaigns/{campaign_id}"
+        let campaignIdPreEscape = "\(APIHelper.mapValueToPathItem(campaignId))"
+        let campaignIdPostEscape = campaignIdPreEscape.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
+        localVariablePath = localVariablePath.replacingOccurrences(of: "{campaign_id}", with: campaignIdPostEscape, options: .literal, range: nil)
+        let localVariableURLString = MailOddsAPI.basePath + localVariablePath
+        let localVariableParameters: [String: Any]? = nil
+
+        let localVariableUrlComponents = URLComponents(string: localVariableURLString)
+
+        let localVariableNillableHeaders: [String: Any?] = [
+            :
+        ]
+
+        let localVariableHeaderParameters = APIHelper.rejectNilHeaders(localVariableNillableHeaders)
+
+        let localVariableRequestBuilder: RequestBuilder<DeletePolicyRule200Response>.Type = MailOddsAPI.requestBuilderFactory.getBuilder()
+
+        return localVariableRequestBuilder.init(method: "DELETE", URLString: (localVariableUrlComponents?.string ?? localVariableURLString), parameters: localVariableParameters, headers: localVariableHeaderParameters, requiresAuthentication: true)
+    }
+
+    /**
      Get campaign with stats
      
      - parameter campaignId: (path) Campaign UUID 

@@ -16,6 +16,7 @@ MailOdds/Classes/OpenAPIs/APIs/ContactListsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/ContentClassificationAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/DKIMManagementAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/DMARCMonitoringAPI.swift
+MailOdds/Classes/OpenAPIs/APIs/DNSProviderAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/DeliverabilityAdvisorAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/DomainInsightsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/EmailSendingAPI.swift
@@ -40,6 +41,7 @@ MailOdds/Classes/OpenAPIs/APIs/SendingDelegationsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SendingDomainsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/ServerTestsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SpamChecksAPI.swift
+MailOdds/Classes/OpenAPIs/APIs/StorefrontDomainsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SubscriberListsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SuppressionListsAPI.swift
 MailOdds/Classes/OpenAPIs/APIs/SystemAPI.swift
@@ -92,6 +94,7 @@ MailOdds/Classes/OpenAPIs/Models/ClassifyContent200Response.swift
 MailOdds/Classes/OpenAPIs/Models/ClassifyContent200ResponseContentCheck.swift
 MailOdds/Classes/OpenAPIs/Models/ClassifyContentRequest.swift
 MailOdds/Classes/OpenAPIs/Models/ConfirmSubscription200Response.swift
+MailOdds/Classes/OpenAPIs/Models/ConnectDnsProviderRequest.swift
 MailOdds/Classes/OpenAPIs/Models/ContactList.swift
 MailOdds/Classes/OpenAPIs/Models/CorrectInboundMessageRequest.swift
 MailOdds/Classes/OpenAPIs/Models/CreateAlertRule201Response.swift
@@ -110,6 +113,7 @@ MailOdds/Classes/OpenAPIs/Models/CreatePolicyRequest.swift
 MailOdds/Classes/OpenAPIs/Models/CreateSendingDomain201Response.swift
 MailOdds/Classes/OpenAPIs/Models/CreateSendingDomainRequest.swift
 MailOdds/Classes/OpenAPIs/Models/CreateStoreRequest.swift
+MailOdds/Classes/OpenAPIs/Models/CreateStorefrontDomainRequest.swift
 MailOdds/Classes/OpenAPIs/Models/CreateToken200Response.swift
 MailOdds/Classes/OpenAPIs/Models/CreateVariantRequest.swift
 MailOdds/Classes/OpenAPIs/Models/CreateWebhookCliSession201Response.swift
@@ -359,6 +363,7 @@ docs/ClassifyContent200ResponseContentCheck.md
 docs/ClassifyContentRequest.md
 docs/ConfigurationSetsAPI.md
 docs/ConfirmSubscription200Response.md
+docs/ConnectDnsProviderRequest.md
 docs/ContactList.md
 docs/ContactListsAPI.md
 docs/ContentClassificationAPI.md
@@ -379,6 +384,7 @@ docs/CreatePolicyRequest.md
 docs/CreateSendingDomain201Response.md
 docs/CreateSendingDomainRequest.md
 docs/CreateStoreRequest.md
+docs/CreateStorefrontDomainRequest.md
 docs/CreateToken200Response.md
 docs/CreateVariantRequest.md
 docs/CreateWebhookCliSession201Response.md
@@ -388,6 +394,7 @@ docs/CrossReferenceBounces200ResponseCrossReference.md
 docs/CrossReferenceBounces200ResponseCrossReferenceEntriesInner.md
 docs/DKIMManagementAPI.md
 docs/DMARCMonitoringAPI.md
+docs/DNSProviderAPI.md
 docs/DeleteJob200Response.md
 docs/DeleteOooContact200Response.md
 docs/DeletePolicy200Response.md
@@ -563,6 +570,7 @@ docs/SpamCheckChecks.md
 docs/SpamChecksAPI.md
 docs/StoreConnection.md
 docs/StoreProduct.md
+docs/StorefrontDomainsAPI.md
 docs/SubscribeRequest.md
 docs/Subscriber.md
 docs/SubscriberList.md
